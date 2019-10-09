@@ -1,0 +1,417 @@
+body {
+    position: relative;
+    background: #efefee;
+    min-height: 45rem;
+    padding-bottom: 80px;
+    color: #666666;
+    font-family: "Open Sans", sans-serif;
+}
+
+html {
+    height:100%;
+}
+
+/* -NAVIGATION- */
+
+.navbar-bg {
+    background-color: #202c40;
+    position: fixed;
+    padding: 5px 0;
+    left: 0;
+    top: 0;
+    right: 0;
+    z-index: 997;
+    opacity: 0.9;
+}
+
+.dropdown-menu, .dropdown-menu.show {
+    right: 0;
+}
+
+.nav-item {
+    padding-left: 10px;
+}
+
+.nowaste-brand {
+    width: min-content;
+    padding-right: 50px;
+}
+
+.nowaste-brand:hover {
+    opacity: 0.9;
+}
+
+.nav-profile-img {
+    width: 50px;
+    border: 1px solid #fff;
+}
+
+.dropdown-item, .dropdown-menu {
+    background-color: #202c40;
+    color: #C9C9C9;
+}
+
+.dropdown-item:hover {
+    background-color: #455166;
+}
+
+/* -HOMEPAGE- */
+.carouselSlideShow {
+    margin-bottom: 20px;
+}
+
+.carousel-item {
+    transition: transform 3s;
+    max-height: 40rem;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 40rem;
+}
+
+/* MY FRIDGE PROFILE */
+
+.fridge-container {
+    border: 1px solid #efefee;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background: #fff;
+}
+.fridge-container a {
+    text-decoration: none;
+    color: #000;
+}
+
+.fridge-title {
+    min-width: 300px;
+}
+
+.fridgeButtons a {
+    color: white;
+}
+
+.fridge-link {
+    color: white;
+}
+
+@media (max-width: 440px) {
+    .fridge-title {
+        min-width: 100px;
+        max-width: 245px;
+    }
+}
+
+.fridge-img {
+    height: 150px;
+    width: 150px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.fridgeCreate-img {
+    height: 100px;
+    width: 100px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.fridge-author-img {
+    height: 25px;
+    border: 1px solid darkgray;
+}
+
+.fridge-details {
+    font-size: .8em;
+}
+
+.btn {
+    cursor: pointer;
+}
+
+/* FRIDGE CREATION */
+.fridgeCreationContainer {
+    padding: 2em 2em;
+    margin: auto;
+    box-shadow: 0 50px 50px rgba(0, 0, 0, .2);
+    background:
+            linear-gradient(rgba(16, 33, 56, 0.8), rgba(1, 25, 140, 0.8));
+}
+
+.fridgeCreationTitle {
+    margin-bottom: -10px;
+    color: #C9C9C9;
+    text-align: center;
+}
+
+#msform {
+    width: 30rem;
+    margin: 50px auto;
+    text-align: center;
+}
+#msform fieldset {
+    background: white;
+    border: 0 none;
+    border-radius: 3px;
+    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+    padding: 20px 30px;
+    box-sizing: border-box;
+    width: 80%;
+    margin: 0 10%;
+}
+
+#msform input, #msform textarea #msform datalist{
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    color: #2C3E50;
+    font-size: 15px;
+}
+
+#msform button {
+    width: 200px;
+    background: rgba(16, 33, 56, 0.8);
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+
+#msform button:hover {
+    width: 200px;
+    background: rgba(22, 25, 41, 0.8);
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+
+.fs-title {
+    font-size: 20px;
+    text-transform: uppercase;
+    color: #2C3E50;
+    margin-bottom: 10px;
+}
+.fs-subtitle {
+    font-weight: normal;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* FLOOR REPO */
+.floorRepo-item {
+    position: relative;
+    height: 360px;
+    overflow: hidden;
+
+}
+
+.floorRepo-wrap {
+    box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.08);
+    transition: 0.3s;
+    background: #fff;
+    padding: 10px;
+}
+
+.floorRepo-wrap h3 {}
+
+.floorRepo-wrap:hover {
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.16);
+}
+
+.floorRepo-info {
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    height: 90px;
+    border-radius: 0 0 3px 3px;
+}
+
+.floorRepo-buttons, .floorTitle {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+
+/* ADVERTISEMENT */
+
+.ad-space {
+    background: #fff;
+    border-radius: 5px;
+    border-top: 5px solid green;
+}
+
+.advertisement-img {
+    width: 150px;
+    height: auto;
+    border: 2px solid #efefee;
+    border-radius: 5px;
+}
+
+.advertisement-text {
+    font-weight: bold;
+}
+
+.quote-space {
+    background: #fff;
+    margin-top: 30px;
+    border-radius: 5px;
+    border-top: 5px solid hotpink;
+}
+
+/* ARTICLES */
+
+.main-article {
+    border: 2px solid #efefee;
+    Background: #fff;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+.main-article img {
+    width: 100%;
+    height: 250px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top: 5px solid lightblue;
+}
+
+.article-container {
+    border: 1px solid #efefee;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background: #fff;
+}
+
+.main-article-link, .article-container a {
+    text-decoration: none;
+    color: #000;
+}
+
+.main-article-link:hover {
+    text-decoration: none;
+    color: #000;
+}
+
+.article-title {
+    min-width: 300px;
+
+}
+
+@media (max-width: 440px) {
+    .article-title {
+        min-width: 100px;
+        max-width: 245px;
+    }
+}
+
+.article-img {
+    height: 100px;
+    width: 100px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.article-author-img {
+    height: 25px;
+    border: 1px solid darkgray;
+}
+
+.article-details {
+    font-size: .8em;
+}
+
+/* CREATE ARTICLE */
+
+.create-article-container {
+    min-width: 400px;
+    background-color: lightblue;
+    border-radius: 5px;
+}
+
+/* ARTICLE SHOW PAGE */
+
+.show-article-container {
+    width: 100%;
+    background-color: #fff;
+}
+
+.show-article-img {
+    width: 250px;
+    height: auto;
+    border-radius: 5px;
+}
+
+.show-article-title {
+    font-size: 2em;
+}
+
+.like-article, .like-article:hover {
+    color: red;
+    text-decoration: none;
+}
+
+@media (max-width: 991px) {
+    .show-article-title {
+        font-size: 1.5em;
+    }
+
+    .show-article-title-container {
+        max-width: 220px;
+    }
+}
+
+.article-text {
+    margin-top: 20px;
+}
+
+.share-icons i {
+    font-size: 1.5em;
+}
+
+.comment-img {
+    width: 50px;
+    height: auto;
+    border: 1px solid darkgray;
+}
+
+.commenter-name {
+    font-weight: bold;
+}
+
+.comment-form {
+    min-width: 500px;
+}
+
+@media (max-width: 767px) {
+    .comment-form {
+        min-width: 260px;
+    }
+}
+
+
+
+/* FOOTER */
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px; /* Set the fixed height of the footer here */
+  line-height: 60px; /* Vertically center the text there */
+  background-color: #fff;
+  margin-top: 10px;
+}

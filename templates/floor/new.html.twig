@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fridge inside  {% endblock %}
+
+{% block body %}
+    {{ dump() }}
+    <div style="padding-bottom: 100px">
+
+    </div>
+    <div class="container fridgeCreationContainer">
+        <h1 class="fridgeCreationTitle">Create new Floor </h1>
+
+        {{ include('floor/_form.html.twig') }}
+
+        <a href="{{ path('fridgeRepo_show') }}">back to Fridge repository</a>
+    </div>
+
+{% endblock %}

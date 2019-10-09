@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fridge inside  {% endblock %}
+
+{% block body %}
+{#    {{ dump() }}#}
+<div class="container">
+    <div style="padding-bottom: 100px">
+
+    </div>
+    <h1>My Fridge</h1>
+
+    {% if listFridge %}
+        {% for fridge in listFridge %}
+            <div class="fridge-container my-1">
+                <a href="{{ path('floor_index', {'id_fridge': fridge.id}) }}">
+                    <img class="fridge-img"  src="{{ asset('images/french_door_fridge.jpg') }}" alt="hello">
+                    <div class="fridge-title d-inline-block pl-3 align-middle">
+                        <span>{{ fridge.name }}</span>
+                        <br>
+                        <br>
+                        <span class="align-left article-details"> Type :  {{ fridge.type }}</span>
+                        <br>
+                        <span class="align-left article-details"> Number of Floors : {{ fridge.getNbrFloors }}</span>
+                    </div>
+                    <div class="fridgeButtons d-inline-block align-right">
+                        {{ include('fridge/_deleteFridge.html.twig') }}
+                        <a href="{{ path('fridge_edit', {'id': fridge.id}) }}" class="btn btn-block btn-dark" role="button">Edit Fridge</a>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="fridge-container my-1">
+        <a href="{{ path('create_product') }}">
+            <img class="fridgeCreate-img"  src="{{ asset('images/FridgeCreate.jpg') }}" alt="hello">
+            <div class="fridge-title d-inline-block pl-3 align-left">
+                <span class="btn btn-lg btn-block ">Create Fridge</span>
+            </div>
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}
