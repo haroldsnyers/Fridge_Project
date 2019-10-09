@@ -6,6 +6,7 @@ use App\Entity\Fridge;
 use App\Entity\Floor;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -31,7 +32,7 @@ class FridgeType extends AbstractType
                     'wine fridge' => 'wine fridge',
                 ],
             ])
-            ->add('nbr_floors')
+            ->add('nbr_floors', IntegerType::class)
         ;
     }
 

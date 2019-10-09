@@ -11,34 +11,36 @@
         <div class="floorTitle">
             <h1>My Fridge </h1>
             <div class="floorRepo-buttons">
-                <h4><a href="">Add Floor</a></h4>
+                <h4><a href="{{ path('floor_new', {'fridgeid': floors[0].getIdFridge.id}) }}">Add Floor</a></h4>
             </div>
         </div>
 
-        {% for floor in floors %}
-            <h>Floor</h>
-        {% endfor %}
-
-        <div class="row portfolio-container">
-
-            <div class="col-lg-2 col-md-12 floorRepo-item">
-                <div class="floorRepo-wrap">
-                    <h3>Floor top (1) : </h3>
-                    <div class="floorRepo-info">
-                        <span>Quantity of food : 25</span>
-                        <span>Type food : sauce, vegetables</span>
-                    </div>
-                    <div class="floorRepo-buttons">
-                        <h4><a href="">Delete</a></h4>
-                        <h4><a href="">Modify</a></h4>
-                        <h4><a href="">List food inside floor</a></h4>
+        {% if floors %}
+            {% for floor in floors %}
+                <div class="row portfolio-container">
+                    <div class="col-lg-12 col-md-12 floorRepo-item">
+                        <div class="floorRepo-wrap">
+                            <h3>Floor top (1) : </h3>
+                            <div class="floorRepo-info">
+                                <span>Quantity of food : {{ floor.getQtyFood}}</span>
+                                <span>Type food : {{ floor.type }}</span>
+                            </div>
+                            <div class="floorRepo-buttons">
+                                <h4>{{ include('floor/_delete_form.html.twig') }}</h4>
+                                <h4><a href="{{ path('floor_edit', {'fridgeid': floor.getIdFridge.id, 'id': floor.id }) }}">Modify</a></h4>
+                                <h4><a href="">List food inside floor</a></h4>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            {% endfor %}
+        {% else %}
         <div>
             <span >no records found</span>
         </div>
+        {% endif %}
+
+
     </div>
 
 {% endblock %}

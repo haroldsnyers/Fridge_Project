@@ -3,11 +3,12 @@
 {% block title %}Edit Floor{% endblock %}
 
 {% block body %}
-    <h1>Edit Floor</h1>
+    <div style="padding-bottom: 100px"></div>
+    <div class="container fridgeCreationContainer">
+        <h1 class="fridgeCreationTitle">Edit Floor </h1>
 
-    {{ include('floor/_form.html.twig', {'button_label': 'Update'}) }}
+        {{ include('floor/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('floor_index') }}">back to list</a>
-
-    {{ include('floor/_delete_form.html.twig') }}
+        <a href="{{ path('floor_index', {'fridgeid': floor.idFridge.id}) }}">back to list</a>
+    </div>
 {% endblock %}

@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Floor;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
 
 /**
  * @method Floor|null find($id, $lockMode = null, $lockVersion = null)
@@ -36,15 +37,17 @@ class FloorRepository extends ServiceEntityRepository
     }
 
 
-    /*
-    public function findOneBySomeField($value): ?Floor
-    {
-        return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+
+//    public function findOneById($value): ?Floor
+//    {
+//        try {
+//            return $this->createQueryBuilder('f')
+//                ->andWhere('f.id_fridge = :fridge_id')
+//                ->setParameter('fridge_id', $value)
+//                ->getQuery()
+//                ->getOneOrNullResult();
+//        } catch (NonUniqueResultException $e) {
+//        }
+//    }
+
 }

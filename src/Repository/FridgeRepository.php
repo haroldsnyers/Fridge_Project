@@ -38,16 +38,16 @@ class FridgeRepository extends ServiceEntityRepository
     */
 
 
-//    public function findOneBySomeField($value): ?fridge
-//    {
-//        try {
-//            return $this->createQueryBuilder('f')
-//                ->andWhere('f.exampleField = :val')
-//                ->setParameter('val', $value)
-//                ->getQuery()
-//                ->getOneOrNullResult();
-//        } catch (NonUniqueResultException $e) {
-//        }
-//    }
+    public function findOneById($value): ?fridge
+    {
+        try {
+            return $this->createQueryBuilder('f')
+                ->andWhere('f.id = :fridge_id')
+                ->setParameter('fridge_id', $value)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+        }
+    }
 
 }

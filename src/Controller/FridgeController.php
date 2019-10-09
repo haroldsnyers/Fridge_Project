@@ -106,11 +106,6 @@ class FridgeController extends AbstractController
             $entityManager->remove($fridge);
             $entityManager->flush();
         }
-//        $fridge = $entityManager->getRepository(Fridge::class)->findAll();
-//        foreach($fridge as $item) {
-//            $entityManager->remove($item);
-//            $entityManager->flush();
-//        }
 
         return $this->showFridgeRepo();
     }
