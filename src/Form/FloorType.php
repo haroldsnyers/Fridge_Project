@@ -13,6 +13,9 @@ class FloorType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('name', TextType::class, [
+                'required'   => true,
+            ])
             ->add('type', TextType::class, [
                 'required'   => true,
             ])

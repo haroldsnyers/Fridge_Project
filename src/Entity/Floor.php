@@ -39,6 +39,11 @@ class Floor
      */
     private $floor;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $name;
+
     public function __construct()
     {
         $this->floor = new ArrayCollection();
@@ -112,6 +117,18 @@ class Floor
                 $floor->setIdFloor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }

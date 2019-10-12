@@ -5,6 +5,8 @@
         <h3 class="fs-subtitle">Select or enter the needed info</h3>
         {{ form_start(floorForm) }}
 
+        {{ form_row(floorForm.name, { 'attr': {
+            'placeholder': "Example : Bottom floor"} }) }}
         {{ form_row(floorForm.type, { 'attr': {
             'placeholder': "Example : vegetables, fish"} }) }}
 

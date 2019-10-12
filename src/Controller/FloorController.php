@@ -64,6 +64,7 @@ class FloorController extends AbstractController
 
         while ($i != 0) {
             $floor = new Floor();
+            $floor->setName('bottom floor');
             $floor->setType('None');
             $floor->setQtyFood(0);
             $floor->setIdFridge($fridge);
@@ -107,7 +108,7 @@ class FloorController extends AbstractController
      */
     public function showFloor(Floor $floor): Response
     {
-        return $this->render('floor/show.html.twig', [
+        return $this->render('', [
             'floor' => $floor,
         ]);
     }

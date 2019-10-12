@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Food{% endblock %}
+
+{% block body %}
+    <div style="padding-bottom: 100px">
+
+    </div>
+
+    <div class="container creationContainer">
+        <h1 class="creationTitle">Create new Food</h1>
+        {{ include('food/_form.html.twig') }}
+        <a href="{{ path('food_index', {'fridgeid': fridgeid}) }}">back to list</a>
+    </div>
+
+
+{% endblock %}

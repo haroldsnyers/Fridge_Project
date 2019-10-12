@@ -129,8 +129,8 @@ html {
     cursor: pointer;
 }
 
-/* FRIDGE CREATION */
-.fridgeCreationContainer {
+/* FORM CREATION */
+.creationContainer {
     padding: 2em 2em;
     margin: auto;
     box-shadow: 0 50px 50px rgba(0, 0, 0, .2);
@@ -138,14 +138,16 @@ html {
             linear-gradient(rgba(16, 33, 56, 0.8), rgba(1, 25, 140, 0.8));
 }
 
-.fridgeCreationTitle {
+.creationTitle {
     margin-bottom: -10px;
     color: #C9C9C9;
     text-align: center;
 }
 
+.creationLinkBack
+
 #msform {
-    width: 30rem;
+    width: 40rem;
     margin: 50px auto;
     text-align: center;
 }
@@ -168,6 +170,24 @@ html {
     width: 100%;
     box-sizing: border-box;
     color: #2C3E50;
+    font-size: 15px;
+}
+
+#msform #food fieldset {
+    background: white;
+    border: 0 none;
+    border-radius: 3px;
+    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+    padding: 20px 30px;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0 0 10px 0;
+    font-size: 10px;
+}
+
+#msform #food fieldset legend{
+    margin: 10px 0 10px 0;
+    padding-top: 40px;
     font-size: 15px;
 }
 
@@ -241,6 +261,12 @@ html {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+
+.floorRepo-buttonadd {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 .button-link {
