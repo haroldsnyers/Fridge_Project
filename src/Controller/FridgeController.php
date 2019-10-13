@@ -56,7 +56,7 @@ class FridgeController extends AbstractController
         $form = $this->createForm(FridgeType::class, $fridge);
 
         $form->handleRequest($request);
-        dump("hello");
+
         if ($form->isSubmitted() && $form->isValid()) {
             dump('submitted');
             // $form->getData() holds the submitted values

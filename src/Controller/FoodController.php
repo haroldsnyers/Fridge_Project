@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Floor;
 use App\Entity\Food;
 use App\Form\FoodType;
 use App\Repository\FoodRepository;
@@ -32,8 +33,18 @@ class FoodController extends AbstractController
     {
         $id_fridge = $request->attributes->get('fridgeid');
 
+        $listFloors = $this->getDoctrine()
+            ->getRepository(Floor::class)
+            ->findFloorsFromFridge($id_fridge);
+
+        $listFloorNames = [];
+        foreach($listFloors as $floor) {
+            $name = $floor->getName();
+            array_push($listFloorNames, $name);
+        }
+
         $food = new Food();
-        $form = $this->createForm(FoodType::class, $food);
+        $form = $this->createForm(FoodType::class, $food, ['floorNames' => $listFloorNames, 'floors' => $listFloors]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -41,7 +52,7 @@ class FoodController extends AbstractController
             $entityManager->persist($food);
             $entityManager->flush();
 
-            return $this->redirectToRoute('food_index');
+            return $this->redirectToRoute('floor_index', ['fridgeid' => $id_fridge]);
         }
 
         return $this->render('food/new.html.twig', [

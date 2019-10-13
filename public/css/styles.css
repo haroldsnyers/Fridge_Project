@@ -91,10 +91,6 @@ html {
     color: white;
 }
 
-.fridge-link {
-    color: white;
-}
-
 @media (max-width: 440px) {
     .fridge-title {
         min-width: 100px;
@@ -144,7 +140,10 @@ html {
     text-align: center;
 }
 
-.creationLinkBack
+.creationLinkBack {
+    color: white;
+    font-weight: bold;
+}
 
 #msform {
     width: 40rem;

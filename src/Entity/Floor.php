@@ -132,4 +132,13 @@ class Floor
 
         return $this;
     }
+
+    // needed for form
+    public function __toString()
+    {
+        $name = strval($this->getName());
+        $type = strval($this->getType());
+        $string = $name."-".$type;
+        return $string;
+    }
 }

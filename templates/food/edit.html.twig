@@ -7,7 +7,7 @@
 
     {{ include('food/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('food_index') }}">back to list</a>
+    <a class="creationLinkBack" href="{{ path('food_index') }}">back to list</a>
 
     {{ include('food/_delete_form.html.twig') }}
 {% endblock %}

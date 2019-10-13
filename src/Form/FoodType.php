@@ -8,6 +8,7 @@ use App\Entity\Fridge;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FoodType extends AbstractType
@@ -20,10 +21,13 @@ class FoodType extends AbstractType
             ->add('expiration_date')
             ->add('quantity')
             ->add('id_floor', EntityType::class, [
-                'class' => Fridge::class,
-                'choice_label' => function(Fridge $fridge) {
-                    return sprintf('(%d) %s', $fridge->getId(), $fridge->getName());
-                }
+                'class' => Floor::class,
+//                'choice_label' => function(Floor $floor, Request $request) {
+//
+//                    return sprintf('(%d) %s', $floor->getId(), $floor->getName());
+//                },
+                'choices' => $options['floors'],
+                'required' => $options['floors']
             ])
         ;
     }
@@ -32,6 +36,8 @@ class FoodType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Food::class,
+            'floors' => null,
+            'floorNames' => null
         ]);
     }
 }
