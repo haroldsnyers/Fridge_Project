@@ -38,6 +38,13 @@ class Fridge
      */
     private $fridge;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="list_fridges")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
+
     public function __construct()
     {
         $this->fridge = new ArrayCollection();
@@ -111,6 +118,18 @@ class Fridge
                 $fridge->setIdFridge(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

@@ -28,7 +28,7 @@
                             <div class="floorRepo-buttons">
                                 <h4>{{ include('floor/_delete_form.html.twig') }}</h4>
                                 <h4><a href="{{ path('floor_edit', {'fridgeid': floor.getIdFridge.id, 'id': floor.id }) }}">Modify</a></h4>
-                                <h4><a href="">List food inside floor</a></h4>
+                                <h4><a href="{{ path('food_index', {'fridgeid': floor.getIdFridge.id, 'floorId': floor.id}) }}">List food inside floor</a></h4>
                             </div>
                         </div>
                     </div>
@@ -50,7 +50,7 @@
             </div>
         </div>
 
-
+        <a class="repoLinkBack" href="{{ path('fridgeRepo_show') }}">back to Fridge repository</a>
     </div>
 
 {% endblock %}

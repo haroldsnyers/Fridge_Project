@@ -17,12 +17,19 @@ use Symfony\Component\Routing\Annotation\Route;
 class FoodController extends AbstractController
 {
     /**
-     * @Route("/", name="food_index", methods={"GET"})
+     * @Route("/floor/{floorId}", name="food_index", methods={"GET"})
+     * @param Request $request
+     * @param FoodRepository $foodRepository
+     * @return Response
      */
-    public function index(FoodRepository $foodRepository): Response
+    public function index(Request $request, FoodRepository $foodRepository): Response
     {
+        $id_floor = $request->attributes->get('floorId');
+        $id_fridge = $request->attributes->get('fridgeid');
+
         return $this->render('food/index.html.twig', [
-            'foods' => $foodRepository->findAll(),
+            'foods' => $foodRepository->findByIdFloor($id_floor),
+            'idFridge' => $id_fridge
         ]);
     }
 
@@ -37,14 +44,8 @@ class FoodController extends AbstractController
             ->getRepository(Floor::class)
             ->findFloorsFromFridge($id_fridge);
 
-        $listFloorNames = [];
-        foreach($listFloors as $floor) {
-            $name = $floor->getName();
-            array_push($listFloorNames, $name);
-        }
-
         $food = new Food();
-        $form = $this->createForm(FoodType::class, $food, ['floorNames' => $listFloorNames, 'floors' => $listFloors]);
+        $form = $this->createForm(FoodType::class, $food, ['floors' => $listFloors]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -83,17 +84,20 @@ class FoodController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('food_index');
+            return $this->redirectToRoute('food_index', [
+                'fridgeid' => $food->getIdFloor()->getIdFridge()->getId(),
+                'floorId' => $food->getIdFloor()->getId()
+            ]);
         }
 
         return $this->render('food/edit.html.twig', [
             'food' => $food,
-            'form' => $form->createView(),
+            'foodForm' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/{id}", name="food_delete", methods={"DELETE"})
+     * @Route("/{id}/delete", name="food_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Food $food): Response
     {
@@ -103,6 +107,9 @@ class FoodController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('food_index');
+        return $this->redirectToRoute('food_index', [
+            'fridgeid' => $food->getIdFloor()->getIdFridge()->getId(),
+            'floorId' => $food->getIdFloor()->getId()
+        ]);
     }
 }

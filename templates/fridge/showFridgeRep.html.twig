@@ -23,11 +23,11 @@
                         <br>
                         <span class="align-left article-details"> Number of Floors : {{ fridge.getNbrFloors }}</span>
                     </div>
+                </a>
                     <div class="fridgeButtons d-inline-block align-right">
                         {{ include('fridge/_deleteFridge.html.twig') }}
                         <a href="{{ path('fridge_edit', {'id': fridge.id}) }}" class="btn btn-block btn-dark" role="button">Edit Fridge</a>
                     </div>
-                </a>
             </div>
         {% endfor %}
     {% endif %}

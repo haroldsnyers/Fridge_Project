@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Floor;
 use App\Entity\Fridge;
 use App\Form\FloorType;
+use App\Repository\FoodRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,12 +21,17 @@ class FloorController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function index(Request $request): Response
+    public function index(Request $request, FoodRepository $foodRepository): Response
     {
         $id_fridge = $request->attributes->get('fridgeid');
 
         $this->generateFloorsFridge($request, $id_fridge);
-        $listFloors = $this->getFloorsFridge($request, $id_fridge);
+        $listFloors = $this->getFloorsFridge($id_fridge);
+
+        foreach ($listFloors as $floor) {
+            $qty_food = count($foodRepository->findByIdFloor($floor));
+            $floor->setQtyFood($qty_food);
+        }
 
         return $this->render('floor/index.html.twig', [
             'floors' => $listFloors,
@@ -33,7 +39,9 @@ class FloorController extends AbstractController
         ]);
     }
 
-    public function getFloorsFridge (Request $request, $id_fridge)
+    //public function updateNbrFood()
+
+    public function getFloorsFridge ($id_fridge)
     {
         $floorList = [];
 
@@ -50,7 +58,7 @@ class FloorController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
 
-        $floorList = $this->getFloorsFridge($request, $id_fridge);
+        $floorList = $this->getFloorsFridge($id_fridge);
         $fridge = $this->getDoctrine()
             ->getRepository(Fridge::class)
             ->findOneById($id_fridge);

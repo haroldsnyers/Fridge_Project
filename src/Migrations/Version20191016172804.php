@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20191008073457 extends AbstractMigration
+final class Version20191016172804 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,9 +22,8 @@ final class Version20191008073457 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE floor ADD id_fridge_id INT NOT NULL');
-        $this->addSql('ALTER TABLE floor ADD CONSTRAINT FK_BE45D62E9491327E FOREIGN KEY (id_fridge_id) REFERENCES fridge (id)');
-        $this->addSql('CREATE INDEX IDX_BE45D62E9491327E ON floor (id_fridge_id)');
+        $this->addSql('ALTER TABLE fridge ADD CONSTRAINT FK_F2E94D8979F37AE5 FOREIGN KEY (id_user_id) REFERENCES user (id)');
+        $this->addSql('CREATE INDEX IDX_F2E94D8979F37AE5 ON fridge (id_user_id)');
     }
 
     public function down(Schema $schema) : void
@@ -32,8 +31,7 @@ final class Version20191008073457 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE floor DROP FOREIGN KEY FK_BE45D62E9491327E');
-        $this->addSql('DROP INDEX IDX_BE45D62E9491327E ON floor');
-        $this->addSql('ALTER TABLE floor DROP id_fridge_id');
+        $this->addSql('ALTER TABLE fridge DROP FOREIGN KEY FK_F2E94D8979F37AE5');
+        $this->addSql('DROP INDEX IDX_F2E94D8979F37AE5 ON fridge');
     }
 }

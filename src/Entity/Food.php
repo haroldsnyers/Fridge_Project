@@ -42,6 +42,21 @@ class Food
      */
     private $id_floor;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $date_of_purchase;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $image_food_path;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $unit_qty;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -103,6 +118,42 @@ class Food
     public function setIdFloor(?Floor $id_floor): self
     {
         $this->id_floor = $id_floor;
+
+        return $this;
+    }
+
+    public function getDateOfPurchase(): ?\DateTimeInterface
+    {
+        return $this->date_of_purchase;
+    }
+
+    public function setDateOfPurchase(\DateTimeInterface $date_of_purchase): self
+    {
+        $this->date_of_purchase = $date_of_purchase;
+
+        return $this;
+    }
+
+    public function getImageFoodPath(): ?string
+    {
+        return $this->image_food_path;
+    }
+
+    public function setImageFoodPath(string $image_food_path): self
+    {
+        $this->image_food_path = $image_food_path;
+
+        return $this;
+    }
+
+    public function getUnitQty(): ?string
+    {
+        return $this->unit_qty;
+    }
+
+    public function setUnitQty(string $unit_qty): self
+    {
+        $this->unit_qty = $unit_qty;
 
         return $this;
     }

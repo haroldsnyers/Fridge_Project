@@ -45,9 +45,13 @@
                     <img class="nav-profile-img rounded-circle" src="{{ asset('images/profile.png') }}">
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" href="#">Profile</a>
-                    <a class="dropdown-item" href="{{ path('fridgeRepo_show') }}">My fridge</a>
-                    <a class="dropdown-item" href="#">Logout</a>
+                    {% if app.user.username is defined %}
+                        <a class="dropdown-item" href="#">Profile</a>
+                        <a class="dropdown-item" href="{{ path('fridgeRepo_show') }}">My fridge</a>
+                        <a class="dropdown-item" href="{{ path('logout') }}">Logout</a>
+                    {% else %}
+                        <a class="dropdown-item" href="{{ path('login') }}">Login</a>
+                    {% endif %}
                 </div>
             </li>
         </ul>

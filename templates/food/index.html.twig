@@ -3,39 +3,42 @@
 {% block title %}Food index{% endblock %}
 
 {% block body %}
+<div class="container">
+    <div style="padding-bottom: 100px">
+
+    </div>
     <h1>Food index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Expiration_date</th>
-                <th>Quantity</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
+    {% if foods %}
         {% for food in foods %}
-            <tr>
-                <td>{{ food.id }}</td>
-                <td>{{ food.name }}</td>
-                <td>{{ food.type }}</td>
-                <td>{{ food.expirationDate ? food.expirationDate|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ food.quantity }}</td>
-                <td>
-                    <a href="{{ path('food_show', {'id': food.id}) }}">show</a>
-                    <a href="{{ path('food_edit', {'id': food.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
+            <div class="fridge-container my-1">
+                <a href="">
+                    <img class="fridge-img"  src="{{ asset('images/french_door_fridge.jpg') }}" alt="hello">
+                    <div class="fridge-title d-inline-block pl-3 align-middle">
+                        <span>{{ food.name }}</span>
+                        <br>
+                        <span class="align-left article-details"> Type :  {{ food.type }}</span>
+                        <br>
+                        <span class="align-left article-details"> Expiration date :  {{ food.expirationDate ? food.expirationDate|date('Y-m-d H:i:s') : '' }}</span>
+                        <br>
+                        <span class="align-left article-details"> Quantity of food : {{ food.quantity }}</span>
+                    </div>
+                </a>
+                <div class="fridgeButtons d-inline-block align-right">
+                    {{ include('food/_delete_form.html.twig') }}
+                    <a href="{{ path('food_edit', {'fridgeid':food.idFloor.idFridge.id, 'id': food.id}) }}" class="btn btn-block btn-dark" role="button">Modify food</a>
+                </div>
+            </div>
         {% endfor %}
-        </tbody>
-    </table>
+    {% else %}
+        <div>
+            <span >no food found in floor</span>
+        </div>
+    {% endif %}
 
-    <a href="{{ path('food_new') }}">Create new</a>
+    <a class="repoLinkBack" href="{{ path('floor_index', {'fridgeid': idFridge}) }}">back to Floor repository</a>
+
+    {{ dump() }}
+</div>
+{#    <a href="{{ path('food_new') }}">Create new</a>#}
 {% endblock %}
