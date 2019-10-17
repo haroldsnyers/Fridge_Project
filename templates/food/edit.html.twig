@@ -7,7 +7,7 @@
     <div class="container creationContainer">
         <h1 class="creationTitle">Edit Food</h1>
 
-        {{ include('food/register.html.twig', {'button_label': 'Update'}) }}
+        {{ include('food/_form.html.twig', {'button_label': 'Update'}) }}
 
         <a class="creationLinkBack" href="{{ path('food_index', {'fridgeid': food.idFloor.idFridge.id, 'floorId':food.idFloor.id}) }}">back to list</a>
     </div>

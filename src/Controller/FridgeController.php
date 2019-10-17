@@ -7,6 +7,8 @@ namespace App\Controller;
 use App\Entity\Fridge;
 use App\Form\FridgeType;
 use App\Repository\FloorRepository;
+use App\Repository\FridgeRepository;
+use http\Client\Curl\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,23 +22,17 @@ class FridgeController extends AbstractController
     /**
      * @Route("/", name="fridgeRepo_show")
      */
-    public function index()
+    public function index(FridgeRepository $fridgeRepository)
     {
-        return $this->showFridgeRepo();
+        return $this->showFridgeRepo($fridgeRepository);
     }
 
-    public function getFridge()
+    public function showFridgeRepo(FridgeRepository $fridgeRepository)
     {
-        $repository = $this->getDoctrine()->getRepository(Fridge::class);
-        $fridge = $repository->findAll();
-
-        return $fridge;
-    }
-
-    public function showFridgeRepo()
-    {
+        $user = $this->getUser()->getUsername();
         $fridgeList = [];
-        $listFridge = $this->getFridge();
+        //$listFridge = $fridgeRepository->findUserFridges($user);
+        $listFridge = $this->getUser()->getListFridges();
         foreach($listFridge as $fridge) {
             array_push($fridgeList, $fridge);
         }
@@ -52,6 +48,7 @@ class FridgeController extends AbstractController
     {
         // creates a task object and initializes some data for this example
         $fridge = new Fridge();
+        $user = $this->getUser();
 
         $form = $this->createForm(FridgeType::class, $fridge);
 
@@ -62,6 +59,7 @@ class FridgeController extends AbstractController
             // $form->getData() holds the submitted values
             // but, the original `$task` variable has also been updated
             $fridge = $form->getData();
+            $fridge->setUser($user);
 
             $entityManager = $this->getDoctrine()->getManager();
 

@@ -7,7 +7,7 @@
     <div class="container creationContainer">
         <h1 class="creationTitle">Edit Floor </h1>
 
-        {{ include('floor/register.html.twig', {'button_label': 'Update'}) }}
+        {{ include('floor/_form.html.twig', {'button_label': 'Update'}) }}
 
         <a class="creationLinkBack" href="{{ path('floor_index', {'fridgeid': floor.idFridge.id}) }}">back to list</a>
     </div>

@@ -20,22 +20,22 @@ class FridgeRepository extends ServiceEntityRepository
         parent::__construct($registry, Fridge::class);
     }
 
-    // /**
-    //  * @return fridge[] Returns an array of fridge objects
-    //  */
-    /*
-    public function findByExampleField($value)
+     /**
+      * @return fridge[] Returns an array of fridge objects
+      */
+
+    public function findUserFridges($value)
     {
         return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
+            ->andWhere('f.user = :val')
             ->setParameter('val', $value)
             ->orderBy('f.id', 'ASC')
-            ->setMaxResults(10)
+            ->setMaxResults(100)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+
 
 
     public function findOneById($value): ?fridge

@@ -67,8 +67,6 @@ class User implements UserInterface, \Serializable
         $this->list_fridges = new ArrayCollection();
     }
 
-    // other properties and methods
-
     public function getEmail()
     {
         return $this->email;

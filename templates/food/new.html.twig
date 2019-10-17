@@ -9,7 +9,7 @@
 
     <div class="container creationContainer">
         <h1 class="creationTitle">Create new Food</h1>
-        {{ include('food/register.html.twig') }}
+        {{ include('food/_form.html.twig') }}
         <a class="creationLinkBack" href="{{ path('floor_index', {'fridgeid': fridgeid}) }}">back to list</a>
     </div>
 
