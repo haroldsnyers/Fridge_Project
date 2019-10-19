@@ -22,16 +22,15 @@ class FridgeController extends AbstractController
     /**
      * @Route("/", name="fridgeRepo_show")
      */
-    public function index(FridgeRepository $fridgeRepository)
+    public function index()
     {
-        return $this->showFridgeRepo($fridgeRepository);
+        return $this->showFridgeRepo();
     }
 
-    public function showFridgeRepo(FridgeRepository $fridgeRepository)
+    public function showFridgeRepo()
     {
         $user = $this->getUser()->getUsername();
         $fridgeList = [];
-        //$listFridge = $fridgeRepository->findUserFridges($user);
         $listFridge = $this->getUser()->getListFridges();
         foreach($listFridge as $fridge) {
             array_push($fridgeList, $fridge);
@@ -79,19 +78,27 @@ class FridgeController extends AbstractController
      */
     public function editFridge(Request $request, Fridge $fridge): Response
     {
-        $form = $this->createForm(FridgeType::class, $fridge);
-        $form->handleRequest($request);
+        $user = $this->getUser()->getUsername();
+        $fridgeUser = $fridge->getUser()->getUsername();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($user == $fridgeUser) {
+            $form = $this->createForm(FridgeType::class, $fridge);
+            $form->handleRequest($request);
 
-            return $this->redirectToRoute('fridgeRepo_show');
+            if ($form->isSubmitted() && $form->isValid()) {
+                $this->getDoctrine()->getManager()->flush();
+
+                return $this->redirectToRoute('fridgeRepo_show');
+            }
+
+            return $this->render('fridge/EditFridge.html.twig', [
+                'fridge' => $fridge,
+                'fridgeForm' => $form->createView(),
+            ]);
+
+        } else {
+            return $this->render('home/homepage.html.twig');
         }
-
-        return $this->render('fridge/EditFridge.html.twig', [
-            'fridge' => $fridge,
-            'fridgeForm' => $form->createView(),
-        ]);
     }
 
     /**
@@ -99,12 +106,19 @@ class FridgeController extends AbstractController
      */
     public function deleteFridge(Request $request, Fridge $fridge) : Response
     {
-        if ($this->isCsrfTokenValid('delete'.$fridge->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($fridge);
-            $entityManager->flush();
-        }
+        $user = $this->getUser()->getUsername();
+        $fridgeUser = $fridge->getUser()->getUsername();
 
-        return $this->showFridgeRepo();
+        if ($user == $fridgeUser) {
+            if ($this->isCsrfTokenValid('delete'.$fridge->getId(), $request->request->get('_token'))) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($fridge);
+                $entityManager->flush();
+            }
+
+            return $this->showFridgeRepo();
+        } else {
+            return $this->render('home/homepage.html.twig');
+        }
     }
 }

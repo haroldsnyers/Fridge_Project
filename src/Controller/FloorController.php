@@ -6,6 +6,7 @@ use App\Entity\Floor;
 use App\Entity\Fridge;
 use App\Form\FloorType;
 use App\Repository\FoodRepository;
+use App\Repository\FridgeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,22 +22,30 @@ class FloorController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function index(Request $request, FoodRepository $foodRepository): Response
+    public function index(Request $request, FoodRepository $foodRepository, FridgeRepository $fridgeRepository): Response
     {
         $id_fridge = $request->attributes->get('fridgeid');
 
-        $this->generateFloorsFridge($request, $id_fridge);
-        $listFloors = $this->getFloorsFridge($id_fridge);
+        $user = $this->getUser()->getUsername();
+        $fridgeUser = $fridgeRepository->findOneById($id_fridge)->getUser()->getUsername();
 
-        foreach ($listFloors as $floor) {
-            $qty_food = count($foodRepository->findByIdFloor($floor));
-            $floor->setQtyFood($qty_food);
+        if ($user == $fridgeUser) {
+            $this->generateFloorsFridge($request, $id_fridge);
+            $listFloors = $this->getFloorsFridge($id_fridge);
+
+            foreach ($listFloors as $floor) {
+                $qty_food = count($foodRepository->findByIdFloor($floor));
+                $floor->setQtyFood($qty_food);
+            }
+
+            return $this->render('floor/index.html.twig', [
+                'floors' => $listFloors,
+                'fridgeid' => $id_fridge,
+            ]);
+
+        } else {
+            return $this->render('home/homepage.html.twig');
         }
-
-        return $this->render('floor/index.html.twig', [
-            'floors' => $listFloors,
-            'fridgeid' => $id_fridge,
-        ]);
     }
 
     //public function updateNbrFood()
@@ -84,7 +93,7 @@ class FloorController extends AbstractController
 
     /**
      * @Route("/new", name="floor_new")
-     * @param Floor $floor
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function addFloor (Request $request)
@@ -116,9 +125,18 @@ class FloorController extends AbstractController
      */
     public function showFloor(Floor $floor): Response
     {
-        return $this->render('', [
-            'floor' => $floor,
-        ]);
+        $user = $this->getUser()->getUsername();
+        $fridgeUser = $floor->getIdFridge()->getUser()->getUsername();
+
+        if ($user == $fridgeUser) {
+            return $this->render('', [
+                'floor' => $floor,
+            ]);
+
+        } else {
+            return $this->render('home/homepage.html.twig');
+        }
+
     }
 
     /**
@@ -126,23 +144,31 @@ class FloorController extends AbstractController
      */
     public function editFloor(Request $request, Floor $floor): Response
     {
-        $form = $this->createForm(FloorType::class, $floor);
-        $form->handleRequest($request);
+        $user = $this->getUser()->getUsername();
+        $fridgeUser = $floor->getIdFridge()->getUser()->getUsername();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($user == $fridgeUser) {
+            $form = $this->createForm(FloorType::class, $floor);
+            $form->handleRequest($request);
 
-            // get id of fridge to generate correct url
-            // getIdFridge returns an object fridge
-            return $this->redirectToRoute('floor_index', [
-                'fridgeid' => $floor->getIdFridge()->getId()
+            if ($form->isSubmitted() && $form->isValid()) {
+                $this->getDoctrine()->getManager()->flush();
+
+                // get id of fridge to generate correct url
+                // getIdFridge returns an object fridge
+                return $this->redirectToRoute('floor_index', [
+                    'fridgeid' => $floor->getIdFridge()->getId()
+                ]);
+            }
+
+            return $this->render('floor/edit.html.twig', [
+                'floor' => $floor,
+                'floorForm' => $form->createView(),
             ]);
-        }
 
-        return $this->render('floor/edit.html.twig', [
-            'floor' => $floor,
-            'floorForm' => $form->createView(),
-        ]);
+        } else {
+            return $this->render('home/homepage.html.twig');
+        }
     }
 
     /**
@@ -150,17 +176,25 @@ class FloorController extends AbstractController
      */
     public function deleteFloor(Request $request, Floor $floor): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$floor->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($floor);
-            $entityManager->flush();
+        $user = $this->getUser()->getUsername();
+        $fridgeUser = $floor->getIdFridge()->getUser()->getUsername();
+
+        if ($user == $fridgeUser) {
+            if ($this->isCsrfTokenValid('delete'.$floor->getId(), $request->request->get('_token'))) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($floor);
+                $entityManager->flush();
+            }
+
+            $id_fridge = $floor->getIdFridge()->getId();
+            $this->changeNbrFloor($id_fridge, -1);
+
+            return $this->redirectToRoute('floor_index', [
+                'fridgeid' => $floor->getIdFridge()->getId()
+            ]);
+
+        } else {
+            return $this->render('home/homepage.html.twig');
         }
-
-        $id_fridge = $floor->getIdFridge()->getId();
-        $this->changeNbrFloor($id_fridge, -1);
-
-        return $this->redirectToRoute('floor_index', [
-            'fridgeid' => $floor->getIdFridge()->getId()
-        ]);
     }
 }

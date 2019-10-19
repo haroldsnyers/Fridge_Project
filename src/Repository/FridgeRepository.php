@@ -36,8 +36,6 @@ class FridgeRepository extends ServiceEntityRepository
         ;
     }
 
-
-
     public function findOneById($value): ?fridge
     {
         try {

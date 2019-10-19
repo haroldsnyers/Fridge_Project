@@ -172,6 +172,11 @@ html {
     font-size: 15px;
 }
 
+#msform input[type="file"] {
+    opacity: 1;
+    height: 60px;
+}
+
 #msform #food fieldset {
     background: white;
     border: 0 none;

@@ -13,7 +13,9 @@
         {% for food in foods %}
             <div class="fridge-container my-1">
                 <a href="">
-                    <img class="fridge-img"  src="{{ asset('images/french_door_fridge.jpg') }}" alt="hello">
+                    {% set imagePath = food.imageFoodPath %}
+                    {{ dump(imagePath) }}
+                    <img class="fridge-img"  src="{{ asset( imagePath ) }}" alt="hello">
                     <div class="fridge-title d-inline-block pl-3 align-middle">
                         <span>{{ food.name }}</span>
                         <br>
