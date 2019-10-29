@@ -6,13 +6,14 @@ namespace App\Controller\API;
 
 use App\Entity\Fridge;
 use App\Form\FridgeType;
-use App\Repository\FloorRepository;
-use App\Repository\FridgeRepository;
-use http\Client\Curl\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * @Route("/api/fridge")
@@ -20,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class FridgeControllerApi extends AbstractController
 {
     /**
-     * @Route("/", name="fridgeRepo_show")
+     * @Route("/", name="api_fridgeRepo_show", methods={"GET"})
      */
     public function index()
     {
@@ -29,15 +30,20 @@ class FridgeControllerApi extends AbstractController
 
     public function showFridgeRepo()
     {
-        $user = $this->getUser()->getUsername();
         $fridgeList = [];
         $listFridge = $this->getUser()->getListFridges();
         foreach($listFridge as $fridge) {
             array_push($fridgeList, $fridge);
         }
-        return $this->render('fridge/showFridgeRep.html.twig', [
-            'listFridge' => $fridgeList
-        ]);
+
+        $encoders = array( new JsonEncoder());
+        $normalizers = array(new ObjectNormalizer());
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($fridgeList,'json');
+        $response = new JsonResponse();
+        $response->setContent($jsonContent);
+
+        return $response;
     }
 
     /**

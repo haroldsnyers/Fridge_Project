@@ -4,6 +4,7 @@ namespace App\Controller\API;
 
 use App\Entity\User;
 use App\Form\UserType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +17,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UserControllerApi extends AbstractController
 {
     /**
-     * @Route("/register", name="user_registration")
+     * @Route("/register", name="api_user_registration", methods={"POST"})
      * @param Request $request
      * @param UserPasswordEncoderInterface $passwordEncoder
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
@@ -43,7 +44,7 @@ class UserControllerApi extends AbstractController
             // ... do any other work - like sending them an email, etc
             // maybe set a "flash" success message for the user
 
-            return $this->redirectToRoute('fridgeRepo_show');
+            return new Response("Registered");
         }
 
         return $this->render(
