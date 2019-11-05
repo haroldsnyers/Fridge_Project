@@ -57,36 +57,40 @@ class FridgeControllerApi extends AbstractController
     }
 
     /**
-     * @Route("/create", name="create_product")
+     * @Route("/create", name="create_product", methods={"POST"})
      */
-    public function newFridge(Request $request)
+    public function newFridge(Request $request, UserRepository $userRepository)
     {
         // creates a task object and initializes some data for this example
         $fridge = new Fridge();
-        $user = $this->getUser();
 
-        $form = $this->createForm(FridgeType::class, $fridge);
+        $data = json_decode($request->getContent(), true);
+        $name = $data['name'];
+        $type = $data['type'];
+        $nbrFloors = $data['nbrFloors'];
+        $userEmail = $data['userMail'];
 
-        $form->handleRequest($request);
+        $user = $userRepository->findOneByEmail($userEmail);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            dump('submitted');
-            // $form->getData() holds the submitted values
-            // but, the original `$task` variable has also been updated
-            $fridge = $form->getData();
-            $fridge->setUser($user);
-
+        $fridge->setName($name);
+        $fridge->setType($type);
+        $fridge->setNbrFloors($nbrFloors);
+        $fridge->setUser($user);
+        try
+        {
             $entityManager = $this->getDoctrine()->getManager();
-
             $entityManager->persist($fridge);
             $entityManager->flush();
-
-            return $this->redirectToRoute('fridgeRepo_show');
+            return $this->json([
+                'fridge' => $fridge
+            ]);
         }
-
-        return $this->render('fridge/CreateFridge.html.twig', [
-            'fridgeForm' => $form->createView(),
-        ]);
+        catch(\Exception $e)
+        {
+            return $this->json([
+                'errors' => "Unable to save new user at this time."
+            ], 400);
+        }
     }
 
     /**
