@@ -6,12 +6,14 @@ namespace App\Controller\API;
 
 use App\Entity\Fridge;
 use App\Form\FridgeType;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
@@ -21,29 +23,37 @@ use Symfony\Component\Serializer\Serializer;
 class FridgeControllerApi extends AbstractController
 {
     /**
-     * @Route("/", name="api_fridgeRepo_show", methods={"GET"})
+     * @Route("/list", name="api_fridgeRepo_show", methods={"GET"})
      */
-    public function index()
+    public function index(Request $request, UserRepository $userRepository)
     {
-        return $this->showFridgeRepo();
-    }
+        $user = $request->query->get('email');
+        try {
+            $fridgeList = [];
+            $listFridge = $userRepository->findOneByEmail($user)->getListFridges();
+            foreach($listFridge as $fridge) {
+                array_push($fridgeList, $fridge);
+            }
 
-    public function showFridgeRepo()
-    {
-        $fridgeList = [];
-        $listFridge = $this->getUser()->getListFridges();
-        foreach($listFridge as $fridge) {
-            array_push($fridgeList, $fridge);
+            $encoders = array( new JsonEncoder());
+            $normalizers = array(new ObjectNormalizer());
+            $serializer = new Serializer($normalizers, $encoders);
+            $jsonContent = $serializer->serialize($listFridge,'json', [
+                'circular_reference_handler' => function ($object) {
+                    return $object->getId();
+                }
+            ]);
+            $response = new JsonResponse();
+            $response->setContent($jsonContent);
+
+            return $response;
+
+        } catch (\Exception $exception) {
+            return $this->json([
+                'errors' => $exception
+            ], 400);
         }
 
-        $encoders = array( new JsonEncoder());
-        $normalizers = array(new ObjectNormalizer());
-        $serializer = new Serializer($normalizers, $encoders);
-        $jsonContent = $serializer->serialize($fridgeList,'json');
-        $response = new JsonResponse();
-        $response->setContent($jsonContent);
-
-        return $response;
     }
 
     /**
@@ -121,8 +131,10 @@ class FridgeControllerApi extends AbstractController
                 $entityManager->remove($fridge);
                 $entityManager->flush();
             }
+            return $this->json([
+                'message' => 'successful'
+            ], 200);
 
-            return $this->showFridgeRepo();
         } else {
             return $this->render('home/homepage.html.twig');
         }

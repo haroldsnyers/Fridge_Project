@@ -1,21 +1,19 @@
 <?php
 
-namespace App\Controller\API;
+namespace App\Controller;
 
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
-/**
- * @Route("/api")
- */
-class SecurityControllerApi extends AbstractController
+class SecurityController extends AbstractController
 {
     /**
-     * @Route("/login", name="api_login")
+     * @Route("/login", name="login")
      */
-    public function login(Request $request ,AuthenticationUtils $utils)
+    public function login(Request $request ,AuthenticationUtils $utils, UserRepository $userRepository)
     {
         $error = $utils->getLastAuthenticationError();
 
@@ -28,7 +26,7 @@ class SecurityControllerApi extends AbstractController
     }
 
     /**
-     * @Route("/logout", name="api_logout")
+     * @Route("/logout", name="logout")
      */
     public function logout(){
 

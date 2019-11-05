@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class FloorControllerApi extends AbstractController
 {
     /**
-     * @Route("/", name="floor_index", methods={"GET"})
+     * @Route("/list", name="floor_index", methods={"GET"})
      * @param Request $request
      * @return Response
      */

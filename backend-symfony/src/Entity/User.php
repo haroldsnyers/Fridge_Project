@@ -67,6 +67,11 @@ class User implements UserInterface, \Serializable
         $this->list_fridges = new ArrayCollection();
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
     public function getEmail()
     {
         return $this->email;
@@ -113,6 +118,7 @@ class User implements UserInterface, \Serializable
         // You *may* need a real salt if you choose a different encoder.
         return null;
     }
+
 
     public function getRoles()
     {

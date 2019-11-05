@@ -15,6 +15,6 @@ class HomeControllerApi extends AbstractController
      */
     public function homePage()
     {
-        return $this->render('home/homepage.html.twig');
+        return $this->json('hello');
     }
 }
