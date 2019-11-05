@@ -1,0 +1,35 @@
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+<mat-accordion multi="true" *ngIf="fridges.length > 0 && !isLoading">
+  <mat-expansion-panel *ngFor="let fridge of fridges">
+<div class="fridge-container my-1">
+        <a href="#">
+            <img class="fridge-img"  src="#" alt="hello">
+            <div class="fridge-title d-inline-block pl-3 align-middle">
+                <span>{{ fridge.name }}</span>
+                <br>
+                <br>
+                <span class="align-left article-details"> Type :  {{ fridge.type }}</span>
+                <br>
+                <span class="align-left article-details"> Number of Floors : {{ fridge.nbrFloors }}</span>
+            </div>
+        </a>
+            <div class="fridgeButtons d-inline-block align-right">
+                <a href="#" class="btn btn-block btn-dark" role="button">Edit Fridge</a>
+            </div>
+    </div>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{ fridge.name }}
+      </mat-panel-title>
+      <mat-panel-description>
+        {{ fridge.type }}
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <p>{{ fridge.user_id }}</p>
+    <mat-action-row *ngIf="userIsAuthenticated">
+        <a mat-button color="primary" [routerLink]="['/edit', fridge.id]">EDIT</a>
+        <button mat-button color="warn" (click)="onDelete(fridge.id)">DELETE</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</mat-accordion>
+<p class="info-text" *ngIf="fridges.length <= 0 && !isLoading">No posts added yet</p>

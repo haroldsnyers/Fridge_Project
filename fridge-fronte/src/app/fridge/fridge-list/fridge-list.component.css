@@ -1,0 +1,57 @@
+:host {
+    display: block;
+    margin-top: 1rem;
+}
+
+.fridge-container {
+    border: 1px solid #efefee;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background: #fff;
+}
+.fridge-container a {
+    text-decoration: none;
+    color: #000;
+}
+
+.fridge-title {
+    min-width: 300px;
+}
+
+.fridgeButtons a {
+    color: white;
+}
+
+@media (max-width: 440px) {
+    .fridge-title {
+        min-width: 100px;
+        max-width: 245px;
+    }
+}
+
+.fridge-img {
+    height: 150px;
+    width: 150px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.fridgeCreate-img {
+    height: 100px;
+    width: 100px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.fridge-author-img {
+    height: 25px;
+    border: 1px solid darkgray;
+}
+
+.fridge-details {
+    font-size: .8em;
+}
+
+.btn {
+    cursor: pointer;
+}

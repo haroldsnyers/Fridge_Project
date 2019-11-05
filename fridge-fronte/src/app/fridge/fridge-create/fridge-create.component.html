@@ -1,0 +1,13 @@
+<div class="container">
+    <mat-card>
+        <mat-form-field>
+            <textarea matInput cols="30" rows="10" [(ngModel)]="enteredValue"></textarea>
+        </mat-form-field>
+        <button 
+            mat-raised-button
+            color='accent'
+            (click)="onAddFridge()">Save Fridge</button>
+    </mat-card>
+    <p>{{ newFridge }}</p>
+</div>
+
