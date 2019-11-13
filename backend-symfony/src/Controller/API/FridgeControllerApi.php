@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Serializer;
 class FridgeControllerApi extends AbstractController
 {
     /**
-     * @Route("/list", name="api_fridgeRepo_show", methods={"GET"})
+     * @Route("/", name="api_fridgeRepo_show", methods={"GET"})
      */
     public function index(Request $request, UserRepository $userRepository)
     {
@@ -57,7 +57,7 @@ class FridgeControllerApi extends AbstractController
     }
 
     /**
-     * @Route("/create", name="create_product", methods={"POST"})
+     * @Route("/", name="create_product", methods={"POST"})
      */
     public function newFridge(Request $request, UserRepository $userRepository)
     {
@@ -94,7 +94,7 @@ class FridgeControllerApi extends AbstractController
     }
 
     /**
-     * @Route("/edit/{id}", name="fridge_edit", methods={"GET","POST"})
+     * @Route("/{id}", name="fridge_edit", methods={"PUT"})
      */
     public function editFridge(Request $request, Fridge $fridge): Response
     {
@@ -122,7 +122,7 @@ class FridgeControllerApi extends AbstractController
     }
 
     /**
-     * @Route("/delete/{id}", name="delete_fridge", methods={"DELETE"})
+     * @Route("/{id}", name="delete_fridge", methods={"DELETE"})
      */
     public function deleteFridge(Request $request, Fridge $fridge) : Response
     {

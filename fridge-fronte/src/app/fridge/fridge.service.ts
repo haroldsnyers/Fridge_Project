@@ -14,6 +14,9 @@ export class FridgeService {
     private data: JSON;
     private fridgeUpdated = new Subject<{fridges: Fridge[]}>();
 
+    // private url = 'http://127.0.0.1:8000';
+    private url = 'http://localhost:3006';
+
     constructor(private http: HttpClient, private router: Router, private authService: AuthService) {}
 
     getFridgeUpdateListener() {
@@ -24,27 +27,25 @@ export class FridgeService {
         const email = this.authService.getCurrentUser();
         // tslint:disable-next-line:object-literal-shorthand
         const Userdata = {email: email};
+        this.fridges = []; // reset fridges to zero
         this.http
             .get(
-                'http://localhost:3006/api/fridge/list', {params: Userdata})
+                this.url + '/api/fridge/', {params: Userdata})
             .subscribe(getData => {
                 this.data = JSON.parse(JSON.stringify(getData));
-                console.log(this.data);
                 for (let i = 0; i < Object.keys(this.data).length; i++) {
                     this.fridges.push(this.data[i]);
                 }
-                console.log(this.fridges);
                 this.fridgeUpdated.next({
                     fridges: [...this.fridges],
                 });
-                console.log(getData);
             });
     }
 
     getFridge(idFridge: string) {
         // subscribe in post-create
         return this.http.get(
-          'http://localhost:3006/api/fridge/' + idFridge + '/floor/list');
+            this.url + '/api/fridge/' + idFridge + '/floor/list');
     }
 
     addFridge(name: string, type: string, nbrOfFloors: string) {
@@ -56,7 +57,7 @@ export class FridgeService {
         fridgeData.append('userMail', email);
         // tslint:disable-next-line:object-literal-shorthand
         this.http
-          .post<{fridge: Fridge }>('http://localhost:3006/api/fridge/create', fridgeData)
+          .post<{fridge: Fridge }>(this.url + '/api/fridge/', fridgeData)
           .subscribe(() => {
             this.router.navigate(['/fridges']);
           });
@@ -73,13 +74,13 @@ export class FridgeService {
             user_id: idUser
         };
         this.http
-          .put('http://localhost:3006/api/fridge/edit' + idFridge, fridgeData)
+          .put(this.url + '/api/fridge/' + idFridge, fridgeData)
           .subscribe(response => {
                 this.router.navigate(['/']);
           });
     }
 
-    deleteFridge(fridgeId: string) {
-        return this.http.delete('http://localhost:3006/api/fridge/delete/' + fridgeId);
+    deleteFridge(idFridge: string) {
+        return this.http.delete(this.url + '/api/fridge/' + idFridge);
     }
 }

@@ -10,6 +10,9 @@ export class AuthService {
     private authStatusListener = new Subject<boolean>(); // just need to know if user is authenticated
     private currentUser = null;
 
+    // private url = 'http://127.0.0.1:8000';
+    private url = 'http://localhost:3006';
+
     constructor(private http: HttpClient, private router: Router) {}
 
     getIsAuth() {
@@ -26,7 +29,7 @@ export class AuthService {
 
     createUser(email: string, username: string, password: string, passwordConfirmation: string) {
         const authData: AuthSignupData = {email, username, password, passwordConfirmation};
-        this.http.post('http://localhost:3006/api/user/register', authData)
+        this.http.post(this.url + '/api/user/register', authData)
             .subscribe(response => {
                 console.log(response);
             });
@@ -34,7 +37,7 @@ export class AuthService {
 
     loginUser(email: string, password: string) {
         const authData: AuthLoginData = {email, password};
-        this.http.post<{result: boolean}>('http://localhost:3006/api/user/login', authData)
+        this.http.post<{result: boolean}>(this.url + '/api/user/login', authData)
             .subscribe(response => {
                 if (response.result === true) {
                     this.isAuthenticated = true; // needed to update authentication status
