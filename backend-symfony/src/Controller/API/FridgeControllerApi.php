@@ -58,6 +58,9 @@ class FridgeControllerApi extends AbstractController
 
     /**
      * @Route("/", name="create_product", methods={"POST"})
+     * @param Request $request
+     * @param UserRepository $userRepository
+     * @return JsonResponse
      */
     public function newFridge(Request $request, UserRepository $userRepository)
     {
@@ -76,13 +79,15 @@ class FridgeControllerApi extends AbstractController
         $fridge->setType($type);
         $fridge->setNbrFloors($nbrFloors);
         $fridge->setUser($user);
+
+
         try
         {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($fridge);
             $entityManager->flush();
             return $this->json([
-                'fridge' => $fridge
+                'message' => "fridge Created!"
             ]);
         }
         catch(\Exception $e)

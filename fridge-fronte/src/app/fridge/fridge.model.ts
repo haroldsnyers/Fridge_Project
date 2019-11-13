@@ -5,3 +5,10 @@ export interface Fridge {
     nbrFloors: string;
     user_id: string;
 }
+
+export interface FridgeCreate {
+    name: string;
+    type: string;
+    nbrFloors: number;
+    userMail: string;
+}

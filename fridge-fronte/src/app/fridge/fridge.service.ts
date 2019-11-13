@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
-import { Fridge } from './fridge.model';
+import { Fridge, FridgeCreate } from './fridge.model';
 import { Subject } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 
@@ -48,18 +48,15 @@ export class FridgeService {
             this.url + '/api/fridge/' + idFridge + '/floor/list');
     }
 
-    addFridge(name: string, type: string, nbrOfFloors: string) {
+    addFridge(name: string, type: string, nbrFloors: number) {
         const email = this.authService.getCurrentUser();
-        const fridgeData = new FormData();
-        fridgeData.append('name', name);
-        fridgeData.append('type', type);
-        fridgeData.append('nbrFloors', nbrOfFloors);
-        fridgeData.append('userMail', email);
+        const fridgeData: FridgeCreate = {name, type, nbrFloors, userMail: email};
         // tslint:disable-next-line:object-literal-shorthand
+        console.log(fridgeData);
         this.http
-          .post<{fridge: Fridge }>(this.url + '/api/fridge/', fridgeData)
-          .subscribe(() => {
-            this.router.navigate(['/fridges']);
+          .post(this.url + '/api/fridge/', fridgeData)
+          .subscribe(response => {
+                this.router.navigate(['/fridges']);
           });
     }
 

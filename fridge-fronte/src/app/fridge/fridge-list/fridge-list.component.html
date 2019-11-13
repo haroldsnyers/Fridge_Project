@@ -1,5 +1,12 @@
 
 <div class="container creationContainer">
+    <div class="add-button">
+      <h2>My Fridge Repository</h2>
+      <button class="mdc-fab mdc-fab--extended" [routerLink]="['/fridge/create']">
+        <span class="material-icons mdc-fab__icon">add</span>
+        <span class="mdc-fab__label">Create</span>
+      </button>
+    </div>
     <mat-spinner *ngIf="isLoading"></mat-spinner>
     <mat-accordion multi="true" *ngIf="fridges.length > 0 && !isLoading">
         <mat-expansion-panel *ngFor="let fridge of fridges">
@@ -28,10 +35,6 @@
           <mat-action-row *ngIf="userIsAuthenticated">
             <a mat-button color="primary" [routerLink]="['/edit', fridge.id]">EDIT</a>
             <button mat-button color="warn" (click)="onDelete(fridge.id)">DELETE</button>
-            <button class="mdc-fab mdc-fab--extended">
-              <span class="material-icons mdc-fab__icon">add</span>
-              <span class="mdc-fab__label">Create</span>
-            </button>
           </mat-action-row>
         </mat-expansion-panel>
       </mat-accordion>

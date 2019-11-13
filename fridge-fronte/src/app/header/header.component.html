@@ -51,7 +51,7 @@
                             <a mat-button routerLink="/create" routerLinkActive="mat-accent">New Post</a>
                         </li>
                         <li class="dropdown-item" *ngIf="userIsAuthenticated">
-                            <a mat-button [routerLink]="['/fridge']" routerLinkActive="mat-accent">Fridges</a>
+                            <a mat-button [routerLink]="['/fridges']" routerLinkActive="mat-accent">Fridges</a>
                         </li>
                         <li class="dropdown-item" *ngIf="!userIsAuthenticated">
                             <a mat-button routerLink="/login" routerLinkActive="mat-accent">Login</a>

@@ -7,13 +7,15 @@ import {
   MatButtonModule,
   MatProgressSpinnerModule,
   MatToolbarModule,
-  MatExpansionModule
+  MatExpansionModule,
+  MatSelectModule,
+  MatSliderModule
 } from '@angular/material';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 
@@ -38,6 +40,7 @@ import { FridgeCreateComponent } from './fridge/fridge-create/fridge-create.comp
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     MatInputModule,
     MatToolbarModule,
@@ -45,6 +48,8 @@ import { FridgeCreateComponent } from './fridge/fridge-create/fridge-create.comp
     MatButtonModule,
     MatProgressSpinnerModule,
     MatExpansionModule,
+    MatSelectModule,
+    MatSliderModule,
     HttpClientModule
   ],
   providers: [],
