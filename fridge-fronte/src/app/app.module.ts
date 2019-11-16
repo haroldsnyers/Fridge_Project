@@ -9,7 +9,9 @@ import {
   MatToolbarModule,
   MatExpansionModule,
   MatSelectModule,
-  MatSliderModule
+  MatSliderModule,
+  MatTabsModule,
+  MatCheckboxModule
 } from '@angular/material';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -25,6 +27,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { FridgeListComponent } from './fridge/fridge-list/fridge-list.component';
 import { FridgeCreateComponent } from './fridge/fridge-create/fridge-create.component';
+import { FridgeInsideListComponent } from './fridgeInside/fridgeInsideList/fridgeInsideList.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +37,8 @@ import { FridgeCreateComponent } from './fridge/fridge-create/fridge-create.comp
     LoginComponent,
     SignupComponent,
     FridgeListComponent,
-    FridgeCreateComponent
+    FridgeCreateComponent,
+    FridgeInsideListComponent
   ],
   imports: [
     BrowserModule,
@@ -50,6 +54,8 @@ import { FridgeCreateComponent } from './fridge/fridge-create/fridge-create.comp
     MatExpansionModule,
     MatSelectModule,
     MatSliderModule,
+    MatTabsModule,
+    MatCheckboxModule,
     HttpClientModule
   ],
   providers: [],

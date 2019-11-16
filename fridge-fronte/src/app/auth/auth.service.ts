@@ -31,7 +31,10 @@ export class AuthService {
         const authData: AuthSignupData = {email, username, password, passwordConfirmation};
         this.http.post(this.url + '/api/user/register', authData)
             .subscribe(response => {
-                console.log(response);
+                this.isAuthenticated = true; // needed to update authentication status
+                this.authStatusListener.next(true); // telling everyone who is interested that the user is authenticated
+                this.currentUser = authData.email;
+                this.router.navigate(['/fridges']);
             });
     }
 
@@ -44,7 +47,7 @@ export class AuthService {
                     this.authStatusListener.next(true); // telling everyone who is interested that the user is authenticated
                     this.currentUser = authData.email;
                 }
-                this.router.navigate(['/']);
+                this.router.navigate(['/fridges']);
             });
     }
 

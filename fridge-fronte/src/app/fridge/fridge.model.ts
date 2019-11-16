@@ -1,9 +1,9 @@
 export interface Fridge {
-    id: string;
+    id: number;
     name: string;
     type: string;
-    nbrFloors: string;
-    user_id: string;
+    nbrFloors: number;
+    user_id: number;
 }
 
 export interface FridgeCreate {

@@ -60,7 +60,7 @@ export class FridgeService {
           });
     }
 
-    updateFridge(idFridge: string, name: string, type: string, nbrOfFloors: string, idUser: string) {
+    updateFridge(idFridge: number, name: string, type: string, nbrOfFloors: number, idUser: number) {
         let fridgeData: Fridge | FormData;
         fridgeData = {
             id : idFridge,

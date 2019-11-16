@@ -7,6 +7,19 @@ mat-spinner {
     margin: auto;
 }
 
+.accordion {
+    background:
+        linear-gradient(rgba(16, 33, 56, 0.8), rgba(1, 25, 140, 0.8));
+}
+
+mat-expansion-panel-header {
+    background-color: whitesmoke;
+}
+
+.cdk-focused .expansionTitle {
+    color: whitesmoke;
+}
+
 .add-button {
     margin-bottom: 10px;
     display: flex;
@@ -17,43 +30,19 @@ mat-spinner {
     color: #3bffb3;
 }
 
-.fridge-container {
-    border: 1px solid #efefee;
+/* .fridge-container {
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
-    background:
-            linear-gradient(rgba(16, 33, 56, 0.8), rgba(1, 25, 140, 0.8));
-}
+} */
+
 .fridge-container a {
     text-decoration: none;
     color: #000;
 }
 
-.fridge-title {
-    min-width: 300px;
-}
-
-.fridgeButtons a {
-    color: white;
-}
-
-@media (max-width: 440px) {
-    .fridge-title {
-        min-width: 100px;
-        max-width: 245px;
-    }
-}
-
 .fridge-img {
     height: 150px;
     width: 150px;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-}
-
-.fridgeCreate-img {
-    height: 100px;
-    width: 100px;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
 }
@@ -64,14 +53,6 @@ mat-spinner {
 }
 
 .fridge-details {
-    font-size: .8em;
-}
-
-.btn {
-    cursor: pointer;
-}
-
-.info-text {
-    margin: auto;
-    color: turquoise;
+    font-size: 1.4em;
+    color: whitesmoke;
 }

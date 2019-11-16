@@ -7,6 +7,7 @@ import { HomeComponent } from './home/home.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { FridgeCreateComponent } from './fridge/fridge-create/fridge-create.component';
 import { FridgeListComponent } from './fridge/fridge-list/fridge-list.component';
+import { FridgeInsideListComponent } from './fridgeInside/fridgeInsideList/fridgeInsideList.component';
 
 
 const routes: Routes = [
@@ -14,7 +15,8 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent},
   { path: 'signup', component: SignupComponent},
   { path: 'fridge/create', component: FridgeCreateComponent},
-  { path: 'fridges', component: FridgeListComponent}
+  { path: 'fridges', component: FridgeListComponent},
+  { path: 'fridge/floors', component: FridgeInsideListComponent}
 ];
 
 @NgModule({
