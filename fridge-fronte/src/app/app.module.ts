@@ -11,7 +11,9 @@ import {
   MatSelectModule,
   MatSliderModule,
   MatTabsModule,
-  MatCheckboxModule
+  MatButtonToggleModule,
+  MatTableModule,
+  MatPaginatorModule
 } from '@angular/material';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -55,7 +57,9 @@ import { FridgeInsideListComponent } from './fridgeInside/fridgeInsideList/fridg
     MatSelectModule,
     MatSliderModule,
     MatTabsModule,
-    MatCheckboxModule,
+    MatButtonToggleModule,
+    MatTableModule,
+    MatPaginatorModule,
     HttpClientModule
   ],
   providers: [],

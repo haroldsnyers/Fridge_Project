@@ -1,59 +1,124 @@
 <div class="container">
+  <div class="add-button-header">
+    <h2>My Fridge - (fridge name)</h2>
     <div>
-        <button mat-raised-button class="example-add-tab-button" (click)="addTab(selectAfterAdding.checked)">
-            Add new tab
-        </button>
-        <mat-checkbox #selectAfterAdding> Select tab after adding </mat-checkbox>
+      <button class="mdc-fab mdc-fab--extended" (click)="addTab()">
+        <span class="material-icons mdc-fab__icon">add</span>
+        <span class="mdc-fab__label">Add Floor</span>
+      </button>
     </div>
-    <mat-tab-group mat-stretch-tabs>
-        <mat-tab *ngFor="let tab of tabs; let index = index" [label]="tab">
-            <ng-template matTabContent>
-                Content {{tab}} - Loaded: {{getTimeLoaded(1) | date:'medium'}}
-                <button mat-raised-button class="example-delete-tab-button" [disabled]="tabs.length === 1"
-                (click)="removeTab(index)">
-                Delete Tab
-            </button>
-            <ul class="mdc-image-list mdc-image-list--masonry my-masonry-image-list">
-                <li class="mdc-image-list__item">
-                    <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/2x3/2.jpg">
-                    <div class="mdc-image-list__supporting">
-                        <span class="mdc-image-list__label">Hello label</span>
-                    </div>
-                </li>
-                <li class="mdc-image-list__item">
-                    <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/1.jpg">
-                    <div class="mdc-image-list__supporting">
-                        <span class="mdc-image-list__label">Text label</span>
-                    </div>
-                </li>
-                <li class="mdc-image-list__item">
-                    <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/2x3/2.jpg">
-                    <div class="mdc-image-list__supporting">
-                        <span class="mdc-image-list__label">Text label</span>
-                    </div>
-                </li>
-                <li class="mdc-image-list__item">
-                    <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/2x3/2.jpg">
-                    <div class="mdc-image-list__supporting">
-                        <span class="mdc-image-list__label">Text label</span>
-                    </div>
-                </li>
-                <li class="mdc-image-list__item">
-                    <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/1.jpg">
-                    <div class="mdc-image-list__supporting">
-                        <span class="mdc-image-list__label">Text label</span>
-                    </div>
-                </li>
-                <li class="mdc-image-list__item">
-                    <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/1.jpg">
-                    <div class="mdc-image-list__supporting">
-                        <span class="mdc-image-list__label">Text label</span>
-                    </div>
-                </li>
-            </ul>
-            
-        </ng-template>
+
+  </div>
+  <mat-tab-group mat-stretch-tabs>
+    <mat-tab *ngFor="let tab of tabs; let index = index" [label]="tab">
+      <ng-template matTabContent>
+        <div class="add-button-header">
+          <mat-button-toggle-group #group="matButtonToggleGroup">
+            <mat-button-toggle checked="true" value="grid" aria-label="grid view">
+              <span class="material-icons mdc-fab__icon">view_module</span>
+            </mat-button-toggle>
+            <mat-button-toggle value="table" aria-label="table view with details">
+              <span class="material-icons mdc-fab__icon">view_headline</span>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+          <button mat-button color="warn" (click)="removeTab(index)">
+            <span class="material-icons mdc-fab__icon">delete_outlined</span>
+            <span class="mdc-fab__label">DELETE</span>
+          </button>
+        </div>
+
+        <div class="example-selected-value">Selected value: {{group.value}}</div>
+        Content {{tab}} - Loaded: {{getTimeLoaded(1) | date:'medium'}}
+
+        <div *ngIf="group.value == 'table'">
+          <mat-form-field>
+						<input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+					</mat-form-field>
+					
+					<div class="mat-elevation-z8">
+						<table mat-table [dataSource]="dataSource" matSort>
+					
+							<!-- ID Column -->
+							<ng-container matColumnDef="id">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+								<td mat-cell *matCellDef="let row"> {{row.id}} </td>
+							</ng-container>
+					
+							<!-- Progress Column -->
+							<ng-container matColumnDef="progress">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header> Progress </th>
+								<td mat-cell *matCellDef="let row"> {{row.progress}}% </td>
+							</ng-container>
+					
+							<!-- Name Column -->
+							<ng-container matColumnDef="name">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+								<td mat-cell *matCellDef="let row"> {{row.name}} </td>
+							</ng-container>
+					
+							<!-- Color Column -->
+							<ng-container matColumnDef="color">
+								<th mat-header-cell *matHeaderCellDef mat-sort-header> Color </th>
+								<td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
+							</ng-container>
+					
+							<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+							<tr mat-row *matRowDef="let row; columns: displayedColumns;">
+							</tr>
+						</table>
+					
+						<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+					</div>
+        </div>
+
+        <div *ngIf="group.value == 'grid'">
+          <p>hello</p>
+        </div>
+
+
+        <!-- <ul class="mdc-image-list mdc-image-list--masonry my-masonry-image-list">
+                    <li class="mdc-image-list__item">
+                        <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/2x3/2.jpg">
+                        <div class="mdc-image-list__supporting">
+                            <span class="mdc-image-list__label">Hello label</span>
+                        </div>
+                    </li>
+                    <li class="mdc-image-list__item">
+                        <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/1.jpg">
+                        <div class="mdc-image-list__supporting">
+                            <span class="mdc-image-list__label">Text label</span>
+                        </div>
+                    </li>
+                    <li class="mdc-image-list__item">
+                        <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/2x3/2.jpg">
+                        <div class="mdc-image-list__supporting">
+                            <span class="mdc-image-list__label">Text label</span>
+                        </div>
+                    </li>
+                    <li class="mdc-image-list__item">
+                        <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/2x3/2.jpg">
+                        <div class="mdc-image-list__supporting">
+                            <span class="mdc-image-list__label">Text label</span>
+                        </div>
+                    </li>
+                    <li class="mdc-image-list__item">
+                        <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/1.jpg">
+                        <div class="mdc-image-list__supporting">
+                            <span class="mdc-image-list__label">Text label</span>
+                        </div>
+                    </li>
+                    <li class="mdc-image-list__item">
+                        <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/1.jpg">
+                        <div class="mdc-image-list__supporting">
+                            <span class="mdc-image-list__label">Text label</span>
+                        </div>
+                    </li>
+                </ul> -->
+
+      </ng-template>
     </mat-tab>
-    
-</mat-tab-group>
+
+  </mat-tab-group>
 </div>
+
+

@@ -1,6 +1,6 @@
 
 <div class="container creationContainer">
-    <div class="add-button">
+    <div class="add-button-header">
       <h2>My Fridge Repository</h2>
       <button class="mdc-fab mdc-fab--extended" [routerLink]="['/fridge/create']">
         <span class="material-icons mdc-fab__icon">add</span>
@@ -33,8 +33,14 @@
             </div>
           </ng-template>
           <mat-action-row>
-            <a mat-button color="primary" [routerLink]="['/edit', fridge.id]">EDIT</a>
-            <button mat-button color="warn" (click)="onDelete(fridge.id)">DELETE</button>
+            <a mat-button class="buttonEdit" [routerLink]="['/edit', fridge.id]">
+              <span class="material-icons mdc-fab__icon">create</span>
+              <span class="mdc-fab__label">EDIT</span>
+              </a>
+            <button mat-button color="warn" (click)="onDelete(fridge.id)">
+                <span class="material-icons mdc-fab__icon">delete_outlined</span>
+                <span class="mdc-fab__label">DELETE</span>
+            </button>
           </mat-action-row>
         </mat-expansion-panel>
       </mat-accordion>

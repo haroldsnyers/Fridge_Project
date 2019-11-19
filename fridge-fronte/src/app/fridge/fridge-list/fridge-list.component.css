@@ -20,7 +20,7 @@ mat-expansion-panel-header {
     color: whitesmoke;
 }
 
-.add-button {
+.add-button-header {
     margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
@@ -28,6 +28,10 @@ mat-expansion-panel-header {
 
 .add-button h2 {
     color: #3bffb3;
+}
+
+.buttonEdit {
+    color: #873be3;
 }
 
 /* .fridge-container {
