@@ -42,17 +42,21 @@ export class FridgeService {
             });
     }
 
-    getFridge(idFridge: string) {
+    getFridge(idFridge: number) {
         // subscribe in post-create
-        return this.http.get(
-            this.url + '/api/fridge/' + idFridge + '/floor/list');
+        for (let i = 0; i < this.fridges.length; i++) {
+            if (this.fridges[i].id === idFridge) {
+                return this.fridges[i];
+            }
+        }
+        // return this.http.get(
+        //     this.url + '/api/fridge/' + idFridge);
     }
 
     addFridge(name: string, type: string, nbrFloors: number) {
         const email = this.authService.getCurrentUser();
         const fridgeData: FridgeCreate = {name, type, nbrFloors, userMail: email};
         // tslint:disable-next-line:object-literal-shorthand
-        console.log(fridgeData);
         this.http
           .post(this.url + '/api/fridge/', fridgeData)
           .subscribe(response => {
@@ -73,7 +77,7 @@ export class FridgeService {
         this.http
           .put(this.url + '/api/fridge/' + idFridge, fridgeData)
           .subscribe(response => {
-                this.router.navigate(['/']);
+                this.router.navigate(['/fridges']);
           });
     }
 

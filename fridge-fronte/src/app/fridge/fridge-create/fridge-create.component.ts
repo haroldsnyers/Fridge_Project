@@ -16,10 +16,18 @@ export class FridgeCreateComponent implements OnInit {
   fridge: Fridge;
   isLoading = false;
   form: FormGroup; // needs to be initialized after (for example in ngOnInit)
-  imagePreview: string;
+  // imagePreview: string;
   private mode = 'create';
-  private postId: string;
-  animals = ['Dog', 'Cat'];
+  private fridgeId: number;
+  animals = [
+    'french door fridge',
+    'side by side fridge',
+    'freezerless fridge',
+    'bottom freezer fridge',
+    'top freezer fridge',
+    'freezer',
+    'wine fridge'
+  ];
 
   constructor(public fridgeService: FridgeService, public route: ActivatedRoute) {}
 
@@ -33,6 +41,33 @@ export class FridgeCreateComponent implements OnInit {
       type: new FormControl(null, {validators : [Validators.required]}),
       nbrFloors: new FormControl(null, {validators : [Validators.required]})
     });
+    // listen to the changes in the url, more specifically the parameters
+    this.route.paramMap.subscribe((paramMap: ParamMap) => {
+      if (paramMap.has('fridgeId')) {
+        this.mode = 'edit';
+        this.fridgeId = +paramMap.get('fridgeId');
+        this.isLoading = true;
+        this.fridge = this.fridgeService.getFridge(this.fridgeId);
+        console.log(this.fridge);
+        this.isLoading = false;
+          // this.fridge = {
+          //   id: fridgeData.id,
+          //   name: fridgeData.name,
+          //   type: fridgeData.type,
+          //   nbrFloors: fridgeData.nbrFloors,
+          //   user_id: fridgeData.user_id
+          // };
+          // to overwrite the initial values of the form
+        this.form.setValue({
+          'name': this.fridge.name,
+          'type': this.fridge.type,
+          'nbrFloors': this.fridge.nbrFloors
+        });
+      } else {
+        this.mode = 'create';
+        this.fridgeId = null;
+      }
+    });
   }
 
   onSaveFridge() {
@@ -41,11 +76,21 @@ export class FridgeCreateComponent implements OnInit {
       return;
     }
     this.isLoading = true;
-    this.fridgeService.addFridge(
-      this.form.value.name,
-      this.form.value.type,
-      this.form.value.nbrFloors
-      );
+    if (this.mode === 'create') {
+      this.fridgeService.addFridge(
+        this.form.value.name,
+        this.form.value.type,
+        this.form.value.nbrFloors
+        );
+    } else {
+      this.fridgeService.updateFridge(
+        this.fridge.id,
+        this.form.value.name,
+        this.form.value.type,
+        this.form.value.nbrFloors,
+        this.fridge.user_id
+        );
+      }
     this.form.reset();
   }
 }

@@ -15,6 +15,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent},
   { path: 'signup', component: SignupComponent},
   { path: 'fridge/create', component: FridgeCreateComponent},
+  { path: 'fridge/edit/:fridgeId', component: FridgeCreateComponent},
   { path: 'fridges', component: FridgeListComponent},
   { path: 'fridge/floors', component: FridgeInsideListComponent}
 ];

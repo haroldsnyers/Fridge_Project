@@ -6,6 +6,7 @@ namespace App\Controller\API;
 
 use App\Entity\Fridge;
 use App\Form\FridgeType;
+use App\Repository\FridgeRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -53,11 +54,10 @@ class FridgeControllerApi extends AbstractController
                 'errors' => $exception
             ], 400);
         }
-
     }
 
     /**
-     * @Route("/", name="create_product", methods={"POST"})
+     * @Route("/", name="create_fridge", methods={"POST"})
      * @param Request $request
      * @param UserRepository $userRepository
      * @return JsonResponse
@@ -101,51 +101,61 @@ class FridgeControllerApi extends AbstractController
     /**
      * @Route("/{id}", name="fridge_edit", methods={"PUT"})
      */
-    public function editFridge(Request $request, Fridge $fridge): Response
+    public function editFridge(Request $request, FridgeRepository $fridgeRepository, Fridge $fridge): Response
     {
-        $user = $this->getUser()->getUsername();
-        $fridgeUser = $fridge->getUser()->getUsername();
+        $id_fridge = $request->attributes->get('id');
+        $fridge = $fridgeRepository->findOneById($id_fridge);
 
-        if ($user == $fridgeUser) {
-            $form = $this->createForm(FridgeType::class, $fridge);
-            $form->handleRequest($request);
+        $data = json_decode($request->getContent(), true);
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->getDoctrine()->getManager()->flush();
+        $name = $data['name'];
+        $type = $data['type'];
+        $nbrFloors = $data['nbrFloors'];
 
-                return $this->redirectToRoute('fridgeRepo_show');
-            }
+        $fridge->setName($name);
+        $fridge->setType($type);
+        $fridge->setNbrFloors($nbrFloors);
+        try {
+            $this->getDoctrine()->getManager()->flush();
 
-            return $this->render('fridge/EditFridge.html.twig', [
-                'fridge' => $fridge,
-                'fridgeForm' => $form->createView(),
+            return $this->json([
+                'message' => "fridge Updated!"
             ]);
 
-        } else {
-            return $this->render('home/homepage.html.twig');
+
+
+        } catch (\Exception $exception) {
+            return $this->json([
+                'errors' => $exception
+            ], 400);
         }
     }
 
     /**
      * @Route("/{id}", name="delete_fridge", methods={"DELETE"})
      */
-    public function deleteFridge(Request $request, Fridge $fridge) : Response
+    public function deleteFridge(Request $request, FridgeRepository $fridgeRepository) : Response
     {
-        $user = $this->getUser()->getUsername();
-        $fridgeUser = $fridge->getUser()->getUsername();
+        $id_fridge = $request->attributes->get('id');
+        $fridge = $fridgeRepository->findOneById($id_fridge);
 
-        if ($user == $fridgeUser) {
-            if ($this->isCsrfTokenValid('delete'.$fridge->getId(), $request->request->get('_token'))) {
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->remove($fridge);
-                $entityManager->flush();
-            }
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($fridge);
+        $entityManager->flush();
+
+        try {
+            $this->getDoctrine()->getManager()->flush();
+
             return $this->json([
                 'message' => 'successful'
             ], 200);
 
-        } else {
-            return $this->render('home/homepage.html.twig');
+        } catch (\Exception $exception) {
+            return $this->json([
+                'errors' => $exception
+            ], 400);
         }
+
+
     }
 }
