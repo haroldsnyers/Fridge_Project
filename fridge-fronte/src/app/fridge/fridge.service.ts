@@ -13,14 +13,26 @@ export class FridgeService {
     private fridges: Fridge[] = [];
     private data: JSON;
     private fridgeUpdated = new Subject<{fridges: Fridge[]}>();
+    private currentFridge: Fridge;
 
     // private url = 'http://127.0.0.1:8000';
     private url = 'http://localhost:3006';
 
-    constructor(private http: HttpClient, private router: Router, private authService: AuthService) {}
+    constructor(
+        private http: HttpClient,
+        private router: Router,
+        private authService: AuthService) {}
 
     getFridgeUpdateListener() {
         return this.fridgeUpdated.asObservable();
+    }
+
+    setCurrentFridge(idFridge: number) {
+        this.currentFridge = this.getFridge(idFridge);
+    }
+
+    getCurrentFridge() {
+        return this.currentFridge;
     }
 
     getFridges() {
@@ -44,6 +56,7 @@ export class FridgeService {
 
     getFridge(idFridge: number) {
         // subscribe in post-create
+        // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < this.fridges.length; i++) {
             if (this.fridges[i].id === idFridge) {
                 return this.fridges[i];

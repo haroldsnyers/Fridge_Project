@@ -33,6 +33,10 @@
             </div>
           </ng-template>
           <mat-action-row>
+            <button mat-button color="warn" (click)="setFridge(fridge.id)">
+                <span class="material-icons mdc-fab__icon">pageview</span>
+                <span class="mdc-fab__label">REVIEW</span>
+            </button>
             <a mat-button class="buttonEdit" [routerLink]="['/fridge/edit', fridge.id]">
               <span class="material-icons mdc-fab__icon">create</span>
               <span class="mdc-fab__label">EDIT</span>

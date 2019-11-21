@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { FridgeService } from '../fridge.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Fridge } from '../fridge.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-fridge-list',
@@ -15,10 +16,16 @@ export class FridgeListComponent implements OnInit, OnDestroy {
   userIsAuthenticated = false;
   private fridgesSub: Subscription;
   private authStatusSub: Subscription;
+  private currentFridge = null;
 
-  private data: JSON[];
+  constructor(
+    public fridgeService: FridgeService,
+    private router: Router,
+    private authService: AuthService) {}
 
-  constructor(public fridgeService: FridgeService, private authService: AuthService) {}
+  getCurrentfridge() {
+    return this.currentFridge;
+  }
 
   ngOnInit() {
     this.isLoading = true;
@@ -26,7 +33,6 @@ export class FridgeListComponent implements OnInit, OnDestroy {
     this.fridgesSub = this.fridgeService.getFridgeUpdateListener()
       // fridgeData same format as getposts from post.service
       .subscribe((fridgeData: {fridges: Fridge[]}) => {
-        console.log(fridgeData);
         this.isLoading = false;
         this.fridges = fridgeData.fridges;
       });
@@ -34,6 +40,12 @@ export class FridgeListComponent implements OnInit, OnDestroy {
     this.authStatusSub = this.authService.getAuthStatusListener().subscribe(isAuthenticated => {
       this.userIsAuthenticated = isAuthenticated;
     });
+  }
+
+  setFridge(fridgeId: number) {
+    this.isLoading = true;
+    this.fridgeService.setCurrentFridge(fridgeId);
+    this.router.navigate(['/fridge/floors']);
   }
 
   onDelete(fridgeId: string) {

@@ -59,6 +59,7 @@ export class FridgeCreateComponent implements OnInit {
           // };
           // to overwrite the initial values of the form
         this.form.setValue({
+          // tslint:disable:object-literal-key-quotes
           'name': this.fridge.name,
           'type': this.fridge.type,
           'nbrFloors': this.fridge.nbrFloors

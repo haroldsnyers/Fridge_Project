@@ -1,13 +1,15 @@
 <div class="container">
   <div class="add-button-header">
-    <h2>My Fridge - (fridge name)</h2>
+    <h2>My Fridge - {{ fridge.name }}</h2>
     <div>
       <button class="mdc-fab mdc-fab--extended" (click)="addTab()">
         <span class="material-icons mdc-fab__icon">add</span>
         <span class="mdc-fab__label">Add Floor</span>
       </button>
     </div>
-
+  </div>
+  <div>
+    <p>{{ fridge.type }}</p>
   </div>
   <mat-tab-group mat-stretch-tabs>
     <mat-tab *ngFor="let tab of tabs; let index = index" [label]="tab">
@@ -72,48 +74,48 @@
         </div>
 
         <div *ngIf="group.value == 'grid'">
-          <p>hello</p>
+            <ul class="mdc-image-list mdc-image-list--masonry my-masonry-image-list">
+                <li class="mdc-image-list__item">
+                    <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/2x3/2.jpg">
+                    <div class="mdc-image-list__supporting">
+                        <span class="mdc-image-list__label">Hello label</span>
+                    </div>
+                </li>
+                <li class="mdc-image-list__item">
+                    <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/1.jpg">
+                    <div class="mdc-image-list__supporting">
+                        <span class="mdc-image-list__label">Text label</span>
+                    </div>
+                </li>
+                <li class="mdc-image-list__item">
+                    <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/2x3/2.jpg">
+                    <div class="mdc-image-list__supporting">
+                        <span class="mdc-image-list__label">Text label</span>
+                    </div>
+                </li>
+                <li class="mdc-image-list__item">
+                    <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/2x3/2.jpg">
+                    <div class="mdc-image-list__supporting">
+                        <span class="mdc-image-list__label">Text label</span>
+                    </div>
+                </li>
+                <li class="mdc-image-list__item">
+                    <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/1.jpg">
+                    <div class="mdc-image-list__supporting">
+                        <span class="mdc-image-list__label">Text label</span>
+                    </div>
+                </li>
+                <li class="mdc-image-list__item">
+                    <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/1.jpg">
+                    <div class="mdc-image-list__supporting">
+                        <span class="mdc-image-list__label">Text label</span>
+                    </div>
+                </li>
+            </ul>
         </div>
 
 
-        <!-- <ul class="mdc-image-list mdc-image-list--masonry my-masonry-image-list">
-                    <li class="mdc-image-list__item">
-                        <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/2x3/2.jpg">
-                        <div class="mdc-image-list__supporting">
-                            <span class="mdc-image-list__label">Hello label</span>
-                        </div>
-                    </li>
-                    <li class="mdc-image-list__item">
-                        <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/1.jpg">
-                        <div class="mdc-image-list__supporting">
-                            <span class="mdc-image-list__label">Text label</span>
-                        </div>
-                    </li>
-                    <li class="mdc-image-list__item">
-                        <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/2x3/2.jpg">
-                        <div class="mdc-image-list__supporting">
-                            <span class="mdc-image-list__label">Text label</span>
-                        </div>
-                    </li>
-                    <li class="mdc-image-list__item">
-                        <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/2x3/2.jpg">
-                        <div class="mdc-image-list__supporting">
-                            <span class="mdc-image-list__label">Text label</span>
-                        </div>
-                    </li>
-                    <li class="mdc-image-list__item">
-                        <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/1.jpg">
-                        <div class="mdc-image-list__supporting">
-                            <span class="mdc-image-list__label">Text label</span>
-                        </div>
-                    </li>
-                    <li class="mdc-image-list__item">
-                        <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/1.jpg">
-                        <div class="mdc-image-list__supporting">
-                            <span class="mdc-image-list__label">Text label</span>
-                        </div>
-                    </li>
-                </ul> -->
+        
 
       </ng-template>
     </mat-tab>

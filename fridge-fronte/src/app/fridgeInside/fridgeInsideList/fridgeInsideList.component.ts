@@ -14,6 +14,15 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 
+import { Floor } from '../floor.model';
+import { Food } from '../food.model';
+import { Subscription } from 'rxjs';
+
+import { FloorService } from '../floor.service';
+import { AuthService } from 'src/app/auth/auth.service';
+import { Fridge } from 'src/app/fridge/fridge.model';
+import { FridgeService } from 'src/app/fridge/fridge.service';
+
 export interface UserData {
   id: string;
   name: string;
@@ -37,7 +46,17 @@ const NAMES: string[] = [
   styleUrls: ['./fridgeInsideList.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class FridgeInsideListComponent implements OnInit, AfterViewInit {
+export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestroy {
+  isLoading = false;
+  userIsAuthenticated = false;
+
+  fridge: Fridge;
+  floors: Floor[] = [];
+  foodList: Food[] = [];
+
+  private floorsSub: Subscription;
+  private authStatusSub: Subscription;
+
   tabLoadTimes: Date[] = [];
   tabs = ['First', 'Second', 'Third'];
 
@@ -46,7 +65,10 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit {
 
   selected = new FormControl(0);
 
-  constructor() {
+  constructor(
+    public floorService: FloorService,
+    public fridgeService: FridgeService,
+    private authService: AuthService) {
     // Create 100 users
     const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
 
@@ -75,6 +97,19 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.isLoading = true;
+    this.fridge = this.fridgeService.getCurrentFridge();
+    this.floorService.getFloors();
+    this.floorsSub = this.floorService.getFloorUpdateListener()
+      .subscribe((floorData: {floors: Floor[]}) => {
+        this.isLoading = false;
+        this.floors = floorData.floors;
+        console.log(this.floors);
+      });
+    this.userIsAuthenticated = this.authService.getIsAuth();
+    this.authStatusSub = this.authService.getAuthStatusListener().subscribe(isAuthenticated => {
+      this.userIsAuthenticated = isAuthenticated;
+    });
     this.dataSource.sort = this.sort;
   }
 
@@ -109,6 +144,10 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit {
 
   removeTab(index: number) {
     this.tabs.splice(index, 1);
+  }
+
+  ngOnDestroy() {
+    this.floorsSub.unsubscribe();
   }
 }
 

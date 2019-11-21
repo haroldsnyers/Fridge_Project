@@ -37,3 +37,7 @@ td, th {
 mat-paginator {
     margin-bottom: 2rem;
 }
+
+.my-masonry-image-list {
+    @include mdc-image-list-masonry-columns(3);
+}
