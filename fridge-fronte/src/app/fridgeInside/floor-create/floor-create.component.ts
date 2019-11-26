@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Floor } from '../floor.model';

@@ -23,7 +23,7 @@ const routes: Routes = [
   { path: 'fridge/floors', component: FridgeInsideListComponent, canActivate: [AuthGuard]},
   { path: 'fridge/floor/create', component: FloorCreateComponent, canActivate: [AuthGuard]},
   { path: 'fridge/floor/edit/:floorId', component: FloorCreateComponent, canActivate: [AuthGuard]},
-  { path: 'fridge/food/create', component: FoodCreateComponent, canActivate: [AuthGuard]},
+  { path: 'fridge/food/create/:floorId', component: FoodCreateComponent, canActivate: [AuthGuard]},
   { path: 'fridge/food/edit/:foodId', component: FoodCreateComponent, canActivate: [AuthGuard]},
 ];
 

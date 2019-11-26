@@ -1,9 +1,9 @@
 <div class="container creationContainer">
   <mat-spinner *ngIf="isLoading"></mat-spinner>
-  <form id="msform" (submit)="onSaveFridge()" [formGroup]="form" *ngIf="!isLoading">
+  <form id="msform" (submit)="onSaveFood()" [formGroup]="form" *ngIf="!isLoading">
     <!-- don't forget the "!", thus not isLoading-->
     <fieldset>
-      <h2 class="fs-title">Create your new fridge</h2>
+      <h2 class="fs-title">{{ title }} your Food</h2>
       <h3 class="fs-subtitle">Select or enter the needed info</h3>
       <mat-form-field>
         <input matInput type="text" formControlName="name" placeholder="Fridge Title">
@@ -12,12 +12,13 @@
       <mat-form-field>
         <mat-label>Favorite animal</mat-label>
         <mat-select formControlName="type" required>
-          <mat-option>--</mat-option>
-          <mat-option *ngFor="let animal of animals" [value]="animal">
-            {{animal}}
-          </mat-option>
+            <mat-option>--</mat-option>
+            <mat-option *ngFor="let type of types" [value]="type">
+              {{type}}
+            </mat-option>
         </mat-select>
       </mat-form-field>
+      
       <div>
         <mat-slider formControlName="nbrFloors" thumbLabel tickInterval="3" min="1" max="15" required></mat-slider>
       </div>

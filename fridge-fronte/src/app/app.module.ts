@@ -35,6 +35,7 @@ import { FridgeCreateComponent } from './fridge/fridge-create/fridge-create.comp
 import { FridgeInsideListComponent } from './fridgeInside/fridgeInsideList/fridgeInsideList.component';
 import { FloorCreateComponent } from './fridgeInside/floor-create/floor-create.component';
 import { DialogDeleteComponent } from './dialog-delete/dialog-delete.component';
+import { FoodCreateComponent } from './fridgeInside/food-create/food-create.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { DialogDeleteComponent } from './dialog-delete/dialog-delete.component';
     FridgeCreateComponent,
     FridgeInsideListComponent,
     FloorCreateComponent,
-    DialogDeleteComponent
+    DialogDeleteComponent,
+    FoodCreateComponent
   ],
   entryComponents: [DialogDeleteComponent],
   imports: [

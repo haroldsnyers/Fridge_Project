@@ -30,11 +30,12 @@ export class FloorService {
     }
 
     getListFloorIds() {
-        const ListFloorId = [];
+        const listFloorId = [];
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < this.floors.length; i++) {
-            ListFloorId.push(this.floors[i].id);
+            listFloorId.push(this.floors[i].id);
         }
+        return listFloorId;
     }
 
     getFloors() {
