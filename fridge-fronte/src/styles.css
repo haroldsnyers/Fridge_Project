@@ -117,3 +117,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     color: #666;
     margin-bottom: 20px;
 }
+
+.buttonEdit {
+    color: #c45810
+}

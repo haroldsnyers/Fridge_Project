@@ -48,7 +48,7 @@ export class FridgeListComponent implements OnInit, OnDestroy {
     this.router.navigate(['/fridge/floors']);
   }
 
-  onDelete(fridgeId: string) {
+  onDelete(fridgeId: number) {
     this.isLoading = true;
     this.fridgeService.deleteFridge(fridgeId).subscribe(() => {
       this.fridgeService.getFridges();

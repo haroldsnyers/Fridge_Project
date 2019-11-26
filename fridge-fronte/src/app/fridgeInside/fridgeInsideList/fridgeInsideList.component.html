@@ -1,8 +1,18 @@
 <div class="container">
   <div class="add-button-header">
-    <h2>My Fridge - {{ fridge.name }}</h2>
+    <div class="titleInside">
+      <h2>My Fridge - {{ fridge.name }}</h2>
+      <button mat-button matTooltip="Edit fridge" class="buttonEdit" [routerLink]="['/fridge/edit', fridge.id]">
+        <span class="material-icons mdc-fab__icon">create</span>
+      </button>
+      <button mat-button matTooltip="Delete fridge" color="warn" (click)="openDialog(fridge.name, fridge.id, 'fridge')">
+        <span class="material-icons mdc-fab__icon">delete_outlined</span>
+      </button>
+    </div>
+
     <div>
-      <button class="mdc-fab mdc-fab--extended" (click)="addTab()">
+      <button class="mdc-fab mdc-fab--extended" [routerLink]="['/fridge/floor/create']">
+        <div class="mdc-fab__ripple"></div>
         <span class="material-icons mdc-fab__icon">add</span>
         <span class="mdc-fab__label">Add Floor</span>
       </button>
@@ -11,116 +21,186 @@
   <div>
     <p>{{ fridge.type }}</p>
   </div>
-  <mat-tab-group mat-stretch-tabs>
-    <mat-tab *ngFor="let tab of tabs; let index = index" [label]="tab">
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <mat-tab-group mat-stretch-tabs *ngIf="floors.length > 0 && !isLoading">
+    <mat-tab *ngFor="let floor of floors; let index = index" [label]="floor.name">
       <ng-template matTabContent>
         <div class="add-button-header">
-          <mat-button-toggle-group #group="matButtonToggleGroup">
-            <mat-button-toggle checked="true" value="grid" aria-label="grid view">
-              <span class="material-icons mdc-fab__icon">view_module</span>
-            </mat-button-toggle>
-            <mat-button-toggle value="table" aria-label="table view with details">
-              <span class="material-icons mdc-fab__icon">view_headline</span>
-            </mat-button-toggle>
-          </mat-button-toggle-group>
-          <button mat-button color="warn" (click)="removeTab(index)">
-            <span class="material-icons mdc-fab__icon">delete_outlined</span>
-            <span class="mdc-fab__label">DELETE</span>
-          </button>
+          <div>
+            <div>
+              <mat-chip-list aria-orientation="horizontal" aria-label="food type" *ngFor="let type of floor.type">
+                <mat-chip>{{type}}</mat-chip>
+              </mat-chip-list>
+              <p>Quantity food: {{ floor.qty_food }}</p>
+            </div>
+
+            <div class="example-selected-value">Selected value: {{group.value}}</div>
+            Content {{floor.name}} - Loaded: {{getTimeLoaded(1) | date:'medium'}}
+          </div>
+          <div>
+            <button mat-button matTooltip="Edit floor" class="buttonEdit"
+              [routerLink]="['/fridge/floor/edit', floor.id]">
+              <span class="material-icons mdc-fab__icon">create</span>
+              <span class="mdc-fab__label">EDIT</span>
+            </button>
+            <button mat-button matTooltip="Delete floor" color="warn"
+              (click)="openDialog(floor.name, floor.id, 'floor')">
+              <span class="material-icons mdc-fab__icon">delete_outlined</span>
+              <span class="mdc-fab__label">DELETE</span>
+            </button>
+          </div>
+
         </div>
 
-        <div class="example-selected-value">Selected value: {{group.value}}</div>
-        Content {{tab}} - Loaded: {{getTimeLoaded(1) | date:'medium'}}
+        <mat-spinner *ngIf="isLoadingBis"></mat-spinner>
+        <div *ngIf="!isLoadingBis">
+          <div class="toggleGroup">
+            <mat-button-toggle-group #group="matButtonToggleGroup">
+              <mat-button-toggle checked="true" value="grid" aria-label="grid view">
+                <span class="material-icons mdc-fab__icon">view_module</span>
+              </mat-button-toggle>
+              <mat-button-toggle value="table" aria-label="table view with details">
+                <span class="material-icons mdc-fab__icon">view_headline</span>
+              </mat-button-toggle>
+              <button mat-button matTooltip="Add element to floor" matTooltipPosition="above"
+                (click)="openDialog(floor.name, floor.id, 'floor')">
+                <span class="material-icons mdc-fab__icon">add_circle_outline</span>
+                <span class="mdc-fab__label">ADD</span>
+              </button>
+            </mat-button-toggle-group>
+          </div>
 
-        <div *ngIf="group.value == 'table'">
-          <mat-form-field>
-						<input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-					</mat-form-field>
-					
-					<div class="mat-elevation-z8">
-						<table mat-table [dataSource]="dataSource" matSort>
-					
-							<!-- ID Column -->
-							<ng-container matColumnDef="id">
-								<th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
-								<td mat-cell *matCellDef="let row"> {{row.id}} </td>
-							</ng-container>
-					
-							<!-- Progress Column -->
-							<ng-container matColumnDef="progress">
-								<th mat-header-cell *matHeaderCellDef mat-sort-header> Progress </th>
-								<td mat-cell *matCellDef="let row"> {{row.progress}}% </td>
-							</ng-container>
-					
-							<!-- Name Column -->
-							<ng-container matColumnDef="name">
-								<th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-								<td mat-cell *matCellDef="let row"> {{row.name}} </td>
-							</ng-container>
-					
-							<!-- Color Column -->
-							<ng-container matColumnDef="color">
-								<th mat-header-cell *matHeaderCellDef mat-sort-header> Color </th>
-								<td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
-							</ng-container>
-					
-							<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-							<tr mat-row *matRowDef="let row; columns: displayedColumns;">
-							</tr>
-						</table>
-					
-						<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-					</div>
-        </div>
+          <div *ngIf="group.value == 'table'">
+            <mat-form-field>
+              <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+            </mat-form-field>
 
-        <div *ngIf="group.value == 'grid'">
+            <div class="mat-elevation-z8">
+              <table mat-table [dataSource]="dataSource" matSort>
+
+                <!-- ID Column -->
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                  <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+                </ng-container>
+
+                <!-- Progress Column -->
+                <ng-container matColumnDef="progress">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Progress </th>
+                  <td mat-cell *matCellDef="let row"> {{row.progress}}% </td>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+                  <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+                </ng-container>
+
+                <!-- Color Column -->
+                <ng-container matColumnDef="color">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Color </th>
+                  <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+                </tr>
+              </table>
+
+              <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+            </div>
+          </div>
+
+          <div *ngIf="group.value == 'grid'">
             <ul class="mdc-image-list mdc-image-list--masonry my-masonry-image-list">
-                <li class="mdc-image-list__item">
-                    <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/2x3/2.jpg">
-                    <div class="mdc-image-list__supporting">
-                        <span class="mdc-image-list__label">Hello label</span>
-                    </div>
-                </li>
-                <li class="mdc-image-list__item">
-                    <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/1.jpg">
-                    <div class="mdc-image-list__supporting">
-                        <span class="mdc-image-list__label">Text label</span>
-                    </div>
-                </li>
-                <li class="mdc-image-list__item">
-                    <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/2x3/2.jpg">
-                    <div class="mdc-image-list__supporting">
-                        <span class="mdc-image-list__label">Text label</span>
-                    </div>
-                </li>
-                <li class="mdc-image-list__item">
-                    <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/2x3/2.jpg">
-                    <div class="mdc-image-list__supporting">
-                        <span class="mdc-image-list__label">Text label</span>
-                    </div>
-                </li>
-                <li class="mdc-image-list__item">
-                    <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/1.jpg">
-                    <div class="mdc-image-list__supporting">
-                        <span class="mdc-image-list__label">Text label</span>
-                    </div>
-                </li>
-                <li class="mdc-image-list__item">
-                    <img class="mdc-image-list__image" src="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/1.jpg">
-                    <div class="mdc-image-list__supporting">
-                        <span class="mdc-image-list__label">Text label</span>
-                    </div>
-                </li>
+              <li class="mdc-image-list__item">
+                <img class="mdc-image-list__image"
+                  src="https://material-components.github.io/material-components-web-catalog/static/media/photos/2x3/2.jpg">
+                <div class="mdc-image-list__supporting">
+                  <span class="mdc-image-list__label">Hello label</span>
+                </div>
+              </li>
+              <li class="mdc-image-list__item">
+                <img class="mdc-image-list__image"
+                  src="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/1.jpg">
+                <div class="mdc-image-list__supporting">
+                  <span class="mdc-image-list__label">Text label</span>
+                </div>
+              </li>
+              <li class="mdc-image-list__item">
+                <img class="mdc-image-list__image"
+                  src="https://material-components.github.io/material-components-web-catalog/static/media/photos/2x3/2.jpg">
+                <div class="mdc-image-list__supporting">
+                  <span class="mdc-image-list__label">Hello label</span>
+                </div>
+              </li>
+              <li class="mdc-image-list__item">
+                <img class="mdc-image-list__image"
+                  src="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/1.jpg">
+                <div class="mdc-image-list__supporting">
+                  <span class="mdc-image-list__label">Text label</span>
+                </div>
+              </li>
+              <li class="mdc-image-list__item">
+                <img class="mdc-image-list__image"
+                  src="https://material-components.github.io/material-components-web-catalog/static/media/photos/2x3/2.jpg">
+                <div class="mdc-image-list__supporting">
+                  <span class="mdc-image-list__label">Text label</span>
+                </div>
+              </li>
+              <li class="mdc-image-list__item">
+                <img class="mdc-image-list__image"
+                  src="https://material-components.github.io/material-components-web-catalog/static/media/photos/2x3/2.jpg">
+                <div class="mdc-image-list__supporting">
+                  <span class="mdc-image-list__label">Text label</span>
+                </div>
+              </li>
+              <li class="mdc-image-list__item">
+                <img class="mdc-image-list__image"
+                  src="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/1.jpg">
+                <div class="mdc-image-list__supporting">
+                  <span class="mdc-image-list__label">Text label</span>
+                </div>
+              </li>
+              <li class="mdc-image-list__item">
+                <img class="mdc-image-list__image"
+                  src="https://material-components.github.io/material-components-web-catalog/static/media/photos/2x3/2.jpg">
+                <div class="mdc-image-list__supporting">
+                  <span class="mdc-image-list__label">Text label</span>
+                </div>
+              </li>
+              <li class="mdc-image-list__item">
+                <img class="mdc-image-list__image"
+                  src="https://material-components.github.io/material-components-web-catalog/static/media/photos/2x3/2.jpg">
+                <div class="mdc-image-list__supporting">
+                  <span class="mdc-image-list__label">Text label</span>
+                </div>
+              </li>
+              <li class="mdc-image-list__item">
+                <img class="mdc-image-list__image"
+                  src="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/1.jpg">
+                <div class="mdc-image-list__supporting">
+                  <span class="mdc-image-list__label">Text label</span>
+                </div>
+              </li>
+              <li class="mdc-image-list__item">
+                <img class="mdc-image-list__image"
+                  src="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/1.jpg">
+                <div class="mdc-image-list__supporting">
+                  <span class="mdc-image-list__label">Text label</span>
+                </div>
+              </li>
             </ul>
+          </div>
         </div>
 
 
-        
+
 
       </ng-template>
     </mat-tab>
 
   </mat-tab-group>
+  <p class="info-text" *ngIf="floors.length <= 0 && !isLoading">No floor added yet</p>
+
 </div>
-
-

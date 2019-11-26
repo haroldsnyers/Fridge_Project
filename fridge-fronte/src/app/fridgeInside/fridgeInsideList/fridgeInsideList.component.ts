@@ -22,6 +22,10 @@ import { FloorService } from '../floor.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Fridge } from 'src/app/fridge/fridge.model';
 import { FridgeService } from 'src/app/fridge/fridge.service';
+import { MatDialog } from '@angular/material';
+import { DialogDeleteComponent } from 'src/app/dialog-delete/dialog-delete.component';
+
+// import {MDCRipple} from '@material/ripple';
 
 export interface UserData {
   id: string;
@@ -48,6 +52,7 @@ const NAMES: string[] = [
 })
 export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoading = false;
+  isLoadingBis = false;
   userIsAuthenticated = false;
 
   fridge: Fridge;
@@ -58,7 +63,7 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
   private authStatusSub: Subscription;
 
   tabLoadTimes: Date[] = [];
-  tabs = ['First', 'Second', 'Third'];
+  tabs = [];
 
   displayedColumns: string[] = ['id', 'name', 'progress', 'color'];
   dataSource: MatTableDataSource<UserData>;
@@ -68,12 +73,16 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
   constructor(
     public floorService: FloorService,
     public fridgeService: FridgeService,
-    private authService: AuthService) {
+    private authService: AuthService,
+    public dialog: MatDialog) {
     // Create 100 users
     const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
 
     // Assign the data to the data source for the table to render
     this.dataSource = new MatTableDataSource(users);
+
+    // const fabRipple = new MDCRipple(document.querySelector('.mdc-fab'));
+
   }
 
   private paginator: MatPaginator;
@@ -104,14 +113,24 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
       .subscribe((floorData: {floors: Floor[]}) => {
         this.isLoading = false;
         this.floors = floorData.floors;
-        console.log(this.floors);
+        this.tabs = this.getFloorsNames();
       });
     this.userIsAuthenticated = this.authService.getIsAuth();
     this.authStatusSub = this.authService.getAuthStatusListener().subscribe(isAuthenticated => {
       this.userIsAuthenticated = isAuthenticated;
     });
+
     this.dataSource.sort = this.sort;
   }
+
+  getFloorsNames() {
+    const tabs = [];
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < this.floors.length; i++) {
+        tabs.push(this.floors[i].name);
+    }
+    return tabs;
+}
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -134,16 +153,23 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
     return this.tabLoadTimes[index];
   }
 
-  addTab(selectAfterAdding: boolean) {
-    this.tabs.push('New');
+  openDialog(name: string, id: number, typeElem: string): void {
+    const dialogRef = this.dialog.open(DialogDeleteComponent, {
+      width: '250px',
+      // tslint:disable-next-line:object-literal-shorthand
+      data: {name: name, typeElem: typeElem, id: id}
+    });
 
-    if (selectAfterAdding) {
-      this.selected.setValue(this.tabs.length - 1);
-    }
+    dialogRef.afterClosed().subscribe(() => {
+      console.log('Deletion succesful');
+    });
   }
 
-  removeTab(index: number) {
-    this.tabs.splice(index, 1);
+  onDelete(floorId: number) {
+    this.isLoading = true;
+    this.floorService.deleteFloor(floorId).subscribe(() => {
+      this.floorService.getFloors();
+    });
   }
 
   ngOnDestroy() {

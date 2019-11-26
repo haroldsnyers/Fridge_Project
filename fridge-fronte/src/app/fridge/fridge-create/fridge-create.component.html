@@ -10,15 +10,15 @@
         <mat-error *ngIf="form.get('name').invalid">please entered valid title</mat-error>
       </mat-form-field>
       <mat-form-field>
-        <mat-label>Favorite animal</mat-label>
+        <mat-label>Type of fridge</mat-label>
         <mat-select formControlName="type" required>
           <mat-option>--</mat-option>
-          <mat-option *ngFor="let animal of animals" [value]="animal">
-            {{animal}}
+          <mat-option *ngFor="let item of types" [value]="item">
+            {{item}}
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <div>
+      <div *ngIf="mode === 'create'">
         <mat-slider formControlName="nbrFloors" thumbLabel tickInterval="3" min="1" max="15" required></mat-slider>
       </div>
       <button class="btn" mat-raised-button color="primary" type="submit">Save</button>

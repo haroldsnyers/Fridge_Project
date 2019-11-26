@@ -5,80 +5,103 @@ namespace App\Controller\API;
 use App\Entity\Floor;
 use App\Entity\Food;
 use App\Form\FoodType;
+use App\Repository\FloorRepository;
 use App\Repository\FoodRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 /**
- * @Route("api/fridge/{fridgeid}/food")
+ * @Route("api/food")
  */
 class FoodControllerApi extends AbstractController
 {
     /**
-     * @Route("/floor/{floorId}", name="food_index", methods={"GET"})
+     * @Route("/", name="food_index", methods={"GET"})
      * @param Request $request
      * @param FoodRepository $foodRepository
      * @return Response
      */
     public function index(Request $request, FoodRepository $foodRepository): Response
     {
-        $id_floor = $request->attributes->get('floorId');
-        $user = $this->getUser()->getUsername();
-        $fridgeUser = $foodRepository->findByIdFloor($id_floor)[0]->getIdFloor()->getIdFridge()->getUser()->getUsername();
+        $id_floor = $request->query->get('floorId');
 
-        if ($user == $fridgeUser) {
-            $id_fridge = $request->attributes->get('fridgeid');
-
-            return $this->render('food/index.html.twig', [
-                'foods' => $foodRepository->findByIdFloor($id_floor),
-                'idFridge' => $id_fridge
+        try {
+            $listFood = $foodRepository->findByIdFloor($id_floor);
+            $encoders = array( new JsonEncoder());
+            $normalizers = array(new ObjectNormalizer());
+            $serializer = new Serializer($normalizers, $encoders);
+            $jsonContent = $serializer->serialize($listFood,'json', [
+                'circular_reference_handler' => function ($object) {
+                    return $object->getId();
+                }
             ]);
+            $response = new JsonResponse();
+            $response->setContent($jsonContent);
 
-        } else {
-            return $this->render('home/homepage.html.twig');
+            return $response;
+
+        } catch (\Exception $exception) {
+            return $this->json([
+                'errors' => $exception
+            ], 400);
         }
     }
 
     /**
-     * @Route("/new", name="food_new", methods={"GET","POST"})
+     * @Route("/", name="food_new", methods={"POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, FloorRepository $floorRepository): Response
     {
-        $id_fridge = $request->attributes->get('fridgeid');
-
-        $listFloors = $this->getDoctrine()
-            ->getRepository(Floor::class)
-            ->findFloorsFromFridge($id_fridge);
-
         $food = new Food();
-        $form = $this->createForm(FoodType::class, $food, ['floors' => $listFloors]);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            /** @var UploadedFile $ImageFile */
-            $noImage = 'images/Food.jpg';
-            $this->uploadImage($form, $food, $noImage);
+        $data = json_decode($request->getContent(), true);
+        $name = $data['name'];
+        $type = $data['type'];
+        $expirationDate = $data['type'];
+        $quantity = $data['type'];
+        $dateOfPurchase = $data['type'];
+        $imageFood = $data['type'];
+        $unitQuantity = $data['type'];
+        $id_floor = $data['id_fridge'];
 
-            // ... persist the $product variable or any other work
+        $floor = $floorRepository->findOneById($id_floor);
+
+        $food->setName($name);
+        $food->setType($type);
+        $food->setExpirationDate($expirationDate);
+        $food->setQuantity($quantity);
+        $food->setDateOfPurchase($dateOfPurchase);
+        $food->setImageFoodPath($imageFood);
+        $food->setUnitQty($unitQuantity);
+        $food->setIdFloor($id_floor);
+
+
+        $nbr_floors = $floor->getQtyFood();
+        $floor->setQtyFood($nbr_floors + 1);
+
+        try {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($food);
             $entityManager->flush();
-
-            return $this->redirectToRoute('floor_index', ['fridgeid' => $id_fridge]);
+            return $this->json([
+                'message' => "food Created!"
+            ]);
+        } catch (\Exception $e) {
+            return $this->json([
+                'errors' => "Unable to save new food at this time."
+            ], 400);
         }
-
-        return $this->render('food/new.html.twig', [
-            'fridgeid' => $id_fridge,
-            'food' => $food,
-            'foodForm' => $form->createView(),
-        ]);
     }
 
     /**

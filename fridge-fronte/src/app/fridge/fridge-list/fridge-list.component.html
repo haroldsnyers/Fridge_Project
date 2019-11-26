@@ -33,20 +33,20 @@
             </div>
           </ng-template>
           <mat-action-row>
-            <button mat-button color="warn" (click)="setFridge(fridge.id)">
+            <button mat-button matToolTip="Go inside fridge" matTooltipPosition="above" (click)="setFridge(fridge.id)">
                 <span class="material-icons mdc-fab__icon">pageview</span>
-                <span class="mdc-fab__label">REVIEW</span>
+                <span class="mdc-fab__label buttonReview">REVIEW</span>
             </button>
-            <a mat-button class="buttonEdit" [routerLink]="['/fridge/edit', fridge.id]">
+            <a mat-button matToolTip="Edit Fridge" matTooltipPosition="right" class="buttonEdit" [routerLink]="['/fridge/edit', fridge.id]">
               <span class="material-icons mdc-fab__icon">create</span>
               <span class="mdc-fab__label">EDIT</span>
               </a>
             <button mat-button color="warn" (click)="onDelete(fridge.id)">
                 <span class="material-icons mdc-fab__icon">delete_outlined</span>
-                <span class="mdc-fab__label">DELETE</span>
+                <span class="mdc-fab__label ">DELETE</span>
             </button>
           </mat-action-row>
         </mat-expansion-panel>
       </mat-accordion>
-      <p class="info-text" *ngIf="fridges.length <= 0 && !isLoading">No posts added yet</p>
+      <p class="info-text" *ngIf="fridges.length <= 0 && !isLoading">No fridge added yet</p>
 </div>

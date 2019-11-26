@@ -9,6 +9,8 @@ import { FridgeCreateComponent } from './fridge/fridge-create/fridge-create.comp
 import { FridgeListComponent } from './fridge/fridge-list/fridge-list.component';
 import { FridgeInsideListComponent } from './fridgeInside/fridgeInsideList/fridgeInsideList.component';
 import { AuthGuard } from './auth/auth.guard';
+import { FloorCreateComponent } from './fridgeInside/floor-create/floor-create.component';
+import { FoodCreateComponent } from './fridgeInside/food-create/food-create.component';
 
 
 const routes: Routes = [
@@ -18,7 +20,11 @@ const routes: Routes = [
   { path: 'fridge/create', component: FridgeCreateComponent, canActivate: [AuthGuard]},
   { path: 'fridge/edit/:fridgeId', component: FridgeCreateComponent, canActivate: [AuthGuard]},
   { path: 'fridges', component: FridgeListComponent, canActivate: [AuthGuard]},
-  { path: 'fridge/floors', component: FridgeInsideListComponent, canActivate: [AuthGuard]}
+  { path: 'fridge/floors', component: FridgeInsideListComponent, canActivate: [AuthGuard]},
+  { path: 'fridge/floor/create', component: FloorCreateComponent, canActivate: [AuthGuard]},
+  { path: 'fridge/floor/edit/:floorId', component: FloorCreateComponent, canActivate: [AuthGuard]},
+  { path: 'fridge/food/create', component: FoodCreateComponent, canActivate: [AuthGuard]},
+  { path: 'fridge/food/edit/:foodId', component: FoodCreateComponent, canActivate: [AuthGuard]},
 ];
 
 @NgModule({

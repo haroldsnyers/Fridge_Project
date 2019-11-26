@@ -36,18 +36,16 @@ class FloorRepository extends ServiceEntityRepository
         ;
     }
 
-
-
-//    public function findOneById($value): ?Floor
-//    {
-//        try {
-//            return $this->createQueryBuilder('f')
-//                ->andWhere('f.id_fridge = :fridge_id')
-//                ->setParameter('fridge_id', $value)
-//                ->getQuery()
-//                ->getOneOrNullResult();
-//        } catch (NonUniqueResultException $e) {
-//        }
-//    }
+    public function findOneById($value): ?Floor
+    {
+        try {
+            return $this->createQueryBuilder('f')
+                ->andWhere('f.id = :floor_id')
+                ->setParameter('floor_id', $value)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+        }
+    }
 
 }

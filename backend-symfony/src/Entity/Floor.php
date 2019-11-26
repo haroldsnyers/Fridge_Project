@@ -19,7 +19,7 @@ class Floor
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="array")
      */
     private $type;
 
@@ -54,12 +54,12 @@ class Floor
         return $this->id;
     }
 
-    public function getType(): ?string
+    public function getType(): ?array
     {
         return $this->type;
     }
 
-    public function setType(string $type): self
+    public function setType(array $type): self
     {
         $this->type = $type;
 

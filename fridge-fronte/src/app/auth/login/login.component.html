@@ -2,7 +2,7 @@
     <mat-spinner *ngIf="isLoading"></mat-spinner>
     <form id="msform" (submit)="onLogin(loginForm)" #loginForm="ngForm" *ngIf="!isLoading"><!-- don't forget the "!", thus not isLoading-->
       <fieldset>
-            <h2 class="fs-title">Create your new fridge</h2>
+            <h2 class="fs-title">Login</h2>
             <h3 class="fs-subtitle">Select or enter the needed info</h3>
             <mat-form-field>
             <input matInput name="email" ngModel type="email" placeholder="E-Mail" #emailInput="ngModel" required email>
@@ -15,5 +15,4 @@
           <button class="btn" mat-raised-button color="primary" type="submit">Login</button>
       </fieldset> 
     </form>
-    <a *ngIf="!isLoading" class="creationLinkBack" href="#">back to Fridge repository</a>
 </div>

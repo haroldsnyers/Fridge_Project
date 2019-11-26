@@ -17,9 +17,9 @@ export class FridgeCreateComponent implements OnInit {
   isLoading = false;
   form: FormGroup; // needs to be initialized after (for example in ngOnInit)
   // imagePreview: string;
-  private mode = 'create';
-  private fridgeId: number;
-  animals = [
+  mode = 'create';
+  protected fridgeId: number;
+  types = [
     'french door fridge',
     'side by side fridge',
     'freezerless fridge',
@@ -50,14 +50,7 @@ export class FridgeCreateComponent implements OnInit {
         this.fridge = this.fridgeService.getFridge(this.fridgeId);
         console.log(this.fridge);
         this.isLoading = false;
-          // this.fridge = {
-          //   id: fridgeData.id,
-          //   name: fridgeData.name,
-          //   type: fridgeData.type,
-          //   nbrFloors: fridgeData.nbrFloors,
-          //   user_id: fridgeData.user_id
-          // };
-          // to overwrite the initial values of the form
+        // to overwrite the initial values of the form
         this.form.setValue({
           // tslint:disable:object-literal-key-quotes
           'name': this.fridge.name,

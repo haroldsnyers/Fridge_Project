@@ -122,8 +122,6 @@ class FridgeControllerApi extends AbstractController
                 'message' => "fridge Updated!"
             ]);
 
-
-
         } catch (\Exception $exception) {
             return $this->json([
                 'errors' => $exception
@@ -147,7 +145,7 @@ class FridgeControllerApi extends AbstractController
             $this->getDoctrine()->getManager()->flush();
 
             return $this->json([
-                'message' => 'successful'
+                'message' => 'Deletion successful'
             ], 200);
 
         } catch (\Exception $exception) {
@@ -155,7 +153,5 @@ class FridgeControllerApi extends AbstractController
                 'errors' => $exception
             ], 400);
         }
-
-
     }
 }

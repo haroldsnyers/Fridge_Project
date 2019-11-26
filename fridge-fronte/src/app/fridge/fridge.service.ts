@@ -94,7 +94,7 @@ export class FridgeService {
           });
     }
 
-    deleteFridge(idFridge: string) {
+    deleteFridge(idFridge: number) {
         return this.http.delete(this.url + '/api/fridge/' + idFridge);
     }
 }

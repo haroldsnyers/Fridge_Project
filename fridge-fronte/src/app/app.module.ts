@@ -13,7 +13,10 @@ import {
   MatTabsModule,
   MatButtonToggleModule,
   MatTableModule,
-  MatPaginatorModule
+  MatPaginatorModule,
+  MatChipsModule,
+  MatDialogModule,
+  MatTooltipModule
 } from '@angular/material';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -30,6 +33,8 @@ import { SignupComponent } from './auth/signup/signup.component';
 import { FridgeListComponent } from './fridge/fridge-list/fridge-list.component';
 import { FridgeCreateComponent } from './fridge/fridge-create/fridge-create.component';
 import { FridgeInsideListComponent } from './fridgeInside/fridgeInsideList/fridgeInsideList.component';
+import { FloorCreateComponent } from './fridgeInside/floor-create/floor-create.component';
+import { DialogDeleteComponent } from './dialog-delete/dialog-delete.component';
 
 @NgModule({
   declarations: [
@@ -40,8 +45,11 @@ import { FridgeInsideListComponent } from './fridgeInside/fridgeInsideList/fridg
     SignupComponent,
     FridgeListComponent,
     FridgeCreateComponent,
-    FridgeInsideListComponent
+    FridgeInsideListComponent,
+    FloorCreateComponent,
+    DialogDeleteComponent
   ],
+  entryComponents: [DialogDeleteComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -60,6 +68,9 @@ import { FridgeInsideListComponent } from './fridgeInside/fridgeInsideList/fridg
     MatButtonToggleModule,
     MatTableModule,
     MatPaginatorModule,
+    MatChipsModule,
+    MatDialogModule,
+    MatTooltipModule,
     HttpClientModule
   ],
   providers: [],
