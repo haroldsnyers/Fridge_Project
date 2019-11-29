@@ -34,8 +34,7 @@ class FoodControllerApi extends AbstractController
      */
     public function index(Request $request, FoodRepository $foodRepository): Response
     {
-        $id_floor = $request->query->get('floorId');
-
+        $id_floor = $request->query->get('idFloor');
         try {
             $listFood = $foodRepository->findByIdFloor($id_floor);
             $encoders = array( new JsonEncoder());
@@ -68,12 +67,12 @@ class FoodControllerApi extends AbstractController
         $data = json_decode($request->getContent(), true);
         $name = $data['name'];
         $type = $data['type'];
-        $expirationDate = $data['type'];
-        $quantity = $data['type'];
-        $dateOfPurchase = $data['type'];
-        $imageFood = $data['type'];
-        $unitQuantity = $data['type'];
-        $id_floor = $data['id_fridge'];
+        $expirationDate = $data['expiration_date'];
+        $quantity = $data['quantity'];
+        $dateOfPurchase = $data['date_of_purchase'];
+        $imageFood = $data['image_food_path'];
+        $unitQuantity = $data['unit_qty'];
+        $id_floor = $data['id_floor'];
 
         $floor = $floorRepository->findOneById($id_floor);
 
@@ -84,7 +83,7 @@ class FoodControllerApi extends AbstractController
         $food->setDateOfPurchase($dateOfPurchase);
         $food->setImageFoodPath($imageFood);
         $food->setUnitQty($unitQuantity);
-        $food->setIdFloor($id_floor);
+        $food->setIdFloor($floor);
 
 
         $nbr_floors = $floor->getQtyFood();
@@ -102,16 +101,6 @@ class FoodControllerApi extends AbstractController
                 'errors' => "Unable to save new food at this time."
             ], 400);
         }
-    }
-
-    /**
-     * @Route("/{id}", name="food_show", methods={"GET"})
-     */
-    public function show(Food $food): Response
-    {
-        return $this->render('food/show.html.twig', [
-            'food' => $food,
-        ]);
     }
 
     public function uploadImage(FormInterface $form, Food $food, $noImageUpload)
@@ -146,68 +135,71 @@ class FoodControllerApi extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="food_edit", methods={"GET","POST"})
+     * @Route("/{id}", name="food_edit", methods={"PUT"})
      */
-    public function edit(Request $request, Food $food): Response
+    public function edit(Request $request, FoodRepository $foodRepository): Response
     {
-        $user = $this->getUser()->getUsername();
-        $fridgeUser = $food->getIdFloor()->getIdFridge()->getUser()->getUsername();
+        $id_food = $request->attributes->get('id');
+        $food = $foodRepository->findOneById($id_food);
 
-        if ($user == $fridgeUser) {
-            $form = $this->createForm(FoodType::class, $food);
-            $form->handleRequest($request);
+        $data = json_decode($request->getContent(), true);
 
-            if ($form->isSubmitted() && $form->isValid()) {
+        $name = $data['name'];
+        $type = $data['type'];
+        $expirationDate = $data['expiration_date'];
+        $quantity = $data['quantity'];
+        $dateOfPurchase = $data['date_of_purchase'];
+        $imageFoodPath = $data['image_food_path'];
+        $unitQty = $data['unit_qty'];
 
-                $noImage = $food->getImageFoodPath();
-                $this->uploadImage($form, $food, $noImage);
+        $food->setName($name);
+        $food->setType($type);
+        $food->setExpirationDate($expirationDate);
+        $food->setQuantity($quantity);
+        $food->setDateOfPurchase($dateOfPurchase);
+        $food->setImageFoodPath($imageFoodPath);
+        $food->setUnitQty($unitQty);
 
-                $this->getDoctrine()->getManager()->flush();
+        try {
+            $this->getDoctrine()->getManager()->flush();
 
-                return $this->redirectToRoute('food_index', [
-                    'fridgeid' => $food->getIdFloor()->getIdFridge()->getId(),
-                    'floorId' => $food->getIdFloor()->getId()
-                ]);
-            }
-
-            return $this->render('food/edit.html.twig', [
-                'food' => $food,
-                'foodForm' => $form->createView(),
+            return $this->json([
+                'message' => "Food Updated!"
             ]);
 
-        } else {
-            return $this->render('home/homepage.html.twig');
+        } catch (\Exception $exception) {
+            return $this->json([
+                'errors' => $exception
+            ], 400);
         }
     }
 
     /**
-     * @Route("/{id}/delete", name="food_delete", methods={"DELETE"})
+     * @Route("/{id}", name="food_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Food $food): Response
+    public function delete(Request $request, FoodRepository $foodRepository, FloorRepository $floorRepository): Response
     {
-        $user = $this->getUser()->getUsername();
-        $fridgeUser = $food->getIdFloor()->getIdFridge()->getUser()->getUsername();
+        $id_food = $request->attributes->get('id');
+        $food = $foodRepository->findOneById($id_food);
 
-        if ($user == $fridgeUser) {
-            if ($this->isCsrfTokenValid('delete'.$food->getId(), $request->request->get('_token'))) {
-                $entityManager = $this->getDoctrine()->getManager();
+        $floor = $floorRepository->findOneById($food->getIdFloor());
 
-                // deleting file after deleting food
-                $filename = $food->getImageFoodPath();
-                $filesystem = new Filesystem();
-                $filesystem->remove($filename);
+        $nbr_floors = $floor->getQtyFood();
+        $floor->setQtyFood($nbr_floors - 1);
 
-                $entityManager->remove($food);
-                $entityManager->flush();
-            }
+        try {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($food);
+            $entityManager->flush();
 
-            return $this->redirectToRoute('food_index', [
-                'fridgeid' => $food->getIdFloor()->getIdFridge()->getId(),
-                'floorId' => $food->getIdFloor()->getId()
-            ]);
+            return $this->json([
+                'message' => 'Deletion successful'
+            ], 200);
 
-        } else {
-            return $this->render('home/homepage.html.twig');
+        } catch (\Exception $exception) {
+            return $this->json([
+                'errors' => $exception
+            ], 400);
         }
     }
 }

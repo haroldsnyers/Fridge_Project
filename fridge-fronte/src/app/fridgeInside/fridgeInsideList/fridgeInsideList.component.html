@@ -25,13 +25,13 @@
   <mat-tab-group mat-stretch-tabs *ngIf="floors.length > 0 && !isLoading">
     <mat-tab *ngFor="let floor of floors; let index = index" [label]="floor.name">
       <ng-template matTabContent>
-        <div class="add-button-header">
+        <div class="add-button-header" style="min-height: 5rem;">
           <div>
             <div>
               <mat-chip-list aria-orientation="horizontal" aria-label="food type" *ngFor="let type of floor.type">
                 <mat-chip>{{type}}</mat-chip>
               </mat-chip-list>
-              <p>Quantity food: {{ floor.qty_food }}</p>
+              <p>Quantity food: {{ floor.qtyfood }}</p>
             </div>
 
             <div class="example-selected-value">Selected value: {{group.value}}</div>
@@ -52,8 +52,8 @@
 
         </div>
 
-        <mat-spinner *ngIf="isLoadingBis"></mat-spinner>
-        <div *ngIf="!isLoadingBis">
+        <!-- <mat-spinner *ngIf="isLoadingBis"></mat-spinner> -->
+        <div>
           <div class="toggleGroup">
             <mat-button-toggle-group #group="matButtonToggleGroup">
               <mat-button-toggle checked="true" value="grid" aria-label="grid view">
@@ -63,7 +63,7 @@
                 <span class="material-icons mdc-fab__icon">view_headline</span>
               </mat-button-toggle>
               <button mat-button matTooltip="Add element to floor" matTooltipPosition="above"
-                (click)="openDialog(floor.name, floor.id, 'floor')">
+              [routerLink]="['/fridge/food/create', floor.id]">
                 <span class="material-icons mdc-fab__icon">add_circle_outline</span>
                 <span class="mdc-fab__label">ADD</span>
               </button>
@@ -192,6 +192,26 @@
               </li>
             </ul>
           </div>
+        </div>
+
+        <div *ngFor="let food of foodList">
+          
+          <div *ngIf="food.id_floor.id == floor.id">
+              <p>{{food.name}}</p>
+              <div>
+                <button mat-button matTooltip="Edit floor" class="buttonEdit"
+                  [routerLink]="['/fridge/food/edit', food.id]">
+                  <span class="material-icons mdc-fab__icon">create</span>
+                  <span class="mdc-fab__label">EDIT</span>
+                </button>
+                <button mat-button matTooltip="Delete floor" color="warn"
+                  (click)="openDialog(food.name, food.id, 'food')">
+                  <span class="material-icons mdc-fab__icon">delete_outlined</span>
+                  <span class="mdc-fab__label">DELETE</span>
+                </button>
+              </div>
+          </div>
+
         </div>
 
 

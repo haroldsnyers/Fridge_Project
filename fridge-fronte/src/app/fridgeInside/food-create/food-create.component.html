@@ -10,7 +10,11 @@
         <mat-error *ngIf="form.get('name').invalid">please entered valid title</mat-error>
       </mat-form-field>
       <mat-form-field>
-        <mat-label>Favorite animal</mat-label>
+        <input matInput type="text" formControlName="imagePath" placeholder="imagePath">
+        <mat-error *ngIf="form.get('name').invalid">please entered valid title</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Type of food</mat-label>
         <mat-select formControlName="type" required>
             <mat-option>--</mat-option>
             <mat-option *ngFor="let type of types" [value]="type">
@@ -18,10 +22,29 @@
             </mat-option>
         </mat-select>
       </mat-form-field>
-      
-      <div>
-        <mat-slider formControlName="nbrFloors" thumbLabel tickInterval="3" min="1" max="15" required></mat-slider>
-      </div>
+      <mat-form-field>
+        <input matInput formControlName="dateOfPurchase" [matDatepicker]="pickerD" placeholder="Choose a date">
+        <mat-datepicker-toggle matSuffix [for]="pickerD"></mat-datepicker-toggle>
+        <mat-datepicker #pickerD></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput formControlName="expirationDate" [matDatepicker]="picker" placeholder="Choose a date">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="number" formControlName="quantity" placeholder="Fridge Title">
+        <mat-error *ngIf="form.get('name').invalid">please entered valid title</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Favorite animal</mat-label>
+        <mat-select formControlName="unitQty" required>
+            <mat-option>--</mat-option>
+            <mat-option *ngFor="let unit of units" [value]="unit">
+              {{unit}}
+            </mat-option>
+        </mat-select>
+      </mat-form-field>
       <button class="btn" mat-raised-button color="primary" type="submit">Save</button>
     </fieldset>
   </form>

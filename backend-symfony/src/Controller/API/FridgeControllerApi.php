@@ -137,12 +137,10 @@ class FridgeControllerApi extends AbstractController
         $id_fridge = $request->attributes->get('id');
         $fridge = $fridgeRepository->findOneById($id_fridge);
 
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->remove($fridge);
-        $entityManager->flush();
-
         try {
-            $this->getDoctrine()->getManager()->flush();
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($fridge);
+            $entityManager->flush();
 
             return $this->json([
                 'message' => 'Deletion successful'

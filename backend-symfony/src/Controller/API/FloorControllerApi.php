@@ -193,12 +193,10 @@ class FloorControllerApi extends AbstractController
         $nbrFloors = $fridge->getNbrFloors();
         $fridge->setNbrFloors($nbrFloors - 1);
 
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->remove($floor);
-        $entityManager->flush();
-
         try {
-            $this->getDoctrine()->getManager()->flush();
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($floor);
+            $entityManager->flush();
 
             return $this->json([
                 'message' => 'Deletion successful'

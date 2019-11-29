@@ -24,6 +24,7 @@ import { Fridge } from 'src/app/fridge/fridge.model';
 import { FridgeService } from 'src/app/fridge/fridge.service';
 import { MatDialog } from '@angular/material';
 import { DialogDeleteComponent } from 'src/app/dialog-delete/dialog-delete.component';
+import { FoodService } from '../food.service';
 
 // import {MDCRipple} from '@material/ripple';
 
@@ -52,18 +53,22 @@ const NAMES: string[] = [
 })
 export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoading = false;
-  isLoadingBis = false;
+  // isLoadingBis = false;
   userIsAuthenticated = false;
+
+  data = {};
 
   fridge: Fridge;
   floors: Floor[] = [];
   foodList: Food[] = [];
 
   private floorsSub: Subscription;
+  private foodSub: Subscription;
   private authStatusSub: Subscription;
 
   tabLoadTimes: Date[] = [];
   tabs = [];
+  floorIds = [];
 
   displayedColumns: string[] = ['id', 'name', 'progress', 'color'];
   dataSource: MatTableDataSource<UserData>;
@@ -73,6 +78,7 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
   constructor(
     public floorService: FloorService,
     public fridgeService: FridgeService,
+    public foodService: FoodService,
     private authService: AuthService,
     public dialog: MatDialog) {
     // Create 100 users
@@ -114,12 +120,18 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
         this.isLoading = false;
         this.floors = floorData.floors;
         this.tabs = this.getFloorsNames();
+        this.floorIds = this.floorService.getListFloorIds();
+        this.foodService.getFoodLists(this.floorIds);
+      });
+    this.foodSub = this.foodService.getFoodUpdateListener()
+      .subscribe((foodData: {listOfFood: Food[]}) => {
+        this.isLoading = false;
+        this.foodList = foodData.listOfFood;
       });
     this.userIsAuthenticated = this.authService.getIsAuth();
     this.authStatusSub = this.authService.getAuthStatusListener().subscribe(isAuthenticated => {
       this.userIsAuthenticated = isAuthenticated;
     });
-
     this.dataSource.sort = this.sort;
   }
 
@@ -130,7 +142,7 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
         tabs.push(this.floors[i].name);
     }
     return tabs;
-}
+  }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -154,10 +166,17 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   openDialog(name: string, id: number, typeElem: string): void {
-    const dialogRef = this.dialog.open(DialogDeleteComponent, {
-      width: '250px',
+    if (typeElem === 'food') {
       // tslint:disable-next-line:object-literal-shorthand
-      data: {name: name, typeElem: typeElem, id: id}
+      this.data = {name: name, typeElem: typeElem, id: id, floorIds: this.floorIds};
+    } else {
+      // tslint:disable-next-line:object-literal-shorthand
+      this.data = {name: name, typeElem: typeElem, id: id};
+    }
+    const dialogRef = this.dialog.open(DialogDeleteComponent, {
+      width: '450px',
+      // tslint:disable-next-line:object-literal-shorthand
+      data: this.data
     });
 
     dialogRef.afterClosed().subscribe(() => {

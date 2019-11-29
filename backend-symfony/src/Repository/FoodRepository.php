@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Food;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
 
 /**
  * @method Food|null find($id, $lockMode = null, $lockVersion = null)
@@ -33,6 +34,18 @@ class FoodRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    public function findOneById($value): ?Food
+    {
+        try {
+            return $this->createQueryBuilder('f')
+                ->andWhere('f.id = :food_id')
+                ->setParameter('food_id', $value)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+        }
     }
 
     /*

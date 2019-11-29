@@ -16,7 +16,9 @@ import {
   MatPaginatorModule,
   MatChipsModule,
   MatDialogModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatDatepickerModule,
+  MatNativeDateModule
 } from '@angular/material';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -73,6 +75,8 @@ import { FoodCreateComponent } from './fridgeInside/food-create/food-create.comp
     MatChipsModule,
     MatDialogModule,
     MatTooltipModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     HttpClientModule
   ],
   providers: [],

@@ -27,7 +27,7 @@ class Food
     private $type;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="string", length=255)
      */
     private $expiration_date;
 
@@ -43,7 +43,7 @@ class Food
     private $id_floor;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="string", length=255)
      */
     private $date_of_purchase;
 
@@ -86,12 +86,12 @@ class Food
         return $this;
     }
 
-    public function getExpirationDate(): ?\DateTimeInterface
+    public function getExpirationDate(): ?string
     {
         return $this->expiration_date;
     }
 
-    public function setExpirationDate(\DateTimeInterface $expiration_date): self
+    public function setExpirationDate(string $expiration_date): self
     {
         $this->expiration_date = $expiration_date;
 
@@ -122,12 +122,12 @@ class Food
         return $this;
     }
 
-    public function getDateOfPurchase(): ?\DateTimeInterface
+    public function getDateOfPurchase(): ?string
     {
         return $this->date_of_purchase;
     }
 
-    public function setDateOfPurchase(\DateTimeInterface $date_of_purchase): self
+    public function setDateOfPurchase(string $date_of_purchase): self
     {
         $this->date_of_purchase = $date_of_purchase;
 

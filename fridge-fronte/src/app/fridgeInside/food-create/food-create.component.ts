@@ -4,6 +4,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Food } from '../food.model';
 import { FoodService } from '../food.service';
+import { FloorService } from '../floor.service';
 
 
 @Component({
@@ -22,8 +23,11 @@ export class FoodCreateComponent implements OnInit {
   private foodId: number;
   private floorId: number;
   types = ['Vegetable', 'Cheese'];
+  units = ['kg', 'g', 'cl', 'L', 'unit(s)'];
 
-  constructor(public foodService: FoodService, public route: ActivatedRoute) {}
+  constructor(
+    public foodService: FoodService,
+    public route: ActivatedRoute) {}
 
   ngOnInit() {
     // configure form
@@ -36,7 +40,7 @@ export class FoodCreateComponent implements OnInit {
       expirationDate: new FormControl(null, {validators : [Validators.required]}),
       quantity: new FormControl(null, {validators : [Validators.required]}),
       dateOfPurchase: new FormControl(null, {validators : [Validators.required]}),
-      ImagePath: new FormControl(null, {validators : [Validators.required]}),
+      imagePath: new FormControl(null, {validators : [Validators.required]}),
       unitQty: new FormControl(null, {validators : [Validators.required]}),
     });
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
@@ -52,6 +56,11 @@ export class FoodCreateComponent implements OnInit {
           // tslint:disable:object-literal-key-quotes
           'name': this.food.name,
           'type': this.food.type,
+          'expirationDate': this.food.expiration_date,
+          'quantity': this.food.quantity,
+          'dateOfPurchase': this.food.date_of_purchase,
+          'imagePath': this.food.image_food_path,
+          'unitQty': this.food.unit_qty
         });
       } else if (paramMap.has('floorId')) {
         this.mode = 'create';
@@ -77,7 +86,7 @@ export class FoodCreateComponent implements OnInit {
         this.form.value.expirationDate,
         this.form.value.quantity,
         this.form.value.dateOfPurchase,
-        this.form.value.ImagePath,
+        this.form.value.imagePath,
         this.form.value.unitQty
         );
     } else {
@@ -85,11 +94,11 @@ export class FoodCreateComponent implements OnInit {
         this.food.id,
         this.form.value.name,
         this.form.value.type,
-        this.food.id_floor,
+        this.food.id_floor.id,
         this.form.value.expirationDate,
         this.form.value.quantity,
         this.form.value.dateOfPurchase,
-        this.form.value.ImagePath,
+        this.form.value.imagePath,
         this.form.value.unitQty
       );
     this.form.reset();
