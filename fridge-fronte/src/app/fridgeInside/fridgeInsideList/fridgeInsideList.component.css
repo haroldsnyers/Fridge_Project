@@ -1,6 +1,8 @@
 .container {
     width: auto;
-    padding-top: 1px;
+    padding-top: 2px;
+    margin-bottom: 2rem;
+    margin-top: 1rem;
     color: whitesmoke;
     background:
     linear-gradient(rgba(16, 33, 56, 0.8), rgba(1, 25, 140, 0.8));
@@ -63,4 +65,12 @@ mat-paginator {
 
 .mdc-image-list {
     column-count: 4;
+}
+
+th {
+    width: unset;
+}
+
+td {
+    width: 20%;
 }

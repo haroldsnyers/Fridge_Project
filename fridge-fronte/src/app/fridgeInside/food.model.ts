@@ -22,3 +22,13 @@ export interface FoodCreate {
     image_food_path: string;
     unit_qty: string;
 }
+
+export interface FoodTable {
+    name: string;
+    type: string;
+    expiration_date: Date;
+    quantity: number;
+    date_of_purchase: Date;
+    image_food_path: string;
+    unit_qty: string;
+}

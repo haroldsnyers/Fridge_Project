@@ -1,4 +1,7 @@
-<div class="container">
+<div class="container" *ngIf="isLoading">
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+</div>
+<div class="container" *ngIf="!isLoading">
   <div class="add-button-header">
     <div class="titleInside">
       <h2>My Fridge - {{ fridge.name }}</h2>
@@ -21,8 +24,7 @@
   <div>
     <p>{{ fridge.type }}</p>
   </div>
-  <mat-spinner *ngIf="isLoading"></mat-spinner>
-  <mat-tab-group mat-stretch-tabs *ngIf="floors.length > 0 && !isLoading">
+  <mat-tab-group mat-stretch-tabs *ngIf="floors.length > 0 && !isLoading" [selectedIndex]="selectTabs" (selectedIndexChange)="updateDataSource($event)">
     <mat-tab *ngFor="let floor of floors; let index = index" [label]="floor.name">
       <ng-template matTabContent>
         <div class="add-button-header" style="min-height: 5rem;">
@@ -33,9 +35,6 @@
               </mat-chip-list>
               <p>Quantity food: {{ floor.qtyfood }}</p>
             </div>
-
-            <div class="example-selected-value">Selected value: {{group.value}}</div>
-            Content {{floor.name}} - Loaded: {{getTimeLoaded(1) | date:'medium'}}
           </div>
           <div>
             <button mat-button matTooltip="Edit floor" class="buttonEdit"
@@ -49,28 +48,26 @@
               <span class="mdc-fab__label">DELETE</span>
             </button>
           </div>
-
         </div>
 
-        <!-- <mat-spinner *ngIf="isLoadingBis"></mat-spinner> -->
-        <div>
+        <mat-spinner *ngIf="isLoadingBis"></mat-spinner>
+        <div *ngIf="foodList.length > 0 && !isLoadingBis">
           <div class="toggleGroup">
             <mat-button-toggle-group #group="matButtonToggleGroup">
               <mat-button-toggle checked="true" value="grid" aria-label="grid view">
-                <span class="material-icons mdc-fab__icon">view_module</span>
+                <span class="material-icons mdc-fab__icon">apps</span>
               </mat-button-toggle>
               <mat-button-toggle value="table" aria-label="table view with details">
                 <span class="material-icons mdc-fab__icon">view_headline</span>
               </mat-button-toggle>
               <button mat-button matTooltip="Add element to floor" matTooltipPosition="above"
-              [routerLink]="['/fridge/food/create', floor.id]">
+                [routerLink]="['/fridge/food/create', floor.id]">
                 <span class="material-icons mdc-fab__icon">add_circle_outline</span>
                 <span class="mdc-fab__label">ADD</span>
               </button>
             </mat-button-toggle-group>
           </div>
-
-          <div *ngIf="group.value == 'table'">
+          <div *ngIf="group.value == 'table' && !isLoadingBis">
             <mat-form-field>
               <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
             </mat-form-field>
@@ -78,28 +75,51 @@
             <div class="mat-elevation-z8">
               <table mat-table [dataSource]="dataSource" matSort>
 
-                <!-- ID Column -->
-                <ng-container matColumnDef="id">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
-                  <td mat-cell *matCellDef="let row"> {{row.id}} </td>
-                </ng-container>
-
-                <!-- Progress Column -->
-                <ng-container matColumnDef="progress">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Progress </th>
-                  <td mat-cell *matCellDef="let row"> {{row.progress}}% </td>
-                </ng-container>
-
-                <!-- Name Column -->
                 <ng-container matColumnDef="name">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
                   <td mat-cell *matCellDef="let row"> {{row.name}} </td>
                 </ng-container>
 
-                <!-- Color Column -->
-                <ng-container matColumnDef="color">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Color </th>
-                  <td mat-cell *matCellDef="let row" [style.color]="row.color"> {{row.color}} </td>
+                <!-- Progress Column -->
+                <ng-container matColumnDef="type">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
+                  <td mat-cell *matCellDef="let row"> {{row.type}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="quantity">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> quanity </th>
+                  <td mat-cell *matCellDef="let row"> {{row.quantity}}{{row.unit_qty}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="expiration_date">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> expiration date </th>
+                  <td mat-cell *matCellDef="let row"> {{row.expiration_date.substring(0,10)}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="date_of_purchase">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> date of purchase </th>
+                  <td mat-cell *matCellDef="let row"> {{row.date_of_purchase.substring(0,10)}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="star" stickyEnd>
+                  <th mat-header-cell *matHeaderCellDef></th>
+                  <td mat-cell *matCellDef="let element">
+                    <button mat-button [matMenuTriggerFor]="menu">
+                        <span class="material-icons mdc-fab__icon">more_vert</span>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item matTooltip="Edit floor" class="buttonEdit"
+                        [routerLink]="['/fridge/food/edit', element.id]">
+                        <span class="material-icons mdc-fab__icon">create</span>
+                        <span class="mdc-fab__label">EDIT</span>
+                      </button>
+                      <button mat-menu-item matTooltip="Delete floor" color="warn"
+                        (click)="openDialog(element.name, element.id, 'food')">
+                        <span class="material-icons mdc-fab__icon">delete_outlined</span>
+                        <span class="mdc-fab__label">DELETE</span>
+                      </button>
+                    </mat-menu>
+                  </td>
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -111,111 +131,19 @@
             </div>
           </div>
 
-          <div *ngIf="group.value == 'grid'">
+          <div *ngIf="group.value == 'grid' && !isLoadingBis">
             <ul class="mdc-image-list mdc-image-list--masonry my-masonry-image-list">
-              <li class="mdc-image-list__item">
+              <li class="mdc-image-list__item" *ngFor="let food of foodList">
                 <img class="mdc-image-list__image"
                   src="https://material-components.github.io/material-components-web-catalog/static/media/photos/2x3/2.jpg">
                 <div class="mdc-image-list__supporting">
-                  <span class="mdc-image-list__label">Hello label</span>
-                </div>
-              </li>
-              <li class="mdc-image-list__item">
-                <img class="mdc-image-list__image"
-                  src="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/1.jpg">
-                <div class="mdc-image-list__supporting">
-                  <span class="mdc-image-list__label">Text label</span>
-                </div>
-              </li>
-              <li class="mdc-image-list__item">
-                <img class="mdc-image-list__image"
-                  src="https://material-components.github.io/material-components-web-catalog/static/media/photos/2x3/2.jpg">
-                <div class="mdc-image-list__supporting">
-                  <span class="mdc-image-list__label">Hello label</span>
-                </div>
-              </li>
-              <li class="mdc-image-list__item">
-                <img class="mdc-image-list__image"
-                  src="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/1.jpg">
-                <div class="mdc-image-list__supporting">
-                  <span class="mdc-image-list__label">Text label</span>
-                </div>
-              </li>
-              <li class="mdc-image-list__item">
-                <img class="mdc-image-list__image"
-                  src="https://material-components.github.io/material-components-web-catalog/static/media/photos/2x3/2.jpg">
-                <div class="mdc-image-list__supporting">
-                  <span class="mdc-image-list__label">Text label</span>
-                </div>
-              </li>
-              <li class="mdc-image-list__item">
-                <img class="mdc-image-list__image"
-                  src="https://material-components.github.io/material-components-web-catalog/static/media/photos/2x3/2.jpg">
-                <div class="mdc-image-list__supporting">
-                  <span class="mdc-image-list__label">Text label</span>
-                </div>
-              </li>
-              <li class="mdc-image-list__item">
-                <img class="mdc-image-list__image"
-                  src="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/1.jpg">
-                <div class="mdc-image-list__supporting">
-                  <span class="mdc-image-list__label">Text label</span>
-                </div>
-              </li>
-              <li class="mdc-image-list__item">
-                <img class="mdc-image-list__image"
-                  src="https://material-components.github.io/material-components-web-catalog/static/media/photos/2x3/2.jpg">
-                <div class="mdc-image-list__supporting">
-                  <span class="mdc-image-list__label">Text label</span>
-                </div>
-              </li>
-              <li class="mdc-image-list__item">
-                <img class="mdc-image-list__image"
-                  src="https://material-components.github.io/material-components-web-catalog/static/media/photos/2x3/2.jpg">
-                <div class="mdc-image-list__supporting">
-                  <span class="mdc-image-list__label">Text label</span>
-                </div>
-              </li>
-              <li class="mdc-image-list__item">
-                <img class="mdc-image-list__image"
-                  src="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/1.jpg">
-                <div class="mdc-image-list__supporting">
-                  <span class="mdc-image-list__label">Text label</span>
-                </div>
-              </li>
-              <li class="mdc-image-list__item">
-                <img class="mdc-image-list__image"
-                  src="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/1.jpg">
-                <div class="mdc-image-list__supporting">
-                  <span class="mdc-image-list__label">Text label</span>
+                  <span class="mdc-image-list__label">{{food.name}}</span>
                 </div>
               </li>
             </ul>
           </div>
         </div>
-
-        <div *ngFor="let food of foodList">
-          
-          <div *ngIf="food.id_floor.id == floor.id">
-              <p>{{food.name}}</p>
-              <div>
-                <button mat-button matTooltip="Edit floor" class="buttonEdit"
-                  [routerLink]="['/fridge/food/edit', food.id]">
-                  <span class="material-icons mdc-fab__icon">create</span>
-                  <span class="mdc-fab__label">EDIT</span>
-                </button>
-                <button mat-button matTooltip="Delete floor" color="warn"
-                  (click)="openDialog(food.name, food.id, 'food')">
-                  <span class="material-icons mdc-fab__icon">delete_outlined</span>
-                  <span class="mdc-fab__label">DELETE</span>
-                </button>
-              </div>
-          </div>
-
-        </div>
-
-
-
+        <p class="info-text" *ngIf="foodList.length <= 0 && !isLoadingBis">No floor added yet</p>
 
       </ng-template>
     </mat-tab>

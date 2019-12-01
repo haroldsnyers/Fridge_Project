@@ -15,7 +15,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 
 import { Floor } from '../floor.model';
-import { Food } from '../food.model';
+import { Food, FoodTable } from '../food.model';
 import { Subscription } from 'rxjs';
 
 import { FloorService } from '../floor.service';
@@ -53,6 +53,7 @@ const NAMES: string[] = [
 })
 export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoading = false;
+  isLoadingBis = false;
   // isLoadingBis = false;
   userIsAuthenticated = false;
 
@@ -68,10 +69,20 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
 
   tabLoadTimes: Date[] = [];
   tabs = [];
+  selectTabs = 0;
   floorIds = [];
 
-  displayedColumns: string[] = ['id', 'name', 'progress', 'color'];
-  dataSource: MatTableDataSource<UserData>;
+  // displayedColumns: string[] = ['id', 'name', 'progress', 'color'];
+  // dataSource: MatTableDataSource<UserData>;
+  displayedColumns: string[] = [
+    'name',
+    'type',
+    'quantity',
+    'expiration_date',
+    'date_of_purchase',
+    'star'
+  ];
+  dataSource: MatTableDataSource<Food>;
 
   selected = new FormControl(0);
 
@@ -82,10 +93,10 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
     private authService: AuthService,
     public dialog: MatDialog) {
     // Create 100 users
-    const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
+    // const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
 
     // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(users);
+    this.dataSource = new MatTableDataSource();
 
     // const fabRipple = new MDCRipple(document.querySelector('.mdc-fab'));
 
@@ -121,18 +132,18 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
         this.floors = floorData.floors;
         this.tabs = this.getFloorsNames();
         this.floorIds = this.floorService.getListFloorIds();
-        this.foodService.getFoodLists(this.floorIds);
+        this.foodService.getFoodList(this.floorIds[0]);
       });
     this.foodSub = this.foodService.getFoodUpdateListener()
       .subscribe((foodData: {listOfFood: Food[]}) => {
         this.isLoading = false;
         this.foodList = foodData.listOfFood;
+        this.dataSource = new MatTableDataSource(this.foodList);
       });
     this.userIsAuthenticated = this.authService.getIsAuth();
     this.authStatusSub = this.authService.getAuthStatusListener().subscribe(isAuthenticated => {
       this.userIsAuthenticated = isAuthenticated;
     });
-    this.dataSource.sort = this.sort;
   }
 
   getFloorsNames() {
@@ -142,6 +153,20 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
         tabs.push(this.floors[i].name);
     }
     return tabs;
+  }
+
+  updateDataSource($event) {
+    console.log(this.floors[$event].id);
+    this.isLoadingBis = true;
+    this.selectTabs = $event;
+    console.log(this.selectTabs);
+    this.foodService.getFoodList(this.floors[$event].id);
+    this.foodSub = this.foodService.getFoodUpdateListener()
+      .subscribe((foodData: {listOfFood: Food[]}) => {
+        this.isLoadingBis = false;
+        this.foodList = foodData.listOfFood;
+        this.dataSource = new MatTableDataSource(this.foodList);
+      });
   }
 
   ngAfterViewInit() {
@@ -155,14 +180,6 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
-  }
-
-  getTimeLoaded(index: number) {
-    if (!this.tabLoadTimes[index]) {
-      this.tabLoadTimes[index] = new Date();
-    }
-
-    return this.tabLoadTimes[index];
   }
 
   openDialog(name: string, id: number, typeElem: string): void {
@@ -195,6 +212,7 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
     this.floorsSub.unsubscribe();
   }
 }
+
 
 /** Builds and returns a new User. */
 function createNewUser(id: number): UserData {

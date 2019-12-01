@@ -41,7 +41,7 @@ export class FoodService {
 
         // tslint:disable-next-line:object-literal-shorthand
         const floorData = {email: email, idFloor: idFloor};
-
+        this.foodList = [];
         this.http
             .get(
                 this.url + '/api/food/', {params: floorData})

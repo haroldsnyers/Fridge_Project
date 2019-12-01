@@ -18,8 +18,8 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <button class="btn" mat-raised-button color="primary" type="submit">Save</button>
+      <button class="btn buttonForm" mat-raised-button color="primary" type="submit">Save</button>
     </fieldset>
   </form>
-  <a *ngIf="!isLoading" class="creationLinkBack" href="#">back to Fridge repository</a>
+  <a *ngIf="!isLoading" class="creationLinkBack" [routerLink]="['/fridge/floors']">back to Fridge repository</a>
 </div>

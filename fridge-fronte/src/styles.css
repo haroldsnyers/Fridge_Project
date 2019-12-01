@@ -16,6 +16,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     box-shadow: 0 50px 50px rgba(0, 0, 0, .2);
     background:
             linear-gradient(rgba(16, 33, 56, 0.8), rgba(1, 25, 140, 0.8));
+    margin-bottom: 3rem;
 }
 
 .creationTitle {
@@ -63,7 +64,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     height: 60px;
 }
 
-#msform #food fieldset {
+#msform .food {
     background: white;
     border: 0 none;
     border-radius: 3px;
@@ -75,13 +76,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     font-size: 10px;
 }
 
-#msform #food fieldset legend{
-    margin: 10px 0 10px 0;
-    padding-top: 40px;
-    font-size: 15px;
-}
-
-#msform button {
+#msform .buttonForm {
     width: 200px;
     background: rgba(16, 33, 56, 0.8);
     font-weight: bold;
@@ -93,7 +88,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     margin: 10px 5px;
 }
 
-#msform button:hover {
+#msform .buttonForm:hover {
     width: 200px;
     background: rgba(22, 25, 41, 0.8);
     font-weight: bold;
@@ -120,4 +115,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .buttonEdit {
     color: #c45810
+}
+
+mat-spinner {
+    margin: auto;
 }
