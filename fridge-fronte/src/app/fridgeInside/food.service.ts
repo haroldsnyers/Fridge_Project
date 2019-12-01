@@ -21,8 +21,8 @@ export class FoodService {
     private data: JSON;
     private foodUpdated = new Subject<{listOfFood: Food[]}>();
 
-    // private url = 'http://127.0.0.1:8000';
-    private url = 'http://localhost:3006';
+    private url = 'http://127.0.0.1:8000';
+    // private url = 'http://localhost:3006';
 
     constructor(
         private http: HttpClient,
@@ -52,7 +52,7 @@ export class FoodService {
                         id: this.data[i].idFloor.id,
                         name: this.data[i].idFloor.name,
                         type: this.data[i].idFloor.type,
-                        qtyfood: this.data[i].idFloor.qtyfood,
+                        qtyFood: this.data[i].idFloor.qtyFood,
                         id_fridge: this.data[i].idFloor.id_fridge,
                     };
                     const food: Food = {

@@ -2,7 +2,7 @@ export interface Floor {
     id: number;
     name: string;
     type: string;
-    qtyfood: number;
+    qtyFood: number;
     id_fridge: number;
 }
 

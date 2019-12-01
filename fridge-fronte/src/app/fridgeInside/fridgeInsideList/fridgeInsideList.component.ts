@@ -130,6 +130,7 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
       .subscribe((floorData: {floors: Floor[]}) => {
         this.isLoading = false;
         this.floors = floorData.floors;
+        console.log(this.floors);
         this.tabs = this.getFloorsNames();
         this.floorIds = this.floorService.getListFloorIds();
         this.foodService.getFoodList(this.floorIds[0]);

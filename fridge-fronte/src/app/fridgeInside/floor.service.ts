@@ -16,8 +16,8 @@ export class FloorService {
     private floorUpdated = new Subject<{floors: Floor[]}>();
     private Fridge: Fridge;
 
-    // private url = 'http://127.0.0.1:8000';
-    private url = 'http://localhost:3006';
+    private url = 'http://127.0.0.1:8000';
+    // private url = 'http://localhost:3006';
 
     constructor(
         private http: HttpClient,

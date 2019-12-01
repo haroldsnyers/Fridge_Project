@@ -1,4 +1,4 @@
-.container {
+.containerInside {
     width: auto;
     padding-top: 2px;
     margin-bottom: 2rem;
@@ -74,3 +74,119 @@ th {
 td {
     width: 20%;
 }
+
+
+#foodList .foodList-wrap {
+    box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.08);
+    transition: 0.3s;
+  }
+  
+  #foodList .foodList-wrap:hover {
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.16);
+  }
+  
+  #foodList .foodList-item {
+    height: 360px;
+  }
+  
+  #foodList .foodList-item figure {
+    background: #000;
+    overflow: hidden;
+    height: 240px;
+    position: relative;
+    border-radius: 4px 4px 0 0;
+    margin: 0;
+    display: grid;
+    justify-content: space-evenly;
+  }
+  
+  #foodList .foodList-item figure:hover img {
+    opacity: 0.4;
+    transition: 0.3s;
+  }
+  
+  #foodList .foodList-item figure .link-edit,
+  #foodList .foodList-item figure .link-delete {
+    position: absolute;
+    display: inline-block;
+    opacity: 0;
+    line-height: 1;
+    text-align: center;
+    width: 36px;
+    height: 36px;
+    background: #fff;
+    border-radius: 50%;
+    transition: 0.2s linear;
+  }
+  
+  #foodList .foodList-item figure .link-edit i,
+  #foodList .foodList-item figure .link-delete i {
+    padding-top: 6px;
+    font-size: 22px;
+    color: #333;
+  }
+  
+  #foodList .foodList-item figure .link-edit:hover,
+  #foodList .foodList-item figure .link-delete:hover {
+    background: #3bffb3;
+  }
+  
+  #foodList .foodList-item figure .link-edit:hover i,
+  #foodList .foodList-item figure .link-delete:hover i {
+    color: #fff;
+  }
+  
+  #foodList .foodList-item figure .link-edit {
+    left: calc(50% - 38px);
+    top: calc(50% - 18px);
+  }
+  
+  #foodList .foodList-item figure .link-delete {
+    right: calc(50% - 38px);
+    top: calc(50% - 18px);
+  }
+  
+  #foodList .foodList-item figure:hover .link-edit {
+    opacity: 1;
+    left: calc(50% - 44px);
+  }
+  
+  #foodList .foodList-item figure:hover .link-delete {
+    opacity: 1;
+    right: calc(50% - 44px);
+  }
+  
+  /* FOODLIST INFO */
+
+  #foodList .foodList-item .foodList-info {
+    background: #fff;
+    text-align: center;
+    padding: 30px;
+    height: 90px;
+    border-radius: 0 0 3px 3px;
+  }
+  
+  #foodList .foodList-item .foodList-info h4 {
+    font-size: 18px;
+    line-height: 1px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    padding-bottom: 0;
+  }
+  
+  #foodList .foodList-item .foodList-info h4 a {
+    color: #333;
+  }
+  
+  #foodList .foodList-item .foodList-info h4 a:hover {
+    color: #18d26e;
+  }
+  
+  #foodList .foodList-item .foodList-info p {
+    padding: 0;
+    margin: 0;
+    color: #b8b8b8;
+    font-weight: 500;
+    font-size: 14px;
+    text-transform: uppercase;
+  }

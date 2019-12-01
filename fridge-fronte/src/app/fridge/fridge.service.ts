@@ -15,8 +15,8 @@ export class FridgeService {
     private fridgeUpdated = new Subject<{fridges: Fridge[]}>();
     private currentFridge: Fridge;
 
-    // private url = 'http://127.0.0.1:8000';
-    private url = 'http://localhost:3006';
+    private url = 'http://127.0.0.1:8000';
+    // private url = 'http://localhost:3006';
 
     constructor(
         private http: HttpClient,

@@ -10,8 +10,8 @@ export class AuthService {
     private authStatusListener = new Subject<boolean>(); // just need to know if user is authenticated
     private currentUser = null;
 
-    // private url = 'http://127.0.0.1:8000';
-    private url = 'http://localhost:3006';
+    private url = 'http://127.0.0.1:8000';
+    // private url = 'http://localhost:3006';
 
     constructor(private http: HttpClient, private router: Router) {}
 
