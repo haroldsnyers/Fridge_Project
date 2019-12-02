@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
@@ -35,14 +36,19 @@ class FloorControllerApi extends AbstractController
             $this->generateFloorsFridge($id_fridge, $fridgeRepository);
             $listFloors = $this->getFloorsFridge($id_fridge);
 
+            $defaultContext = [
+                AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context){
+                    return $object->getId();
+                },
+                ObjectNormalizer::CIRCULAR_REFERENCE_LIMIT =>0,
+                AbstractNormalizer::IGNORED_ATTRIBUTES =>['fridge', 'user', 'floor'],
+                ObjectNormalizer::ENABLE_MAX_DEPTH => true,
+            ];
+
             $encoders = array( new JsonEncoder());
             $normalizers = array(new ObjectNormalizer());
             $serializer = new Serializer($normalizers, $encoders);
-            $jsonContent = $serializer->serialize($listFloors,'json', [
-                'circular_reference_handler' => function ($object) {
-                    return $object->getId();
-                }
-            ]);
+            $jsonContent = $serializer->serialize($listFloors,'json', $defaultContext);
             $response = new JsonResponse();
             $response->setContent($jsonContent);
 
@@ -54,8 +60,6 @@ class FloorControllerApi extends AbstractController
             ], 400);
         }
     }
-
-    //public function updateNbrFood()
 
     public function getFloorsFridge ($id_fridge)
     {
@@ -135,20 +139,6 @@ class FloorControllerApi extends AbstractController
             ], 400);
         }
 
-    }
-
-    public function changeNbrFloor ($id_fridge, $change)
-    {
-        $fridge = $this->getDoctrine()
-            ->getRepository(Fridge::class)
-            ->findOneById($id_fridge);
-
-        $nbr_floors = $fridge->getNbrFloors();
-
-        $entityManager = $this->getDoctrine()->getManager();
-        $fridge->setNbrFloors($nbr_floors + $change);
-        $entityManager->persist($fridge);
-        $entityManager->flush();
     }
 
     /**

@@ -26,40 +26,6 @@ class UserControllerApi extends AbstractController
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
-//        try {
-//            $data = json_decode($request->getContent(), true);
-//
-//            // 1) build the form
-//            $user = new User();
-//            $form = $this->createForm(UserType::class, $user);
-//
-//            // 2) handle the submit (will only happen on POST)
-//            $form->submit($data);
-//
-//            // 3) Encode the password (you could also do this via Doctrine listener)
-//            $password = $passwordEncoder->encodePassword($user, 'engage');
-//            $user->setPassword($password);
-//
-//            // 4) save the User!
-//            $entityManager = $this->getDoctrine()->getManager();
-//            $entityManager->persist($user);
-//            $entityManager->flush();
-//
-//            // ... do any other work - like sending them an email, etc
-//            // maybe set a "flash" success message for the user
-//
-//
-//            return new JsonResponse("Registered", 201);
-//
-//        } catch (\Exception $exception) {
-//
-//            return new JsonResponse([
-//                'success' => false,
-//                'code' => $exception->getCode(),
-//                'message' => $exception->getMessage()
-//            ]);
-//        }
-
         $user = new User();
         $data = json_decode($request->getContent(), true);
         $email = $data['email'];
@@ -100,7 +66,7 @@ class UserControllerApi extends AbstractController
             }
         }
         return $this->json([
-            'errors' => $errors
+            'error' => $errors
         ], 400);
 
 

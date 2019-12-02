@@ -1,19 +1,22 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { AuthSignupData, AuthLoginData } from './auth-data.model';
 import { Router } from '@angular/router';
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { ApiService } from '../service/api.service';
 
 @Injectable({ providedIn: 'root'})
 export class AuthService {
     private isAuthenticated = false;
     private authStatusListener = new Subject<boolean>(); // just need to know if user is authenticated
+    private errorListener: Subject<string> =  new Subject<string>();
     private currentUser = null;
 
-    private url = 'http://127.0.0.1:8000';
-    // private url = 'http://localhost:3006';
-
-    constructor(private http: HttpClient, private router: Router) {}
+    constructor(
+        private http: HttpClient,
+        private router: Router,
+        private api: ApiService) {}
 
     getIsAuth() {
         return this.isAuthenticated;
@@ -23,37 +26,50 @@ export class AuthService {
         return this.authStatusListener.asObservable();
     }
 
+    getErrorListener(): Observable<any> {
+        return this.errorListener.asObservable();
+      }
+
     getCurrentUser() {
         return this.currentUser;
     }
 
     createUser(email: string, username: string, password: string, passwordConfirmation: string) {
         const authData: AuthSignupData = {email, username, password, passwordConfirmation};
-        this.http.post(this.url + '/api/user/register', authData)
+        this.api.postSignup(authData)
             .subscribe(response => {
                 this.isAuthenticated = true; // needed to update authentication status
                 this.authStatusListener.next(true); // telling everyone who is interested that the user is authenticated
                 this.currentUser = authData.email;
                 this.router.navigate(['/fridges']);
+            }, error => {
+                this.errorListener.error(error);
+                this.authStatusListener.next(false);
+                this.errorListener = new Subject<string>();
             });
     }
 
     loginUser(email: string, password: string) {
         const authData: AuthLoginData = {email, password};
-        this.http.post<{result: boolean}>(this.url + '/api/user/login', authData)
-            .subscribe(response => {
-                if (response.result === true) {
-                    this.isAuthenticated = true; // needed to update authentication status
-                    this.authStatusListener.next(true); // telling everyone who is interested that the user is authenticated
-                    this.currentUser = authData.email;
-                }
-                this.router.navigate(['/fridges']);
-            });
+        this.api.postLogin(authData)
+            .subscribe(
+                response => {
+                    if (response.result === true) {
+                        this.isAuthenticated = true; // needed to update authentication status
+                        this.authStatusListener.next(true); // telling everyone who is interested that the user is authenticated
+                        this.currentUser = authData.email;
+                    }
+                    this.router.navigate(['/fridges']);
+                }, error => {
+                    this.errorListener.error(error);
+                    this.authStatusListener.next(false);
+                    this.errorListener = new Subject<string>();
+                });
     }
 
     logout() {
         this.isAuthenticated = false;
         this.authStatusListener.next(false);
         this.router.navigate(['/']);
-      }
+    }
 }

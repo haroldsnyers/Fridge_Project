@@ -18,6 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
@@ -37,14 +38,20 @@ class FoodControllerApi extends AbstractController
         $id_floor = $request->query->get('idFloor');
         try {
             $listFood = $foodRepository->findByIdFloor($id_floor);
+
+            $defaultContext = [
+                AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context){
+                    return $object->getId();
+                },
+                ObjectNormalizer::CIRCULAR_REFERENCE_LIMIT =>0,
+                AbstractNormalizer::IGNORED_ATTRIBUTES =>['fridge', 'user', 'floor', 'idFridge'],
+                ObjectNormalizer::ENABLE_MAX_DEPTH => true,
+            ];
+
             $encoders = array( new JsonEncoder());
             $normalizers = array(new ObjectNormalizer());
             $serializer = new Serializer($normalizers, $encoders);
-            $jsonContent = $serializer->serialize($listFood,'json', [
-                'circular_reference_handler' => function ($object) {
-                    return $object->getId();
-                }
-            ]);
+            $jsonContent = $serializer->serialize($listFood,'json', $defaultContext);
             $response = new JsonResponse();
             $response->setContent($jsonContent);
 

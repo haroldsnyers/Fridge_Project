@@ -36,14 +36,19 @@ class FridgeControllerApi extends AbstractController
                 array_push($fridgeList, $fridge);
             }
 
+            $defaultContext = [
+                AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context){
+                    return $object->getId();
+                },
+                ObjectNormalizer::CIRCULAR_REFERENCE_LIMIT =>0,
+                AbstractNormalizer::IGNORED_ATTRIBUTES =>['fridge'],
+                ObjectNormalizer::ENABLE_MAX_DEPTH => true,
+            ];
+
             $encoders = array( new JsonEncoder());
             $normalizers = array(new ObjectNormalizer());
             $serializer = new Serializer($normalizers, $encoders);
-            $jsonContent = $serializer->serialize($listFridge,'json', [
-                'circular_reference_handler' => function ($object) {
-                    return $object->getId();
-                }
-            ]);
+            $jsonContent = $serializer->serialize($listFridge,'json', $defaultContext);
             $response = new JsonResponse();
             $response->setContent($jsonContent);
 
