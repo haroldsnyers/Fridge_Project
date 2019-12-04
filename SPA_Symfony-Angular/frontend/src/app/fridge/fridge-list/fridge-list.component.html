@@ -1,0 +1,52 @@
+
+<div class="container creationContainer">
+    <div class="add-button-header">
+      <h2>My Fridge Repository</h2>
+      <button class="mdc-fab mdc-fab--extended" [routerLink]="['/fridge/create']">
+        <span class="material-icons mdc-fab__icon">add</span>
+        <span class="mdc-fab__label">Create</span>
+      </button>
+    </div>
+    <mat-spinner *ngIf="isLoading"></mat-spinner>
+    <mat-accordion multi="false" *ngIf="fridges.length > 0 && !isLoading">
+        <mat-expansion-panel class="accordion" *ngFor="let fridge of fridges">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <span class="expansionTitle">{{ fridge.name }}</span>
+               
+            </mat-panel-title>
+            <mat-panel-description class="expansionTitle">
+                <span class="expansionTitle">{{ fridge.type }}</span>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <ng-template matExpansionPanelContent>
+            <div class="fridge-container my-1">
+              <a href="#">
+                <img class="fridge-img" src="assets/images/french_door_fridge.jpg" alt="hello">
+                <div class="fridge-title d-inline-block pl-3 align-middle">
+                  <br>
+                  <span class="align-left fridge-details"> Type : {{ fridge.type }}</span>
+                  <br>
+                  <span class="align-left fridge-details"> Number of Floors : {{ fridge.nbrFloors }}</span>
+                </div>
+              </a>
+            </div>
+          </ng-template>
+          <mat-action-row>
+            <button mat-button matToolTip="Go inside fridge" matTooltipPosition="above" (click)="setFridge(fridge.id)">
+                <span class="material-icons mdc-fab__icon">pageview</span>
+                <span class="mdc-fab__label buttonReview">REVIEW</span>
+            </button>
+            <a mat-button matToolTip="Edit Fridge" matTooltipPosition="right" class="buttonEdit" [routerLink]="['/fridge/edit', fridge.id]">
+              <span class="material-icons mdc-fab__icon">create</span>
+              <span class="mdc-fab__label">EDIT</span>
+              </a>
+            <button mat-button color="warn" (click)="onDelete(fridge.id)">
+                <span class="material-icons mdc-fab__icon">delete_outlined</span>
+                <span class="mdc-fab__label ">DELETE</span>
+            </button>
+          </mat-action-row>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <p class="info-text" *ngIf="fridges.length <= 0 && !isLoading">No fridge added yet</p>
+</div>
