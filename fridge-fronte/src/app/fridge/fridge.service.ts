@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { Fridge, FridgeCreate } from './fridge.model';
 import { Subject } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
+import { ApiService } from '../service/api.service';
 
 @Injectable({
     providedIn: 'root'
@@ -21,7 +22,8 @@ export class FridgeService {
     constructor(
         private http: HttpClient,
         private router: Router,
-        private authService: AuthService) {}
+        private authService: AuthService,
+        private api: ApiService) {}
 
     getFridgeUpdateListener() {
         return this.fridgeUpdated.asObservable();
@@ -38,11 +40,9 @@ export class FridgeService {
     getFridges() {
         const email = this.authService.getCurrentUser();
         // tslint:disable-next-line:object-literal-shorthand
-        const Userdata = {email: email};
+        const userData = {email: email};
         this.fridges = []; // reset fridges to zero
-        this.http
-            .get(
-                this.url + '/api/fridge/', {params: Userdata})
+        this.api.getFridges(userData)
             .subscribe(getData => {
                 this.data = JSON.parse(JSON.stringify(getData));
                 for (let i = 0; i < Object.keys(this.data).length; i++) {

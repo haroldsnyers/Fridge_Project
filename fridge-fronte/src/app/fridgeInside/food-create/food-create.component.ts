@@ -13,8 +13,6 @@ import { FloorService } from '../floor.service';
   styleUrls: ['./food-create.component.css']
 })
 export class FoodCreateComponent implements OnInit {
-  enteredTitle = '';
-  enteredContent = '';
   food: Food;
   isLoading = false;
   form: FormGroup; // needs to be initialized after (for example in ngOnInit)
@@ -22,7 +20,17 @@ export class FoodCreateComponent implements OnInit {
   title = 'Create';
   private foodId: number;
   private floorId: number;
-  types = ['Vegetable', 'Cheese'];
+  types = [
+    'Vegetable',
+    'Cheese',
+    'Meat',
+    'Poultry (chickens, turkeys, geese and ducks,...',
+    'Fish',
+    'Dairy food',
+    'Condiments (sauce)',
+    'Grain food (bread)',
+    'Other'
+  ];
   units = ['kg', 'g', 'cl', 'L', 'unit(s)'];
 
   constructor(
@@ -50,7 +58,6 @@ export class FoodCreateComponent implements OnInit {
         this.foodId = +paramMap.get('foodId');
         this.isLoading = true;
         this.food = this.foodService.getFood(this.foodId);
-        console.log(this.food);
         this.isLoading = false;
         this.form.setValue({
           // tslint:disable:object-literal-key-quotes
@@ -68,7 +75,6 @@ export class FoodCreateComponent implements OnInit {
         this.foodId = null;
         this.floorId = +paramMap.get('floorId');
       }
-      console.log(this.mode);
     });
   }
 

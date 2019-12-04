@@ -41,7 +41,7 @@ class FridgeControllerApi extends AbstractController
                     return $object->getId();
                 },
                 ObjectNormalizer::CIRCULAR_REFERENCE_LIMIT =>0,
-                AbstractNormalizer::IGNORED_ATTRIBUTES =>['fridge'],
+                AbstractNormalizer::IGNORED_ATTRIBUTES =>['fridge', 'password', 'plainPassword', 'salt'],
                 ObjectNormalizer::ENABLE_MAX_DEPTH => true,
             ];
 

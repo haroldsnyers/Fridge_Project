@@ -19,7 +19,17 @@ export class FloorCreateComponent implements OnInit {
   title = 'Create';
   private mode = 'create';
   private floorId: number;
-  types = ['Vegetable', 'Cheese'];
+  types = [
+    'Vegetable',
+    'Cheese',
+    'Meat',
+    'Poultry (chickens, turkeys, geese and ducks,...',
+    'Fish',
+    'Dairy food',
+    'Condiments (sauce)',
+    'Grain food (bread)',
+    'Other'
+  ];
 
   constructor(public floorService: FloorService, public route: ActivatedRoute) {}
 

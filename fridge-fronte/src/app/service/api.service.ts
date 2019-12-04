@@ -14,6 +14,15 @@ export class ApiService {
 
     constructor(private http: HttpClient, private router: Router) {}
 
+    /* Fridge API */
+
+    getFridges(userData) {
+        return this.http.get(this.url + '/api/fridge/', {params: userData}).pipe(
+            catchError(this.handelError));
+    }
+
+    /* User API */
+
     postLogin(authData: AuthLoginData) {
         return this.http.post<{result: boolean}>(this.url + '/api/user/login', authData).pipe(
             catchError(this.handelError));
@@ -26,7 +35,7 @@ export class ApiService {
 
     handelError(err: any) {
         if (err instanceof HttpErrorResponse) {
-          return throwError(err.error.error);
+          return throwError(err.error.errors);
         } else {
           return throwError(err.message);
         }
