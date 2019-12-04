@@ -1,0 +1,16 @@
+{% form_theme fridgeForm 'bootstrap_4_layout.html.twig' %}
+<form id="msform" method="post">
+    <fieldset>
+        <h2 class="fs-title">{{ h2_label|default('Create your new fridge') }}</h2>
+        <h3 class="fs-subtitle">Select or enter the needed info</h3>
+        {{ form_start(fridgeForm) }}
+
+        {{ form_row(fridgeForm.name, { 'attr': {
+            'placeholder': "Example : Kitchen fridge"} }) }}
+        {{ form_row(fridgeForm.type) }}
+        {{ form_label(fridgeForm.nbr_floors, 'Number of Floors') }}
+        {{ form_widget(fridgeForm.nbr_floors) }}
+        <button class="btn">{{ button_label|default('Save') }}</button>
+        {{ form_end(fridgeForm) }}
+    </fieldset>
+</form>

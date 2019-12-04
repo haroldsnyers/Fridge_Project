@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SecurityController!{% endblock %}
+
+{% block body %}
+    <div style="padding-bottom: 100px"></div>
+
+<div class="container">
+    <h1>Login Page ✅</h1>
+    <div class="login-page">
+        <div class="form">
+            {% if error %}
+                <span class="error">{{ error.messageKey| replace({"Invalid credentials." : "Invalid username or password."}) }}</span>
+            {% endif %}
+            <form action="{{ path('login') }}" method="POST">
+                <input type="text" name="_username" value="{{ last_username }}" placeholder="username"/>
+                <input type="password" name="_password" placeholder="password"/>
+                <button class="submit">login</button>
+                <p class="message">Not registered? <a href="{{ path('user_registration') }}">Create an account</a></p>
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% form_theme floorForm 'bootstrap_4_layout.html.twig' %}
+<form id="msform" method="post">
+    <fieldset>
+        <h2 class="fs-title">{{ h2_label|default('Edit your Floor') }}</h2>
+        <h3 class="fs-subtitle">Select or enter the needed info</h3>
+        {{ form_start(floorForm) }}
+
+        {{ form_row(floorForm.name, { 'attr': {
+            'placeholder': "Example : Bottom floor"} }) }}
+        {{ form_row(floorForm.type, { 'attr': {
+            'placeholder': "Example : vegetables, fish"} }) }}
+
+        <button class="btn">{{ button_label|default('Save') }}</button>
+        {{ form_end(floorForm) }}
+    </fieldset>
+</form>
