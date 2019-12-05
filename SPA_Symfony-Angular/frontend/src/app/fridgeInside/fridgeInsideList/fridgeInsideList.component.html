@@ -51,7 +51,6 @@
           </div>
         </div>
 
-        <mat-spinner *ngIf="isLoadingBis"></mat-spinner>
         <div class="toggleGroup">
           <mat-button-toggle-group #group="matButtonToggleGroup">
             <mat-button-toggle *ngIf="foodList.length > 0" checked="true" value="grid" aria-label="grid view">
@@ -67,6 +66,7 @@
             </button>
           </mat-button-toggle-group>
         </div>
+        <mat-spinner *ngIf="isLoadingBis"></mat-spinner>
         <div *ngIf="foodList.length > 0 && !isLoadingBis">
           <div *ngIf="group.value == 'table' && !isLoadingBis">
             <mat-form-field>
@@ -139,10 +139,10 @@
                 <div *ngFor="let food of foodList" class="col-lg-4 col-md-6 foodList-item wow fadeInUp">
                   <div class="foodList-wrap">
                     <figure>
-                      <img src="assets/images/Food.jpg" class="img-fluid" alt="">
-                      <a href="#" data-lightbox="portfolio" class="link-edit" matTooltip="Delete food"><i
+                      <img src={{food.image_food_path}} class="img-fluid" alt="">
+                      <a class="link-edit" matTooltip="Edit food" [routerLink]="['/fridge/food/edit', food.id]"><i
                           class="material-icons mdc-fab__icon">create</i></a>
-                      <a href="#" class="link-delete" matTooltip="Delete food"><i
+                      <a class="link-delete" matTooltip="Delete food" (click)="openDialog(food.name, food.id, 'food')"><i
                           class="material-icons mdc-fab__icon">delete</i></a>
                     </figure>
 
@@ -151,12 +151,14 @@
                       <p>{{food.type}}</p>
                     </div>
                   </div>
+                  
+                  
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <p class="info-text" *ngIf="foodList.length <= 0 && !isLoadingBis">No floor added yet</p>
+        <p class="info-text" *ngIf="foodList.length <= 0 && !isLoadingBis">No food added yet</p>
 
       </ng-template>
     </mat-tab>

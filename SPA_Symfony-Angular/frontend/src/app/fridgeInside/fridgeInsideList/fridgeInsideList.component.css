@@ -96,8 +96,9 @@ td {
     position: relative;
     border-radius: 4px 4px 0 0;
     margin: 0;
-    display: grid;
-    justify-content: space-evenly;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
   
   #foodList .foodList-item figure:hover img {

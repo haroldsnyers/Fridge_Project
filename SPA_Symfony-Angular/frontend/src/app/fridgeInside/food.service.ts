@@ -8,15 +8,25 @@ import { FridgeService } from '../fridge/fridge.service';
 
 import { Food, FoodCreate } from './food.model';
 import { Floor } from './floor.model';
-import { Fridge } from '../fridge/fridge.model';
-import { EmailValidator } from '@angular/forms';
 import { FloorService } from './floor.service';
+import { map } from 'rxjs/operators';
+
+const typeMap = new Map();
+const urlImages = 'assets/images/';
+typeMap.set('Fish', urlImages + 'fish.png');
+typeMap.set('Vegetable', urlImages + 'vegetables.png');
+typeMap.set('Cheese', urlImages + 'cheese.png');
+typeMap.set('Meat', urlImages + 'meat.png');
+typeMap.set('Poultry (chickens, turkeys, geese and ducks,...', urlImages + 'chicken.png');
+typeMap.set('Dairy food', urlImages + 'dairy_food.png');
+typeMap.set('Condiments (sauce)', urlImages + 'condiments.png');
+typeMap.set('Grain food (bread)', urlImages + 'grain_food.png');
+typeMap.set('Other', urlImages + 'food.png');
 
 @Injectable({
     providedIn: 'root'
 })
 export class FoodService {
-    private listOfFoodList = [];
     private foodList: Food[] = [];
     private data: JSON;
     private foodUpdated = new Subject<{listOfFood: Food[]}>();
@@ -95,6 +105,8 @@ export class FoodService {
 
     addFood(name: string, type, idFloor: number, expirationDate: Date,
             quantity: number, dateOfPurchase: Date, imageFoodPath: string, unitQty: string) {
+        imageFoodPath = typeMap.get(type);
+
         const foodData: FoodCreate = {
             name,
             type,
@@ -116,6 +128,9 @@ export class FoodService {
                quantity: number, dateOfPurchase: Date, imageFoodPath: string, unitQty: string) {
         let foodData: Food | FormData;
         const floor = this.floorService.getFloor(idFloor);
+
+        imageFoodPath = typeMap.get(type);
+
         foodData = {
             id : idFood,
             // tslint:disable:object-literal-shorthand

@@ -30,17 +30,17 @@ export class LoginComponent implements AfterViewInit {
             this.Error = error;
           }
         );
+        this.isLoading = false;
       }
     );
-    this.isLoading = false;
   }
 
   onLogin(form: NgForm) {
     if (form.invalid) {
       return;
     }
-    this.authService.loginUser(form.value.email, form.value.password);
     this.isLoading = true;
+    this.authService.loginUser(form.value.email, form.value.password);
     this.ngAfterViewInit();
   }
 

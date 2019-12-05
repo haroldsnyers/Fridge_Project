@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FridgeService } from '../fridge/fridge.service';
 import { FloorService } from '../fridgeInside/floor.service';
 import { FoodService } from '../fridgeInside/food.service';
+import { Router } from '@angular/router';
 
 export interface DialogData {
   name: string;
@@ -30,7 +31,8 @@ export class DialogDeleteComponent {
     @Inject(MAT_DIALOG_DATA) public dataFood: DialogDataFood,
     private fridgeService: FridgeService,
     private floorService: FloorService,
-    private foodService: FoodService) {}
+    private foodService: FoodService,
+    private router: Router) {}
 
   onNoClick(): void {
     this.dialogRef.close();
@@ -48,6 +50,7 @@ export class DialogDeleteComponent {
     } else if (this.dataFood.typeElem === 'food') {
       this.foodService.deleteFood(this.dataFood.id).subscribe(() => {
         this.foodService.getFoodLists(this.dataFood.floorIds);
+        this.router.navigate(['/fridge/floors']);
       });
     }
     this.dialogRef.close();

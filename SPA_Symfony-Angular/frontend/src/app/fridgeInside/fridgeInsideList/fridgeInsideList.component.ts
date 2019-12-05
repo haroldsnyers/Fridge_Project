@@ -25,25 +25,9 @@ import { FridgeService } from 'src/app/fridge/fridge.service';
 import { MatDialog } from '@angular/material';
 import { DialogDeleteComponent } from 'src/app/dialog-delete/dialog-delete.component';
 import { FoodService } from '../food.service';
+import { Router } from '@angular/router';
 
 // import {MDCRipple} from '@material/ripple';
-
-export interface UserData {
-  id: string;
-  name: string;
-  progress: string;
-  color: string;
-}
-
-/** Constants used to fill up our data base. */
-const COLORS: string[] = [
-  'maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple', 'fuchsia', 'lime', 'teal',
-  'aqua', 'blue', 'navy', 'black', 'gray'
-];
-const NAMES: string[] = [
-  'Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack', 'Charlotte', 'Theodore', 'Isla', 'Oliver',
-  'Isabella', 'Jasper', 'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'
-];
 
 @Component({
   selector: 'app-fridginside-list',
@@ -91,7 +75,8 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
     public fridgeService: FridgeService,
     public foodService: FoodService,
     private authService: AuthService,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    private router: Router) {
     // Create 100 users
     // const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
 
@@ -135,9 +120,10 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
         this.floorIds = this.floorService.getListFloorIds();
         this.foodService.getFoodList(this.floorIds[0]);
       });
+    this.isLoadingBis = true;
     this.foodSub = this.foodService.getFoodUpdateListener()
       .subscribe((foodData: {listOfFood: Food[]}) => {
-        this.isLoading = false;
+        this.isLoadingBis = false;
         this.foodList = foodData.listOfFood;
         this.dataSource = new MatTableDataSource(this.foodList);
       });
@@ -212,19 +198,4 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
   ngOnDestroy() {
     this.floorsSub.unsubscribe();
   }
-}
-
-
-/** Builds and returns a new User. */
-function createNewUser(id: number): UserData {
-  const name = NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
-
-  return {
-    id: id.toString(),
-    // tslint:disable-next-line:object-literal-shorthand
-    name: name,
-    progress: Math.round(Math.random() * 100).toString(),
-    color: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
-  };
 }
