@@ -4,8 +4,7 @@
     margin-bottom: 2rem;
     margin-top: 1rem;
     color: whitesmoke;
-    background:
-    linear-gradient(rgba(16, 33, 56, 0.8), rgba(1, 25, 140, 0.8));
+    background: #202c40;
     box-shadow: 0px 0px 20px 0px black;
 }
 
@@ -17,7 +16,7 @@
 }
 
 .add-button-header h2  {
-    color: #3bffb3;
+    color: var(--mdc-theme-secondary, #018786);;
     text-shadow: 2px 2px 2px black;
 
 }

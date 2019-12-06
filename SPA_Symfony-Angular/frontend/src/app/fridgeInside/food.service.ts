@@ -10,9 +10,13 @@ import { Food, FoodCreate } from './food.model';
 import { Floor } from './floor.model';
 import { FloorService } from './floor.service';
 import { map } from 'rxjs/operators';
+import { ApiService } from '../service/api.service';
+
+const url = 'http://127.0.0.1:8000';
+// private url = 'http://localhost:3006';
 
 const typeMap = new Map();
-const urlImages = 'assets/images/';
+const urlImages = url + '/images/foodDefault/';
 typeMap.set('Fish', urlImages + 'fish.png');
 typeMap.set('Vegetable', urlImages + 'vegetables.png');
 typeMap.set('Cheese', urlImages + 'cheese.png');
@@ -31,15 +35,13 @@ export class FoodService {
     private data: JSON;
     private foodUpdated = new Subject<{listOfFood: Food[]}>();
 
-    private url = 'http://127.0.0.1:8000';
-    // private url = 'http://localhost:3006';
-
     constructor(
         private http: HttpClient,
         private router: Router,
         private authService: AuthService,
         private fridgeService: FridgeService,
-        private floorService: FloorService) {}
+        private floorService: FloorService,
+        private api: ApiService) {}
 
     getFoodUpdateListener() {
         return this.foodUpdated.asObservable();
@@ -52,9 +54,7 @@ export class FoodService {
         // tslint:disable-next-line:object-literal-shorthand
         const floorData = {email: email, idFloor: idFloor};
         this.foodList = [];
-        this.http
-            .get(
-                this.url + '/api/food/', {params: floorData})
+        this.api.getFoods(floorData)
             .subscribe(getData => {
                 this.data = JSON.parse(JSON.stringify(getData));
                 for (let i = 0; i < Object.keys(this.data).length; i++) {
@@ -85,16 +85,15 @@ export class FoodService {
             });
     }
 
-    getFoodLists(listFloorId) {
-        this.foodList = [];
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < listFloorId.length; i++) {
-            this.getFoodList(listFloorId[i]);
-        }
-    }
+    // getFoodLists(listFloorId) {
+    //     this.foodList = [];
+    //     // tslint:disable-next-line:prefer-for-of
+    //     for (let i = 0; i < listFloorId.length; i++) {
+    //         this.getFoodList(listFloorId[i]);
+    //     }
+    // }
 
     getFood(idFood: number) {
-        console.log(this.foodList);
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < this.foodList.length; i++) {
             if (this.foodList[i].id === idFood) {
@@ -116,9 +115,7 @@ export class FoodService {
             image_food_path: imageFoodPath,
             unit_qty: unitQty,
             id_floor: idFloor};
-        console.log(foodData);
-        this.http
-            .post(this.url + '/api/food/', foodData)
+        this.api.addFood(foodData)
             .subscribe(response => {
                 this.router.navigate(['/fridge/floors']);
             });
@@ -143,15 +140,13 @@ export class FoodService {
             image_food_path: imageFoodPath,
             unit_qty: unitQty,
         };
-        console.log(foodData);
-        this.http
-          .put(this.url + '/api/food/' + idFood, foodData)
+        this.api.updateFood(foodData, idFood)
           .subscribe(response => {
                 this.router.navigate(['/fridge/floors']);
           });
     }
 
     deleteFood(idFood: number) {
-        return this.http.delete(this.url + '/api/food/' + idFood);
+        return this.api.deleteFood(idFood);
     }
 }

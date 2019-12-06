@@ -1,5 +1,5 @@
 :host {
-    display: block;
+    /* display: block; */
     margin-top: 1rem;
 }
 
@@ -23,11 +23,11 @@ mat-expansion-panel-header {
 }
 
 .add-button-header h2 {
-    color: #3bffb3;
+    color: var(--mdc-theme-secondary, #018786);
 }
 
 .buttonReview {
-    color: #3486eb;
+    color: #3498DB;
 }
 
 /* .fridge-container {
@@ -35,9 +35,10 @@ mat-expansion-panel-header {
     border-bottom-left-radius: 5px;
 } */
 
-.fridge-container a {
+.fridge-container div {
     text-decoration: none;
     color: #000;
+    display: flex;
 }
 
 .fridge-img {

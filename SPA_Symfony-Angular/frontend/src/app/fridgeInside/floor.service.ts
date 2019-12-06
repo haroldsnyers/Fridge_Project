@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { FridgeService } from '../fridge/fridge.service';
 import { Fridge } from '../fridge/fridge.model';
+import { ApiService } from '../service/api.service';
 
 @Injectable({
     providedIn: 'root'
@@ -16,14 +17,12 @@ export class FloorService {
     private floorUpdated = new Subject<{floors: Floor[]}>();
     private Fridge: Fridge;
 
-    private url = 'http://127.0.0.1:8000';
-    // private url = 'http://localhost:3006';
-
     constructor(
         private http: HttpClient,
         private router: Router,
         private authService: AuthService,
-        private fridgeService: FridgeService) {}
+        private fridgeService: FridgeService,
+        private api: ApiService) {}
 
     getFloorUpdateListener() {
         return this.floorUpdated.asObservable();
@@ -47,9 +46,7 @@ export class FloorService {
         const fridgeData = {email: email, idFridge: idFridge};
         // tslint:disable-next-line:object-literal-shorthand
         this.floors = []; // reset fridges to zero
-        this.http
-            .get(
-                this.url + '/api/floors/', {params: fridgeData})
+        this.api.getFloors(fridgeData)
             .subscribe(getData => {
                 this.data = JSON.parse(JSON.stringify(getData));
                 for (let i = 0; i < Object.keys(this.data).length; i++) {
@@ -74,8 +71,7 @@ export class FloorService {
         const fridge = this.fridgeService.getCurrentFridge();
         const floorData: FloorCreate = {name, type, id_fridge: fridge.id};
         // tslint:disable-next-line:object-literal-shorthand
-        this.http
-          .post(this.url + '/api/floors/', floorData)
+        this.api.addFloors(floorData)
           .subscribe(response => {
                 this.router.navigate(['/fridge/floors']);
           });
@@ -90,15 +86,14 @@ export class FloorService {
             type: type,
             id_fridge: idFridge
         };
-        this.http
-          .put(this.url + '/api/floors/' + idFloor, floorData)
+        this.api.updateFloors(floorData, idFloor)
           .subscribe(response => {
                 this.router.navigate(['/fridge/floors']);
           });
     }
 
     deleteFloor(idFloor: number) {
-        return this.http.delete(this.url + '/api/floors/' + idFloor);
+        return this.api.deleteFloors(idFloor);
     }
 
 }

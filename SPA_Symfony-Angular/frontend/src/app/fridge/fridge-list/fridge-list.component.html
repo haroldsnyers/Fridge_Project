@@ -21,7 +21,7 @@
           </mat-expansion-panel-header>
           <ng-template matExpansionPanelContent>
             <div class="fridge-container my-1">
-              <a href="#">
+              <div>
                 <img class="fridge-img" src="assets/images/french_door_fridge.jpg" alt="hello">
                 <div class="fridge-title d-inline-block pl-3 align-middle">
                   <br>
@@ -29,7 +29,7 @@
                   <br>
                   <span class="align-left fridge-details"> Number of Floors : {{ fridge.nbrFloors }}</span>
                 </div>
-              </a>
+              </div>
             </div>
           </ng-template>
           <mat-action-row>
@@ -42,7 +42,7 @@
               <span class="mdc-fab__label">EDIT</span>
               </a>
             <button mat-button color="warn" (click)="onDelete(fridge.id)">
-                <span class="material-icons mdc-fab__icon">delete_outlined</span>
+                <span class="material-icons mdc-fab__icon">delete</span>
                 <span class="mdc-fab__label ">DELETE</span>
             </button>
           </mat-action-row>

@@ -16,9 +16,6 @@ export class FridgeService {
     private fridgeUpdated = new Subject<{fridges: Fridge[]}>();
     private currentFridge: Fridge;
 
-    private url = 'http://127.0.0.1:8000';
-    // private url = 'http://localhost:3006';
-
     constructor(
         private http: HttpClient,
         private router: Router,
@@ -55,23 +52,19 @@ export class FridgeService {
     }
 
     getFridge(idFridge: number) {
-        // subscribe in post-create
         // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < this.fridges.length; i++) {
             if (this.fridges[i].id === idFridge) {
                 return this.fridges[i];
             }
         }
-        // return this.http.get(
-        //     this.url + '/api/fridge/' + idFridge);
     }
 
     addFridge(name: string, type: string, nbrFloors: number) {
         const email = this.authService.getCurrentUser();
         const fridgeData: FridgeCreate = {name, type, nbrFloors, userMail: email};
         // tslint:disable-next-line:object-literal-shorthand
-        this.http
-          .post(this.url + '/api/fridge/', fridgeData)
+        this.api.addFridges(fridgeData)
           .subscribe(response => {
                 this.router.navigate(['/fridges']);
           });
@@ -87,14 +80,13 @@ export class FridgeService {
             nbrFloors: nbrOfFloors,
             user_id: idUser
         };
-        this.http
-          .put(this.url + '/api/fridge/' + idFridge, fridgeData)
+        this.api.updateFridge(fridgeData, idFridge)
           .subscribe(response => {
                 this.router.navigate(['/fridges']);
           });
     }
 
     deleteFridge(idFridge: number) {
-        return this.http.delete(this.url + '/api/fridge/' + idFridge);
+        return this.api.deleteFridge(idFridge);
     }
 }
