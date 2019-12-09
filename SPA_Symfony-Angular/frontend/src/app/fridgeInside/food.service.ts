@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -34,6 +34,7 @@ export class FoodService {
     private foodList: Food[] = [];
     private data: JSON;
     private foodUpdated = new Subject<{listOfFood: Food[]}>();
+    private errorListener: Subject<string> =  new Subject<string>();
 
     constructor(
         private http: HttpClient,
@@ -45,6 +46,10 @@ export class FoodService {
 
     getFoodUpdateListener() {
         return this.foodUpdated.asObservable();
+    }
+
+    getErrorListener(): Observable<any> {
+        return this.errorListener.asObservable();
     }
 
     getFoodList(floorId: number) {
@@ -82,16 +87,19 @@ export class FoodService {
                 this.foodUpdated.next({
                     listOfFood: [...this.foodList],
                 });
+            }, error => {
+                this.errorListener.error(error);
+                this.errorListener = new Subject<string>();
             });
     }
 
-    // getFoodLists(listFloorId) {
-    //     this.foodList = [];
-    //     // tslint:disable-next-line:prefer-for-of
-    //     for (let i = 0; i < listFloorId.length; i++) {
-    //         this.getFoodList(listFloorId[i]);
-    //     }
-    // }
+    getFoodLists(listFloorId) {
+        this.foodList = [];
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0; i < listFloorId.length; i++) {
+            this.getFoodList(listFloorId[i]);
+        }
+    }
 
     getFood(idFood: number) {
         // tslint:disable-next-line:prefer-for-of
@@ -118,6 +126,9 @@ export class FoodService {
         this.api.addFood(foodData)
             .subscribe(response => {
                 this.router.navigate(['/fridge/floors']);
+            }, error => {
+                this.errorListener.error(error);
+                this.errorListener = new Subject<string>();
             });
     }
 
@@ -141,9 +152,12 @@ export class FoodService {
             unit_qty: unitQty,
         };
         this.api.updateFood(foodData, idFood)
-          .subscribe(response => {
+            .subscribe(response => {
                 this.router.navigate(['/fridge/floors']);
-          });
+            }, error => {
+                this.errorListener.error(error);
+                this.errorListener = new Subject<string>();
+            });
     }
 
     deleteFood(idFood: number) {

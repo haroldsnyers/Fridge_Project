@@ -1,5 +1,5 @@
-import { Component, AfterViewInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Component, AfterViewInit, OnInit } from '@angular/core';
+import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 
@@ -8,12 +8,33 @@ import { Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements AfterViewInit {
+export class LoginComponent implements AfterViewInit, OnInit {
   hide = true;
   isLoading = false;
   Error: string;
 
+  private history = false;
+
+  form: FormGroup;
+
   constructor(public authService: AuthService, private router: Router) { }
+
+  ngOnInit(): void {
+    this.form = new FormGroup({
+      // assing key-values pairs to subscribe to controls
+      email: new FormControl(null, {
+        validators: [Validators.required]
+      }),
+      password: new FormControl(null, {validators : [Validators.required]})
+    });
+    if (this.history) {
+      this.form.setValue({
+        // tslint:disable:object-literal-key-quotes
+        'email': this.authService.getHistory()[0],
+        'password': this.authService.getHistory()[1]
+      });
+    }
+  }
 
   ngAfterViewInit(): void {
     this.authService.getAuthStatusListener()
@@ -28,6 +49,7 @@ export class LoginComponent implements AfterViewInit {
           },
           error => {
             this.Error = error;
+            this.history = true;
           }
         );
         this.isLoading = false;
@@ -35,12 +57,13 @@ export class LoginComponent implements AfterViewInit {
     );
   }
 
-  onLogin(form: NgForm) {
-    if (form.invalid) {
+  onLogin() {
+    if (this.form.invalid) {
       return;
     }
     this.isLoading = true;
-    this.authService.loginUser(form.value.email, form.value.password);
+    this.authService.loginUser(this.form.value.email, this.form.value.password);
+    this.authService.setHistory(this.form.value.email, this.form.value.password);
     this.ngAfterViewInit();
   }
 

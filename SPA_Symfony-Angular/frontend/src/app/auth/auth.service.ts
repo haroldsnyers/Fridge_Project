@@ -13,6 +13,10 @@ export class AuthService {
     private errorListener: Subject<string> =  new Subject<string>();
     private currentUser = null;
 
+    private emailHistory = '';
+    private passwordHistory = '';
+    private usernameHistory = '';
+
     constructor(
         private http: HttpClient,
         private router: Router,
@@ -28,14 +32,36 @@ export class AuthService {
 
     getErrorListener(): Observable<any> {
         return this.errorListener.asObservable();
-      }
+    }
 
     getCurrentUser() {
         return this.currentUser;
     }
 
+    setHistorySignup(email, username, password) {
+        this.emailHistory = email;
+        this.passwordHistory = password;
+        this.usernameHistory = username;
+    }
+
+    getHistorySignup() {
+        const listHistory = [this.emailHistory, this.usernameHistory, this.passwordHistory];
+        return listHistory;
+    }
+
+    setHistory(email, password) {
+        this.emailHistory = email;
+        this.passwordHistory = password;
+    }
+
+    getHistory() {
+        const listHistory = [this.emailHistory, this.passwordHistory];
+        return listHistory;
+    }
+
     createUser(email: string, username: string, password: string, passwordConfirmation: string) {
         const authData: AuthSignupData = {email, username, password, passwordConfirmation};
+        console.log(authData);
         this.api.postSignup(authData)
             .subscribe(response => {
                 this.isAuthenticated = true; // needed to update authentication status

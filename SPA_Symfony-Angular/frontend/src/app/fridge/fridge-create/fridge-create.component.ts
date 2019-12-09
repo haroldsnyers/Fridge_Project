@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FridgeService } from '../fridge.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
@@ -10,7 +10,7 @@ import { Fridge } from '../fridge.model';
   templateUrl: './fridge-create.component.html',
   styleUrls: ['./fridge-create.component.css']
 })
-export class FridgeCreateComponent implements OnInit {
+export class FridgeCreateComponent implements OnInit, AfterViewInit {
   enteredTitle = '';
   enteredContent = '';
   fridge: Fridge;
@@ -19,6 +19,7 @@ export class FridgeCreateComponent implements OnInit {
   // imagePreview: string;
   mode = 'create';
   protected fridgeId: number;
+  Error: string;
   types = [
     'french door fridge',
     'side by side fridge',
@@ -64,6 +65,19 @@ export class FridgeCreateComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit(): void {
+    this.fridgeService.getErrorListener().subscribe(
+        next => {
+          this.Error = next;
+          this.isLoading = false;
+        },
+        error => {
+          this.Error = error;
+          this.isLoading = false;
+        }
+    );
+  }
+
   onSaveFridge() {
     console.log(this.form.value);
     if (this.form.invalid) {
@@ -85,6 +99,7 @@ export class FridgeCreateComponent implements OnInit {
         this.fridge.user_id
         );
       }
+    this.ngAfterViewInit();
     this.form.reset();
   }
 }

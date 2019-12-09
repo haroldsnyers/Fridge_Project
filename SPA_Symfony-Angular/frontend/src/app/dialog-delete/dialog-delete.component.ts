@@ -4,6 +4,7 @@ import { FridgeService } from '../fridge/fridge.service';
 import { FloorService } from '../fridgeInside/floor.service';
 import { FoodService } from '../fridgeInside/food.service';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
 
 export interface DialogData {
   name: string;
@@ -40,15 +41,24 @@ export class DialogDeleteComponent {
 
   onYesClick(): void {
     if (this.data.typeElem === 'fridge') {
-      this.fridgeService.deleteFridge(this.data.id).subscribe(() => {
+      this.fridgeService.deleteFridge(this.data.id).subscribe(error => {
+        this.floorService.errorListener.error(error);
+        this.floorService.errorListener = new Subject<string>();
+      }, () => {
         this.fridgeService.getFridges();
       });
     } else if (this.data.typeElem === 'floor') {
-      this.floorService.deleteFloor(this.data.id).subscribe(() => {
+      this.floorService.deleteFloor(this.data.id).subscribe(error => {
+        this.floorService.errorListener.error(error);
+        this.floorService.errorListener = new Subject<string>();
+      }, () => {
         this.floorService.getFloors();
       });
     } else if (this.dataFood.typeElem === 'food') {
-      this.foodService.deleteFood(this.dataFood.id).subscribe(() => {
+      this.foodService.deleteFood(this.dataFood.id).subscribe(error => {
+        this.floorService.errorListener.error(error);
+        this.floorService.errorListener = new Subject<string>();
+      }, () => {
         this.foodService.getFoodLists(this.dataFood.floorIds);
         this.router.navigate(['/fridge/floors']);
       });

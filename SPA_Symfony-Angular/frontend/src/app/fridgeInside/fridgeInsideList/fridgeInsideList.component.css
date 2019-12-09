@@ -1,24 +1,9 @@
-.containerInside {
-    width: auto;
-    padding-top: 2px;
-    margin-bottom: 2rem;
-    margin-top: 1rem;
-    color: whitesmoke;
-    background: #202c40;
-    box-shadow: 0px 0px 20px 0px black;
-}
-
-.add-button-header {
-    margin-bottom: 10px;
-    margin-top: 1rem;
-    display: flex;
-    justify-content: space-between;
-}
-
-.add-button-header h2  {
-    color: var(--mdc-theme-secondary, #018786);;
-    text-shadow: 2px 2px 2px black;
-
+.spinnerContainer {
+  padding: 2em 2em;
+  margin: auto;
+  box-shadow: 0 50px 50px rgba(0, 0, 0, .2);
+  background: #202c40;
+  margin-bottom: 3rem;
 }
 
 .titleInside {
@@ -40,9 +25,13 @@
 }
 
 .mat-tab-labels, .mat-tab-label {
-    color: #3bffb3;
+    color: #D6CE15;
     text-shadow: 2px 2px 2px black;
+}
 
+/* ink bar style */
+.mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar{
+  background: #53900F;
 }
 
 table {
@@ -126,9 +115,11 @@ td {
     color: #333;
   }
   
-  #foodList .foodList-item figure .link-edit:hover,
+  #foodList .foodList-item figure .link-edit:hover {
+    background: #53900F;
+  }
   #foodList .foodList-item figure .link-delete:hover {
-    background: #3bffb3;
+    background: #C3073E;
   }
   
   #foodList .foodList-item figure .link-edit:hover i,
@@ -162,7 +153,7 @@ td {
     background: #fff;
     text-align: center;
     padding: 30px;
-    height: 90px;
+    height: 100px;
     border-radius: 0 0 3px 3px;
   }
   
@@ -172,14 +163,7 @@ td {
     font-weight: 700;
     margin-bottom: 18px;
     padding-bottom: 0;
-  }
-  
-  #foodList .foodList-item .foodList-info h4 a {
     color: #333;
-  }
-  
-  #foodList .foodList-item .foodList-info h4 a:hover {
-    color: #18d26e;
   }
   
   #foodList .foodList-item .foodList-info p {

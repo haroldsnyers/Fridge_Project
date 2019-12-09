@@ -5,6 +5,9 @@
     <fieldset>
       <h2 class="fs-title">{{ title }} Floor</h2>
       <h3 class="fs-subtitle">Select or enter the needed info</h3>
+
+      <span *ngIf="Error" class="mat-error"> {{Error}} </span>
+
       <mat-form-field>
         <input matInput type="text" formControlName="name" placeholder="Floor Title/position">
         <mat-error *ngIf="form.get('name').invalid">please entered valid name</mat-error>

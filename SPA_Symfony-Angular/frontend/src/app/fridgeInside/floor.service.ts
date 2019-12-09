@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { Floor, FloorCreate, FloorUpdate } from './floor.model';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -15,6 +15,7 @@ export class FloorService {
     private floors: Floor[] = [];
     private data: JSON;
     private floorUpdated = new Subject<{floors: Floor[]}>();
+    errorListener: Subject<string> =  new Subject<string>();
     private Fridge: Fridge;
 
     constructor(
@@ -26,6 +27,10 @@ export class FloorService {
 
     getFloorUpdateListener() {
         return this.floorUpdated.asObservable();
+    }
+
+    getErrorListener(): Observable<any> {
+        return this.errorListener.asObservable();
     }
 
     getListFloorIds() {
@@ -55,6 +60,9 @@ export class FloorService {
                 this.floorUpdated.next({
                     floors: [...this.floors],
                 });
+            }, error => {
+                this.errorListener.error(error);
+                this.errorListener = new Subject<string>();
             });
     }
 
@@ -74,7 +82,10 @@ export class FloorService {
         this.api.addFloors(floorData)
           .subscribe(response => {
                 this.router.navigate(['/fridge/floors']);
-          });
+          }, error => {
+            this.errorListener.error(error);
+            this.errorListener = new Subject<string>();
+        });
     }
 
     updateFloor(idFloor: number, name: string, type: string, idFridge: number) {
@@ -89,7 +100,10 @@ export class FloorService {
         this.api.updateFloors(floorData, idFloor)
           .subscribe(response => {
                 this.router.navigate(['/fridge/floors']);
-          });
+          }, error => {
+            this.errorListener.error(error);
+            this.errorListener = new Subject<string>();
+        });
     }
 
     deleteFloor(idFloor: number) {

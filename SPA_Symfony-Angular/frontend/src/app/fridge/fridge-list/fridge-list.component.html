@@ -1,5 +1,5 @@
-
-<div class="container creationContainer">
+<span *ngIf="Error" class="mat-error"> {{Error}} </span>
+<div class="container containerInside">
     <div class="add-button-header">
       <h2>My Fridge Repository</h2>
       <button class="mdc-fab mdc-fab--extended" [routerLink]="['/fridge/create']">
@@ -41,7 +41,7 @@
               <span class="material-icons mdc-fab__icon">create</span>
               <span class="mdc-fab__label">EDIT</span>
               </a>
-            <button mat-button color="warn" (click)="onDelete(fridge.id)">
+            <button mat-button class="buttonDelete" (click)="openDialog(fridge.name, fridge.id, 'fridge')">
                 <span class="material-icons mdc-fab__icon">delete</span>
                 <span class="mdc-fab__label ">DELETE</span>
             </button>

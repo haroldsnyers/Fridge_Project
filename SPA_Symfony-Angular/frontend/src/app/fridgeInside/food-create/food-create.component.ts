@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -12,7 +12,7 @@ import { FloorService } from '../floor.service';
   templateUrl: './food-create.component.html',
   styleUrls: ['./food-create.component.css']
 })
-export class FoodCreateComponent implements OnInit {
+export class FoodCreateComponent implements OnInit, AfterViewInit {
   food: Food;
   isLoading = false;
   form: FormGroup; // needs to be initialized after (for example in ngOnInit)
@@ -32,6 +32,7 @@ export class FoodCreateComponent implements OnInit {
     'Other'
   ];
   units = ['kg', 'g', 'cl', 'L', 'unit(s)'];
+  Error: string;
 
   constructor(
     public foodService: FoodService,
@@ -78,6 +79,19 @@ export class FoodCreateComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit(): void {
+    this.foodService.getErrorListener().subscribe(
+        next => {
+          this.Error = next;
+          this.isLoading = false;
+        },
+        error => {
+          this.Error = error;
+          this.isLoading = false;
+        }
+    );
+  }
+
   onSaveFood() {
     console.log(this.form.value);
     if (this.form.invalid) {
@@ -107,6 +121,7 @@ export class FoodCreateComponent implements OnInit {
         this.form.value.imagePath,
         this.form.value.unitQty
       );
+    this.ngAfterViewInit();
     this.form.reset();
     }
   }

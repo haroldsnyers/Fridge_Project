@@ -1,6 +1,6 @@
 <div class="container creationContainer">
   <mat-spinner *ngIf="isLoading"></mat-spinner>
-  <form id="msform" (submit)="onSignup(signupForm)" #signupForm="ngForm" *ngIf="!isLoading">
+  <form id="msform" (submit)="onSignup()" [formGroup]="form" *ngIf="!isLoading" novalidate>
     <!-- don't forget the "!", thus not isLoading-->
     <fieldset>
       <h2 class="fs-title">Signup</h2>
@@ -10,45 +10,58 @@
 
       <mat-form-field floatlabel="auto">
         <mat-label>E-Mail</mat-label>
-        <input matInput name="email" ngModel type="email" placeholder="example@mail.com" #emailInput="ngModel" required email>
-        <mat-error *ngIf="emailInput.invalid">please enter valid email</mat-error>
+        <input matInput formControlName="email" type="email" placeholder="example@mail.com" #email required email>
+        <mat-error>
+            {{ errors.email }}
+        </mat-error>      
       </mat-form-field>
 
       <mat-form-field>
-        <input matInput name="username" ngModel type="text" placeholder="Username" #usernameInput="ngModel" required
+        <input matInput formControlName="username" #username type="text" placeholder="Username" required
           username>
-        <mat-error *ngIf="usernameInput.invalid">please enter valid Username</mat-error>
+          <mat-error>
+              {{ errors.username }}
+          </mat-error>
       </mat-form-field>
 
-      <mat-form-field>
-        <input matInput name="password" minlength="8" ngModel [type]="hide ? 'password' : 'text'" placeholder="Password"
-          #passwordInput="ngModel" #password1 required password>
-
-        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
-          [attr.aria-pressed]="hide">
-          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-        </button>
-
-        <mat-hint align="end">{{password1.value?.length || 0}}/8</mat-hint>
-        <!-- <mat-error *ngIf="passwordInput.invalid">please enter valid password</mat-error> -->
-        <mat-error *ngIf="password1.value?.length < 9">Password is to short</mat-error>
-      </mat-form-field>
-
-      <mat-form-field>
-        <input matInput name="passwordConfirmation" minlength="8" ngModel [type]="hide ? 'password' : 'text'"
-          placeholder="Repeat Password" #password2 #passwordInput="ngModel" required password>
-
-        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
-          [attr.aria-pressed]="hide">
-          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-        </button>
-
-        <mat-hint align="end">{{password2.value?.length || 0}}/8</mat-hint>
-        <!-- <mat-error *ngIf="passwordInput.invalid">please enter valid password</mat-error> -->
-        <mat-error *ngIf="password2.value != password1.value">passwords don't match</mat-error>
-      </mat-form-field>
-
+      <div formGroupName="passwordGroup">
+          <mat-form-field>
+              <input matInput formControlName="password" minlength="8" [type]="hide ? 'password' : 'text'" placeholder="Password"
+                #password1>
+      
+              <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                [attr.aria-pressed]="hide">
+                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+      
+              <mat-hint align="end">{{password1.value?.length || 0}}/8</mat-hint>
+              <mat-error>
+                  {{ errors.password }}
+              </mat-error>
+              <!-- <mat-error *ngIf="form.get('password').invalid">please enter valid password</mat-error>
+              <mat-error *ngIf="password1.value?.length < 9">Password is to short</mat-error> -->
+            </mat-form-field>
+            <br>
+            <mat-form-field>
+              <input matInput formControlName="passwordConfirmation" [type]="hide ? 'password' : 'text'"
+                placeholder="Repeat Password" #password2 [errorStateMatcher]="confirmValidParentMatcher">
+      
+              <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                [attr.aria-pressed]="hide">
+                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+      
+              <mat-hint align="end">{{password2.value?.length || 0}}/8</mat-hint>
+              <mat-error>
+                  {{errors.passwordConfirmation}}
+              </mat-error>
+              <!-- <mat-error *ngIf="password2.value != password1.value">passwords don't match</mat-error> -->
+              <!-- <mat-error *ngIf="form.get('passwordConfirmation').invalid">please enter valid password</mat-error> -->
+            </mat-form-field>
+      </div>
+    
       <button class="btn buttonForm" mat-raised-button color="primary" type="submit">Signup</button>
+      <br><a *ngIf="!isLoading" [routerLink]="['/login']">Already an account? Login</a>
     </fieldset>
   </form>
 </div>

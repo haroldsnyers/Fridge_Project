@@ -16,7 +16,7 @@ import { MatPaginator } from '@angular/material/paginator';
 
 import { Floor } from '../floor.model';
 import { Food, FoodTable } from '../food.model';
-import { Subscription } from 'rxjs';
+import { Subscription, Subject } from 'rxjs';
 
 import { FloorService } from '../floor.service';
 import { AuthService } from 'src/app/auth/auth.service';
@@ -25,7 +25,6 @@ import { FridgeService } from 'src/app/fridge/fridge.service';
 import { MatDialog } from '@angular/material';
 import { DialogDeleteComponent } from 'src/app/dialog-delete/dialog-delete.component';
 import { FoodService } from '../food.service';
-import { Router } from '@angular/router';
 
 // import {MDCRipple} from '@material/ripple';
 
@@ -56,6 +55,8 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
   selectTabs = 0;
   floorIds = [];
 
+  Error: string;
+
   // displayedColumns: string[] = ['id', 'name', 'progress', 'color'];
   // dataSource: MatTableDataSource<UserData>;
   displayedColumns: string[] = [
@@ -75,8 +76,7 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
     public fridgeService: FridgeService,
     public foodService: FoodService,
     private authService: AuthService,
-    public dialog: MatDialog,
-    private router: Router) {
+    public dialog: MatDialog) {
     // Create 100 users
     // const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
 
@@ -159,6 +159,16 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.foodService.getErrorListener().subscribe(
+      next => {
+        this.Error = next;
+        this.isLoading = false;
+      },
+      error => {
+        this.Error = error;
+        this.isLoading = false;
+      }
+  );
   }
 
   applyFilter(filterValue: string) {
@@ -182,16 +192,11 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
       // tslint:disable-next-line:object-literal-shorthand
       data: this.data
     });
+    this.isLoading = true;
 
     dialogRef.afterClosed().subscribe(() => {
       console.log('Deletion succesful');
-    });
-  }
-
-  onDelete(floorId: number) {
-    this.isLoading = true;
-    this.floorService.deleteFloor(floorId).subscribe(() => {
-      this.floorService.getFloors();
+      this.ngAfterViewInit();
     });
   }
 

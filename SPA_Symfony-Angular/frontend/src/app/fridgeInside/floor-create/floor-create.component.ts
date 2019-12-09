@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Floor } from '../floor.model';
@@ -9,7 +9,7 @@ import { FloorService } from '../floor.service';
   templateUrl: './floor-create.component.html',
   styleUrls: ['./floor-create.component.css']
 })
-export class FloorCreateComponent implements OnInit {
+export class FloorCreateComponent implements OnInit, AfterViewInit {
   enteredTitle = '';
   enteredContent = '';
   floor: Floor;
@@ -19,6 +19,7 @@ export class FloorCreateComponent implements OnInit {
   title = 'Create';
   private mode = 'create';
   private floorId: number;
+  Error: string;
   types = [
     'Vegetable',
     'Cheese',
@@ -65,6 +66,19 @@ export class FloorCreateComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit(): void {
+    this.floorService.getErrorListener().subscribe(
+        next => {
+          this.Error = next;
+          this.isLoading = false;
+        },
+        error => {
+          this.Error = error;
+          this.isLoading = false;
+        }
+    );
+  }
+
   onSaveFloor() {
     console.log(this.form.value);
     if (this.form.invalid) {
@@ -83,6 +97,7 @@ export class FloorCreateComponent implements OnInit {
         this.form.value.type,
         this.floor.id_fridge
       );
+    this.ngAfterViewInit();
     this.form.reset();
     }
   }

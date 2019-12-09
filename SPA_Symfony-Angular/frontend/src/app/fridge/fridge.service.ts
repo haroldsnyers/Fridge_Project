@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { Fridge, FridgeCreate } from './fridge.model';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { ApiService } from '../service/api.service';
 
@@ -14,6 +14,7 @@ export class FridgeService {
     private fridges: Fridge[] = [];
     private data: JSON;
     private fridgeUpdated = new Subject<{fridges: Fridge[]}>();
+    private errorListener: Subject<string> =  new Subject<string>();
     private currentFridge: Fridge;
 
     constructor(
@@ -34,6 +35,10 @@ export class FridgeService {
         return this.currentFridge;
     }
 
+    getErrorListener(): Observable<any> {
+        return this.errorListener.asObservable();
+    }
+
     getFridges() {
         const email = this.authService.getCurrentUser();
         // tslint:disable-next-line:object-literal-shorthand
@@ -48,6 +53,9 @@ export class FridgeService {
                 this.fridgeUpdated.next({
                     fridges: [...this.fridges],
                 });
+            }, error => {
+                this.errorListener.error(error);
+                this.errorListener = new Subject<string>();
             });
     }
 
@@ -67,7 +75,10 @@ export class FridgeService {
         this.api.addFridges(fridgeData)
           .subscribe(response => {
                 this.router.navigate(['/fridges']);
-          });
+          }, error => {
+            this.errorListener.error(error);
+            this.errorListener = new Subject<string>();
+        });
     }
 
     updateFridge(idFridge: number, name: string, type: string, nbrOfFloors: number, idUser: number) {
@@ -83,6 +94,9 @@ export class FridgeService {
         this.api.updateFridge(fridgeData, idFridge)
           .subscribe(response => {
                 this.router.navigate(['/fridges']);
+          }, error => {
+            this.errorListener.error(error);
+            this.errorListener = new Subject<string>();
           });
     }
 

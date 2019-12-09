@@ -4,8 +4,8 @@
 }
 
 .accordion {
-    background:
-        linear-gradient(rgba(16, 33, 56, 0.8), rgba(1, 25, 140, 0.8));
+    background: #143060;
+        /* linear-gradient(rgba(16, 33, 56, 0.8), rgba(1, 25, 140, 0.8)); */
 }
 
 mat-expansion-panel-header {
@@ -14,16 +14,6 @@ mat-expansion-panel-header {
 
 .cdk-focused .expansionTitle {
     color: whitesmoke;
-}
-
-.add-button-header {
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
-}
-
-.add-button-header h2 {
-    color: var(--mdc-theme-secondary, #018786);
 }
 
 .buttonReview {

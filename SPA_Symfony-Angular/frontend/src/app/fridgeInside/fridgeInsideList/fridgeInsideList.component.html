@@ -1,14 +1,16 @@
-<div class="container containerInside" *ngIf="isLoading">
+<div class="container spinnerContainer" *ngIf="isLoading">
   <mat-spinner *ngIf="isLoading"></mat-spinner>
 </div>
 <div class="container containerInside" *ngIf="!isLoading">
+  <span *ngIf="Error" class="mat-error"> {{Error}} </span>
+  
   <div class="add-button-header">
     <div class="titleInside">
       <h2>My Fridge - {{ fridge.name }}</h2>
       <button mat-button matTooltip="Edit fridge" class="buttonEdit" [routerLink]="['/fridge/edit', fridge.id]">
         <span class="material-icons mdc-fab__icon">create</span>
       </button>
-      <button mat-button matTooltip="Delete fridge" color="warn" (click)="openDialog(fridge.name, fridge.id, 'fridge')">
+      <button mat-button matTooltip="Delete fridge" class="buttonDelete" (click)="openDialog(fridge.name, fridge.id, 'fridge')">
         <span class="material-icons mdc-fab__icon">delete_outlined</span>
       </button>
     </div>
@@ -43,7 +45,7 @@
               <span class="material-icons mdc-fab__icon">create</span>
               <span class="mdc-fab__label">EDIT</span>
             </button>
-            <button mat-button matTooltip="Delete floor" color="warn"
+            <button mat-button matTooltip="Delete floor" class="buttonDelete"
               (click)="openDialog(floor.name, floor.id, 'floor')">
               <span class="material-icons mdc-fab__icon">delete</span>
               <span class="mdc-fab__label">DELETE</span>
@@ -53,10 +55,10 @@
 
         <div class="toggleGroup">
           <mat-button-toggle-group #group="matButtonToggleGroup">
-            <mat-button-toggle *ngIf="foodList.length > 0" checked="true" value="grid" aria-label="grid view">
+            <mat-button-toggle *ngIf="foodList.length > 0" checked="true" value="grid" matTooltip="Image view" matTooltipPosition="above">
               <span class="material-icons mdc-fab__icon">apps</span>
             </mat-button-toggle>
-            <mat-button-toggle *ngIf="foodList.length > 0" value="table" aria-label="table view with details">
+            <mat-button-toggle *ngIf="foodList.length > 0" value="table" matTooltip="Table View (details)" matTooltipPosition="above">
               <span class="material-icons mdc-fab__icon">view_headline</span>
             </mat-button-toggle>
             <button mat-button matTooltip="Add element to floor" matTooltipPosition="above"
@@ -114,7 +116,7 @@
                         <span class="material-icons mdc-fab__icon">create</span>
                         <span class="mdc-fab__label">EDIT</span>
                       </button>
-                      <button mat-menu-item matTooltip="Delete food" color="warn"
+                      <button mat-menu-item matTooltip="Delete food" class="buttonDelete"
                         (click)="openDialog(element.name, element.id, 'food')">
                         <span class="material-icons mdc-fab__icon">delete</span>
                         <span class="mdc-fab__label">DELETE</span>
@@ -147,8 +149,9 @@
                     </figure>
 
                     <div class="foodList-info">
-                      <h4><a href="#">{{food.name}}</a></h4>
-                      <p>{{food.type}}</p>
+                      <h4>{{food.name}}</h4>
+                      <p>Quanity: {{food.quantity}}{{food.unit_qty}}</p>
+                      <p>Expiration Date: {{food.date_of_purchase.substring(0,10)}} </p>
                     </div>
                   </div>
                   

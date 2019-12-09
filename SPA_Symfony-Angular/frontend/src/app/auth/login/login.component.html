@@ -1,6 +1,6 @@
 <div class="container creationContainer">
   <mat-spinner *ngIf="isLoading"></mat-spinner>
-  <form id="msform" (submit)="onLogin(loginForm)" #loginForm="ngForm" *ngIf="!isLoading">
+  <form id="msform" (submit)="onLogin()" [formGroup]="form" *ngIf="!isLoading">
     <!-- don't forget the "!", thus not isLoading-->
     <fieldset>
       <h2 class="fs-title">Login</h2>
@@ -9,23 +9,22 @@
       <span *ngIf="Error" class="mat-error"> {{Error}} </span>
 
       <mat-form-field>
-        <input matInput name="email" ngModel type="email" placeholder="E-Mail" #emailInput="ngModel" required email>
-        <mat-error *ngIf="emailInput.invalid">please enter valid email</mat-error>
+        <input matInput  formControlName="email" type="email" placeholder="E-Mail" required email>
+        <mat-error *ngIf="form.get('email').invalid">please enter valid email</mat-error>
       </mat-form-field>
 
       <mat-form-field>
-        <input matInput name="password" ngModel [type]="hide ? 'password' : 'text'" placeholder="Password"
-          #passwordInput="ngModel" required password>
+        <input matInput formControlName="password" [type]="hide ? 'password' : 'text'" placeholder="Password" required password>
         <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
           [attr.aria-pressed]="hide">
           <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
-        <mat-error *ngIf="passwordInput.invalid">please enter valid password</mat-error>
+        <mat-error *ngIf="form.get('password').invalid">please enter valid password</mat-error>
       </mat-form-field>
 
       <button class="btn buttonForm" mat-raised-button color="primary" type="submit">Login</button>
       
-      <br><a *ngIf="!isLoading" [routerLink]="['/signup']">Signup?</a>
+      <br><a *ngIf="!isLoading" [routerLink]="['/signup']">Not registered yet? Signup</a>
     </fieldset>
   </form>
 </div>

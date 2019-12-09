@@ -113,10 +113,48 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     margin-bottom: 20px;
 }
 
+
+/* GENERAL */
+.containerInside {
+    width: auto;
+    padding-top: 2px;
+    padding-bottom: 2em;
+    margin: auto;
+    color: whitesmoke;
+    background: #202c40;
+    box-shadow: 0px 0px 20px 0px black;
+}
+
 .buttonEdit {
-    color: #c45810
+    color: #53900F;
+}
+
+.buttonDelete {
+    color: #C3073E;
+}
+
+.add-button-header {
+    margin-bottom: 30px;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.add-button-header h2  {
+    color: #3498DB;
+    text-shadow: 2px 2px 2px black;
 }
 
 mat-spinner {
     margin: auto;
+    
+}
+
+.mat-progress-spinner circle, .mat-spinner circle {
+    stroke: #D6CE15;
+}
+
+.mdc-fab {
+    color: #1F2605;
+    background-color: #D6CE15;
 }

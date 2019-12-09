@@ -66,7 +66,7 @@ class UserControllerApi extends AbstractController
             }
         }
         return $this->json([
-            'error' => $errors
+            'errors' => $errors
         ], 400);
 
 

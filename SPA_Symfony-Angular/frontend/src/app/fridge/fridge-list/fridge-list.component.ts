@@ -1,16 +1,18 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FridgeService } from '../fridge.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Fridge } from '../fridge.model';
 import { Router } from '@angular/router';
+import { DialogDeleteComponent } from 'src/app/dialog-delete/dialog-delete.component';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-fridge-list',
   templateUrl: './fridge-list.component.html',
   styleUrls: ['./fridge-list.component.css']
 })
-export class FridgeListComponent implements OnInit, OnDestroy {
+export class FridgeListComponent implements OnInit, OnDestroy, AfterViewInit {
   fridges: Fridge[] = [];
   isLoading = false;
   userIsAuthenticated = false;
@@ -18,10 +20,14 @@ export class FridgeListComponent implements OnInit, OnDestroy {
   private authStatusSub: Subscription;
   private currentFridge = null;
 
+  Error: string;
+  data = {};
+
   constructor(
     public fridgeService: FridgeService,
     private router: Router,
-    private authService: AuthService) {}
+    private authService: AuthService,
+    public dialog: MatDialog) {}
 
   getCurrentfridge() {
     return this.currentFridge;
@@ -42,16 +48,38 @@ export class FridgeListComponent implements OnInit, OnDestroy {
     });
   }
 
+  ngAfterViewInit(): void {
+    this.fridgeService.getErrorListener().subscribe(
+        next => {
+          this.Error = next;
+          this.isLoading = false;
+        },
+        error => {
+          this.Error = error;
+          this.isLoading = false;
+        }
+    );
+  }
+
   setFridge(fridgeId: number) {
     this.isLoading = true;
     this.fridgeService.setCurrentFridge(fridgeId);
     this.router.navigate(['/fridge/floors']);
   }
 
-  onDelete(fridgeId: number) {
+  openDialog(name: string, id: number, typeElem: string): void {
+    // tslint:disable-next-line:object-literal-shorthand
+    this.data = {name: name, typeElem: typeElem, id: id};
+    const dialogRef = this.dialog.open(DialogDeleteComponent, {
+      width: '450px',
+      // tslint:disable-next-line:object-literal-shorthand
+      data: this.data
+    });
     this.isLoading = true;
-    this.fridgeService.deleteFridge(fridgeId).subscribe(() => {
-      this.fridgeService.getFridges();
+
+    dialogRef.afterClosed().subscribe(() => {
+      console.log('Deletion succesful');
+      this.ngAfterViewInit();
     });
   }
 
