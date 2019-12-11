@@ -36,6 +36,8 @@ export class FoodService {
     private foodUpdated = new Subject<{listOfFood: Food[]}>();
     private errorListener: Subject<string> =  new Subject<string>();
 
+    private url = 'food';
+
     constructor(
         private http: HttpClient,
         private router: Router,
@@ -59,7 +61,7 @@ export class FoodService {
         // tslint:disable-next-line:object-literal-shorthand
         const floorData = {email: email, idFloor: idFloor};
         this.foodList = [];
-        this.api.getFoods(floorData)
+        this.api.getItems(floorData, this.url)
             .subscribe(getData => {
                 this.data = JSON.parse(JSON.stringify(getData));
                 for (let i = 0; i < Object.keys(this.data).length; i++) {
@@ -123,7 +125,7 @@ export class FoodService {
             image_food_path: imageFoodPath,
             unit_qty: unitQty,
             id_floor: idFloor};
-        this.api.addFood(foodData)
+        this.api.addItem(foodData, this.url)
             .subscribe(response => {
                 this.router.navigate(['/fridge/floors']);
             }, error => {
@@ -151,7 +153,7 @@ export class FoodService {
             image_food_path: imageFoodPath,
             unit_qty: unitQty,
         };
-        this.api.updateFood(foodData, idFood)
+        this.api.updateItem(foodData, idFood, this.url)
             .subscribe(response => {
                 this.router.navigate(['/fridge/floors']);
             }, error => {
@@ -161,6 +163,6 @@ export class FoodService {
     }
 
     deleteFood(idFood: number) {
-        return this.api.deleteFood(idFood);
+        return this.api.deleteItem(idFood, this.url);
     }
 }

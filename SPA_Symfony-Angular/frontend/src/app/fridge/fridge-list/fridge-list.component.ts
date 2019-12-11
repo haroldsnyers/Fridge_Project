@@ -75,7 +75,6 @@ export class FridgeListComponent implements OnInit, OnDestroy, AfterViewInit {
       // tslint:disable-next-line:object-literal-shorthand
       data: this.data
     });
-    this.isLoading = true;
 
     dialogRef.afterClosed().subscribe(() => {
       console.log('Deletion succesful');

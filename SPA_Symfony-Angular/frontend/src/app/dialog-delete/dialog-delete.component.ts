@@ -46,21 +46,17 @@ export class DialogDeleteComponent {
         this.floorService.errorListener = new Subject<string>();
       }, () => {
         this.fridgeService.getFridges();
+        this.router.navigate(['/fridges']);
       });
     } else if (this.data.typeElem === 'floor') {
       this.floorService.deleteFloor(this.data.id).subscribe(error => {
         this.floorService.errorListener.error(error);
         this.floorService.errorListener = new Subject<string>();
-      }, () => {
-        this.floorService.getFloors();
       });
     } else if (this.dataFood.typeElem === 'food') {
       this.foodService.deleteFood(this.dataFood.id).subscribe(error => {
         this.floorService.errorListener.error(error);
         this.floorService.errorListener = new Subject<string>();
-      }, () => {
-        this.foodService.getFoodLists(this.dataFood.floorIds);
-        this.router.navigate(['/fridge/floors']);
       });
     }
     this.dialogRef.close();

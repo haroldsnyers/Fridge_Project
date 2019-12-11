@@ -192,11 +192,35 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
       // tslint:disable-next-line:object-literal-shorthand
       data: this.data
     });
-    this.isLoading = true;
 
     dialogRef.afterClosed().subscribe(() => {
-      console.log('Deletion succesful');
       this.ngAfterViewInit();
+      if (typeElem === 'food') {
+        console.log('deleting food');
+        this.foodList = [];
+        this.foodService.getFoodList(this.floorIds[0]);
+        this.foodSub = this.foodService.getFoodUpdateListener()
+          .subscribe((foodData: {listOfFood: Food[]}) => {
+            this.isLoadingBis = false;
+            this.foodList = foodData.listOfFood;
+            this.dataSource = new MatTableDataSource(this.foodList);
+          });
+      } else if (typeElem === 'floor') {
+        console.log('deleting floor');
+        this.floorService.getFloors();
+        this.floors = [];
+        this.floorsSub = this.floorService.getFloorUpdateListener()
+          .subscribe((floorData: {floors: Floor[]}) => {
+            this.isLoading = false;
+            this.floors = floorData.floors;
+            console.log(this.floors);
+            this.tabs = this.getFloorsNames();
+            this.floorIds = this.floorService.getListFloorIds();
+            this.foodService.getFoodList(this.floorIds[0]);
+      });
+      }
+      console.log(this.foodList);
+      console.log(this.dataSource);
     });
   }
 

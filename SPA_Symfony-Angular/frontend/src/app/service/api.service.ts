@@ -29,71 +29,26 @@ export class ApiService {
             catchError(this.handelError));
     }
 
-    /* Fridge API */
+    /* GENERAL API */
 
-    getFridges(userData) {
-        return this.http.get(this.url + '/api/fridge/', {params: userData}).pipe(
+    getItems(itemData, url) {
+        return this.http.get(this.url + '/api/' + url + '/', {params: itemData}).pipe(
             catchError(this.handelError));
     }
 
-    addFridges(fridgeData: FridgeCreate) {
-        return this.http.post(this.url + '/api/fridge/', fridgeData).pipe(
+    addItem(itemData, url) {
+        return this.http.post(this.url + '/api/' + url + '/', itemData).pipe(
             catchError(this.handelError));
     }
 
-    updateFridge(fridgeData: Fridge, idFridge: number) {
-        return this.http.put(this.url + '/api/fridge/' + idFridge, fridgeData).pipe(
+    updateItem(itemData, idItem: number, url) {
+        return this.http.put(this.url + '/api/' + url + '/' + idItem, itemData).pipe(
             catchError(this.handelError));
     }
 
-    deleteFridge(idFridge: number) {
-        return this.http.delete(this.url + '/api/fridge/' + idFridge).pipe(
+    deleteItem(idItem: number, url) {
+        return this.http.delete(this.url + '/api/' + url + '/' + idItem).pipe(
             catchError(this.handelError));
-    }
-
-    /* Floor API */
-
-    getFloors(fridgeData) {
-        return this.http.get(this.url + '/api/floors/', {params: fridgeData})
-            .pipe(
-                catchError(this.handelError));
-    }
-
-    addFloors(floorData: FloorCreate) {
-        return this.http
-        .post(this.url + '/api/floors/', floorData).pipe(
-            catchError(this.handelError));
-    }
-
-    updateFloors(floorData: FloorUpdate, idFloor: number) {
-        return this.http
-        .put(this.url + '/api/floors/' + idFloor, floorData).pipe(
-            catchError(this.handelError));
-    }
-
-    deleteFloors(idFloor: number) {
-        return this.http.delete(this.url + '/api/floors/' + idFloor).pipe(
-            catchError(this.handelError));
-    }
-
-    /* Food API */
-
-    getFoods(floorData) {
-        return this.http.get(this.url + '/api/food/', {params: floorData})
-            .pipe(
-                catchError(this.handelError));
-    }
-
-    addFood(foodData: FoodCreate) {
-        return this.http.post(this.url + '/api/food/', foodData)
-            .pipe(
-                catchError(this.handelError));
-    }
-
-    updateFood(foodData: Food, idFood: number) {
-        return this.http.put(this.url + '/api/food/' + idFood, foodData)
-            .pipe(
-                catchError(this.handelError));
     }
 
     deleteFood(idFood: number) {

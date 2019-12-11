@@ -17,6 +17,7 @@ export class FloorService {
     private floorUpdated = new Subject<{floors: Floor[]}>();
     errorListener: Subject<string> =  new Subject<string>();
     private Fridge: Fridge;
+    private url = 'floors';
 
     constructor(
         private http: HttpClient,
@@ -51,7 +52,7 @@ export class FloorService {
         const fridgeData = {email: email, idFridge: idFridge};
         // tslint:disable-next-line:object-literal-shorthand
         this.floors = []; // reset fridges to zero
-        this.api.getFloors(fridgeData)
+        this.api.getItems(fridgeData, this.url)
             .subscribe(getData => {
                 this.data = JSON.parse(JSON.stringify(getData));
                 for (let i = 0; i < Object.keys(this.data).length; i++) {
@@ -79,7 +80,7 @@ export class FloorService {
         const fridge = this.fridgeService.getCurrentFridge();
         const floorData: FloorCreate = {name, type, id_fridge: fridge.id};
         // tslint:disable-next-line:object-literal-shorthand
-        this.api.addFloors(floorData)
+        this.api.addItem(floorData, this.url)
           .subscribe(response => {
                 this.router.navigate(['/fridge/floors']);
           }, error => {
@@ -97,7 +98,7 @@ export class FloorService {
             type: type,
             id_fridge: idFridge
         };
-        this.api.updateFloors(floorData, idFloor)
+        this.api.updateItem(floorData, idFloor, this.url)
           .subscribe(response => {
                 this.router.navigate(['/fridge/floors']);
           }, error => {
@@ -107,7 +108,7 @@ export class FloorService {
     }
 
     deleteFloor(idFloor: number) {
-        return this.api.deleteFloors(idFloor);
+        return this.api.deleteItem(idFloor, this.url);
     }
 
 }

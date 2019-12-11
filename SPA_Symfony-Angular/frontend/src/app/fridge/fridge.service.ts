@@ -17,6 +17,8 @@ export class FridgeService {
     private errorListener: Subject<string> =  new Subject<string>();
     private currentFridge: Fridge;
 
+    private url = 'fridge';
+
     constructor(
         private http: HttpClient,
         private router: Router,
@@ -44,7 +46,7 @@ export class FridgeService {
         // tslint:disable-next-line:object-literal-shorthand
         const userData = {email: email};
         this.fridges = []; // reset fridges to zero
-        this.api.getFridges(userData)
+        this.api.getItems(userData, this.url)
             .subscribe(getData => {
                 this.data = JSON.parse(JSON.stringify(getData));
                 for (let i = 0; i < Object.keys(this.data).length; i++) {
@@ -72,7 +74,7 @@ export class FridgeService {
         const email = this.authService.getCurrentUser();
         const fridgeData: FridgeCreate = {name, type, nbrFloors, userMail: email};
         // tslint:disable-next-line:object-literal-shorthand
-        this.api.addFridges(fridgeData)
+        this.api.addItem(fridgeData, this.url)
           .subscribe(response => {
                 this.router.navigate(['/fridges']);
           }, error => {
@@ -91,7 +93,7 @@ export class FridgeService {
             nbrFloors: nbrOfFloors,
             user_id: idUser
         };
-        this.api.updateFridge(fridgeData, idFridge)
+        this.api.updateItem(fridgeData, idFridge, this.url)
           .subscribe(response => {
                 this.router.navigate(['/fridges']);
           }, error => {
@@ -101,6 +103,6 @@ export class FridgeService {
     }
 
     deleteFridge(idFridge: number) {
-        return this.api.deleteFridge(idFridge);
+        return this.api.deleteItem(idFridge, this.url);
     }
 }
