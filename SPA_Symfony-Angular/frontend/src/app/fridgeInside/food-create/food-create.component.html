@@ -13,10 +13,6 @@
         <mat-error *ngIf="form.get('name').invalid">please entered valid title</mat-error>
       </mat-form-field>
       <mat-form-field>
-        <input matInput type="text" formControlName="imagePath" placeholder="imagePath">
-        <mat-error *ngIf="form.get('name').invalid">please entered valid title</mat-error>
-      </mat-form-field>
-      <mat-form-field>
         <mat-label>Type of food</mat-label>
         <mat-select formControlName="type" required>
             <mat-option>--</mat-option>

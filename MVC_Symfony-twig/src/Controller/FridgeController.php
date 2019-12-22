@@ -14,6 +14,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+$fridgeImage = [
+    'french door fridge' => 'french_door_fridge.jpg',
+    'side by side fridge' => 'side_by_side_fridge.jpg',
+    'freezerless fridge' => 'freezerless_fridge.jpg',
+    'bottom freezer fridge' => 'bottom_freezer_fridge.jpg',
+    'top freezer fridge' => 'top_freezer_fridge.jpg',
+    'freezer' => 'freezer.jpg',
+    'wine fridge' => 'wine_fridge.jpg'
+];
+
 /**
  * @Route("/fridge")
  */
@@ -57,6 +67,7 @@ class FridgeController extends AbstractController
             dump('submitted');
             // $form->getData() holds the submitted values
             // but, the original `$task` variable has also been updated
+            $form->getData();
             $fridge = $form->getData();
             $fridge->setUser($user);
 

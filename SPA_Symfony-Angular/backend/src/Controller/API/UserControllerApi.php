@@ -37,9 +37,9 @@ class UserControllerApi extends AbstractController
         {
             $errors[] = "Password does not match the password confirmation.";
         }
-        if(strlen($password) < 2)
+        if(strlen($password) < 8)
         {
-            $errors[] = "Password should be at least 6 characters.";
+            $errors[] = "Password should be at least 8 characters.";
         }
         if(!$errors)
         {

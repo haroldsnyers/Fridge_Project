@@ -22,9 +22,10 @@ import { FloorService } from '../floor.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Fridge } from 'src/app/fridge/fridge.model';
 import { FridgeService } from 'src/app/fridge/fridge.service';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { DialogDeleteComponent } from 'src/app/dialog-delete/dialog-delete.component';
 import { FoodService } from '../food.service';
+import { Router } from '@angular/router';
 
 // import {MDCRipple} from '@material/ripple';
 
@@ -76,7 +77,8 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
     public fridgeService: FridgeService,
     public foodService: FoodService,
     private authService: AuthService,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    private router: Router) {
     // Create 100 users
     // const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
 
@@ -195,32 +197,31 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
 
     dialogRef.afterClosed().subscribe(() => {
       this.ngAfterViewInit();
-      if (typeElem === 'food') {
-        console.log('deleting food');
-        this.foodList = [];
-        this.foodService.getFoodList(this.floorIds[0]);
-        this.foodSub = this.foodService.getFoodUpdateListener()
-          .subscribe((foodData: {listOfFood: Food[]}) => {
-            this.isLoadingBis = false;
-            this.foodList = foodData.listOfFood;
-            this.dataSource = new MatTableDataSource(this.foodList);
-          });
-      } else if (typeElem === 'floor') {
-        console.log('deleting floor');
-        this.floorService.getFloors();
-        this.floors = [];
-        this.floorsSub = this.floorService.getFloorUpdateListener()
-          .subscribe((floorData: {floors: Floor[]}) => {
-            this.isLoading = false;
-            this.floors = floorData.floors;
-            console.log(this.floors);
-            this.tabs = this.getFloorsNames();
-            this.floorIds = this.floorService.getListFloorIds();
-            this.foodService.getFoodList(this.floorIds[0]);
-      });
-      }
-      console.log(this.foodList);
-      console.log(this.dataSource);
+      this.router.navigate(['/fridge/floors']);
+      // if (typeElem === 'food') {
+      //   this.foodList = [];
+      //   this.foodService.getFoodList(this.floorIds[0]);
+      //   this.foodSub = this.foodService.getFoodUpdateListener()
+      //     .subscribe((foodData: {listOfFood: Food[]}) => {
+      //       this.isLoadingBis = false;
+      //       this.foodList = foodData.listOfFood;
+      //       this.dataSource = new MatTableDataSource(this.foodList);
+      //     });
+      // } else if (typeElem === 'floor') {
+      //   this.floorService.getFloors();
+      //   this.floors = [];
+      //   this.floorsSub = this.floorService.getFloorUpdateListener()
+      //     .subscribe((floorData: {floors: Floor[]}) => {
+      //       this.isLoading = false;
+      //       this.floors = floorData.floors;
+      //       console.log(this.floors);
+      //       this.tabs = this.getFloorsNames();
+      //       this.floorIds = this.floorService.getListFloorIds();
+      //       this.foodService.getFoodList(this.floorIds[0]);
+      // });
+      // }
+      // console.log(this.foodList);
+      // console.log(this.dataSource);
     });
   }
 

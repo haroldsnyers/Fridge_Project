@@ -20,7 +20,9 @@ import {
   MatDatepickerModule,
   MatNativeDateModule,
   MatMenuModule,
-  MatIconModule
+  MatSnackBarModule,
+  MatIconModule,
+  MatSnackBar
 } from '@angular/material';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -81,6 +83,7 @@ import { FoodCreateComponent } from './fridgeInside/food-create/food-create.comp
     MatNativeDateModule,
     MatMenuModule,
     MatIconModule,
+    MatSnackBarModule,
     HttpClientModule
   ],
   providers: [],

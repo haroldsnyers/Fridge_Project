@@ -22,7 +22,7 @@
           <ng-template matExpansionPanelContent>
             <div class="fridge-container my-1">
               <div>
-                <img class="fridge-img" src="assets/images/french_door_fridge.jpg" alt="hello">
+                <img class="fridge-img" src="{{ fridge.imageFridgePath }}" alt="{{ fridge.imageFridgePath }}">
                 <div class="fridge-title d-inline-block pl-3 align-middle">
                   <br>
                   <span class="align-left fridge-details"> Type : {{ fridge.type }}</span>

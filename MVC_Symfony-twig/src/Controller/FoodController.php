@@ -5,10 +5,10 @@ namespace App\Controller;
 use App\Entity\Floor;
 use App\Entity\Food;
 use App\Form\FoodType;
+use App\Repository\FloorRepository;
 use App\Repository\FoodRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,11 +27,11 @@ class FoodController extends AbstractController
      * @param FoodRepository $foodRepository
      * @return Response
      */
-    public function index(Request $request, FoodRepository $foodRepository): Response
+    public function index(Request $request, FloorRepository $floorRepository, FoodRepository $foodRepository): Response
     {
         $id_floor = $request->attributes->get('floorId');
         $user = $this->getUser()->getUsername();
-        $fridgeUser = $foodRepository->findByIdFloor($id_floor)[0]->getIdFloor()->getIdFridge()->getUser()->getUsername();
+        $fridgeUser = $floorRepository->findOneById($id_floor)->getIdFridge()->getUser()->getUsername();
 
         if ($user == $fridgeUser) {
             $id_fridge = $request->attributes->get('fridgeid');

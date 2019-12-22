@@ -24,28 +24,33 @@ class FloorController extends AbstractController
      */
     public function index(Request $request, FoodRepository $foodRepository, FridgeRepository $fridgeRepository): Response
     {
-        $id_fridge = $request->attributes->get('fridgeid');
+        try {
+            $id_fridge = $request->attributes->get('fridgeid');
 
-        $user = $this->getUser()->getUsername();
-        $fridgeUser = $fridgeRepository->findOneById($id_fridge)->getUser()->getUsername();
+            $user = $this->getUser()->getUsername();
+            $fridgeUser = $fridgeRepository->findOneById($id_fridge)->getUser()->getUsername();
 
-        if ($user == $fridgeUser) {
-            $this->generateFloorsFridge($request, $id_fridge);
-            $listFloors = $this->getFloorsFridge($id_fridge);
+            if ($user == $fridgeUser) {
+                $this->generateFloorsFridge($request, $id_fridge);
+                $listFloors = $this->getFloorsFridge($id_fridge);
 
-            foreach ($listFloors as $floor) {
-                $qty_food = count($foodRepository->findByIdFloor($floor));
-                $floor->setQtyFood($qty_food);
+                foreach ($listFloors as $floor) {
+                    $qty_food = count($foodRepository->findByIdFloor($floor));
+                    $floor->setQtyFood($qty_food);
+                }
+
+                return $this->render('floor/index.html.twig', [
+                    'floors' => $listFloors,
+                    'fridgeid' => $id_fridge,
+                ]);
+
+            } else {
+                return $this->render('home/homepage.html.twig');
             }
-
-            return $this->render('floor/index.html.twig', [
-                'floors' => $listFloors,
-                'fridgeid' => $id_fridge,
-            ]);
-
-        } else {
+        } catch (\Exception $e) {
             return $this->render('home/homepage.html.twig');
         }
+
     }
 
     //public function updateNbrFood()

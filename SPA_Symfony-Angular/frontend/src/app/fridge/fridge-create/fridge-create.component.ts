@@ -4,6 +4,7 @@ import { FridgeService } from '../fridge.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Fridge } from '../fridge.model';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-fridge-list',
@@ -30,7 +31,10 @@ export class FridgeCreateComponent implements OnInit, AfterViewInit {
     'wine fridge'
   ];
 
-  constructor(public fridgeService: FridgeService, public route: ActivatedRoute) {}
+  constructor(
+    public fridgeService: FridgeService,
+    public route: ActivatedRoute,
+    private snackBar: MatSnackBar) {}
 
   ngOnInit() {
     // configure form
@@ -90,6 +94,7 @@ export class FridgeCreateComponent implements OnInit, AfterViewInit {
         this.form.value.type,
         this.form.value.nbrFloors
         );
+      this.openSnackBar('Fridge successfully Created!', 'OK');
     } else {
       this.fridgeService.updateFridge(
         this.fridge.id,
@@ -98,8 +103,15 @@ export class FridgeCreateComponent implements OnInit, AfterViewInit {
         this.form.value.nbrFloors,
         this.fridge.user_id
         );
+      this.openSnackBar('Frudge successfully Created!', 'OK');
       }
     this.ngAfterViewInit();
     this.form.reset();
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 4000,
+    });
   }
 }

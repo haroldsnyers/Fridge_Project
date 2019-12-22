@@ -67,7 +67,7 @@ class FoodControllerApi extends AbstractController
     /**
      * @Route("/", name="food_new", methods={"POST"})
      */
-    public function new(Request $request, FloorRepository $floorRepository): Response
+    public function newFood(Request $request, FloorRepository $floorRepository): Response
     {
         $food = new Food();
 

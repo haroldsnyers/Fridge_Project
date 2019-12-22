@@ -3,6 +3,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Floor } from '../floor.model';
 import { FloorService } from '../floor.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-floor-create',
@@ -32,7 +33,10 @@ export class FloorCreateComponent implements OnInit, AfterViewInit {
     'Other'
   ];
 
-  constructor(public floorService: FloorService, public route: ActivatedRoute) {}
+  constructor(
+    public floorService: FloorService,
+    public route: ActivatedRoute,
+    private snackBar: MatSnackBar) {}
 
   ngOnInit() {
     // configure form
@@ -90,15 +94,23 @@ export class FloorCreateComponent implements OnInit, AfterViewInit {
         this.form.value.name,
         this.form.value.type
         );
+      this.openSnackBar('Floor succesfully Created!', 'OK');
     } else {
-    this.floorService.updateFloor(
+      this.floorService.updateFloor(
         this.floor.id,
         this.form.value.name,
         this.form.value.type,
         this.floor.id_fridge
       );
+      this.openSnackBar('Floor succesfully updated!', 'OK');
+    }
     this.ngAfterViewInit();
     this.form.reset();
-    }
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 4000,
+    });
   }
 }

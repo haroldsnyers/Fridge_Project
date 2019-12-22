@@ -51,12 +51,6 @@ export class ApiService {
             catchError(this.handelError));
     }
 
-    deleteFood(idFood: number) {
-        return this.http.delete(this.url + '/api/food/' + idFood)
-            .pipe(
-                catchError(this.handelError));
-    }
-
     handelError(err: any) {
         if (err instanceof HttpErrorResponse) {
           return throwError(err.error.errors);

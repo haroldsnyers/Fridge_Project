@@ -41,7 +41,7 @@ class FridgeControllerApi extends AbstractController
                     return $object->getId();
                 },
                 ObjectNormalizer::CIRCULAR_REFERENCE_LIMIT =>0,
-                AbstractNormalizer::IGNORED_ATTRIBUTES =>['fridge', 'password', 'plainPassword', 'salt'],
+                AbstractNormalizer::IGNORED_ATTRIBUTES =>['fridge', 'password', 'plainPassword', 'salt', 'listFridges'],
                 ObjectNormalizer::ENABLE_MAX_DEPTH => true,
             ];
 
@@ -76,6 +76,7 @@ class FridgeControllerApi extends AbstractController
         $name = $data['name'];
         $type = $data['type'];
         $nbrFloors = $data['nbrFloors'];
+        $imagePath = $data['imagePath'];
         $userEmail = $data['userMail'];
 
         $user = $userRepository->findOneByEmail($userEmail);
@@ -83,8 +84,8 @@ class FridgeControllerApi extends AbstractController
         $fridge->setName($name);
         $fridge->setType($type);
         $fridge->setNbrFloors($nbrFloors);
+        $fridge->setImageFridgePath($imagePath);
         $fridge->setUser($user);
-
 
         try
         {
@@ -93,12 +94,12 @@ class FridgeControllerApi extends AbstractController
             $entityManager->flush();
             return $this->json([
                 'message' => "fridge Created!"
-            ]);
+            ], 200);
         }
         catch(\Exception $e)
         {
             return $this->json([
-                'errors' => "Unable to save new user at this time."
+                'errors' => "Unable to save new fridge at this time."
             ], 400);
         }
     }
@@ -115,17 +116,20 @@ class FridgeControllerApi extends AbstractController
 
         $name = $data['name'];
         $type = $data['type'];
+        $imagePath = $data['imagePath'];
         $nbrFloors = $data['nbrFloors'];
 
         $fridge->setName($name);
         $fridge->setType($type);
         $fridge->setNbrFloors($nbrFloors);
+        $fridge->setImageFridgePath($imagePath);
+
         try {
             $this->getDoctrine()->getManager()->flush();
 
             return $this->json([
                 'message' => "fridge Updated!"
-            ]);
+            ], 200);
 
         } catch (\Exception $exception) {
             return $this->json([

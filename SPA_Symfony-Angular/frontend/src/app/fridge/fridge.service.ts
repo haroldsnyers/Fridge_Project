@@ -7,6 +7,19 @@ import { Subject, Observable } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { ApiService } from '../service/api.service';
 
+const urlHost = 'http://127.0.0.1:8000';
+// private url = 'http://localhost:3006';
+
+const typeMap = new Map();
+const urlImages = urlHost + '/images/fridgeImage/';
+typeMap.set('french door fridge', urlImages + 'french_door_fridge.jpg');
+typeMap.set('side by side fridge', urlImages + 'side_by_side_fridge.jpg');
+typeMap.set('freezerless fridge', urlImages + 'freezerless_fridge.jpg');
+typeMap.set('bottom freezer fridge', urlImages + 'bottom_freezer_fridge.jpg');
+typeMap.set('top freezer fridge', urlImages + 'top_freezer_fridge.jpg');
+typeMap.set('freezer', urlImages + 'freezer.jpg');
+typeMap.set('wine fridge', urlImages + 'wine_fridge.jpg');
+
 @Injectable({
     providedIn: 'root'
 })
@@ -71,8 +84,9 @@ export class FridgeService {
     }
 
     addFridge(name: string, type: string, nbrFloors: number) {
+        const imagePath = typeMap.get(type);
         const email = this.authService.getCurrentUser();
-        const fridgeData: FridgeCreate = {name, type, nbrFloors, userMail: email};
+        const fridgeData: FridgeCreate = {name, type, nbrFloors, imageFridgePath: imagePath, userMail: email};
         // tslint:disable-next-line:object-literal-shorthand
         this.api.addItem(fridgeData, this.url)
           .subscribe(response => {
@@ -84,6 +98,7 @@ export class FridgeService {
     }
 
     updateFridge(idFridge: number, name: string, type: string, nbrOfFloors: number, idUser: number) {
+        const imagePath = typeMap.get(type);
         let fridgeData: Fridge | FormData;
         fridgeData = {
             id : idFridge,
@@ -91,6 +106,7 @@ export class FridgeService {
             name: name,
             type: type,
             nbrFloors: nbrOfFloors,
+            imageFridgePath: imagePath,
             user_id: idUser
         };
         this.api.updateItem(fridgeData, idFridge, this.url)

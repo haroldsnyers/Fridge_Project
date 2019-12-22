@@ -12,11 +12,11 @@ import { FloorService } from './floor.service';
 import { map } from 'rxjs/operators';
 import { ApiService } from '../service/api.service';
 
-const url = 'http://127.0.0.1:8000';
+const urlHost = 'http://127.0.0.1:8000';
 // private url = 'http://localhost:3006';
 
 const typeMap = new Map();
-const urlImages = url + '/images/foodDefault/';
+const urlImages = urlHost + '/images/foodDefault/';
 typeMap.set('Fish', urlImages + 'fish.png');
 typeMap.set('Vegetable', urlImages + 'vegetables.png');
 typeMap.set('Cheese', urlImages + 'cheese.png');
@@ -42,7 +42,6 @@ export class FoodService {
         private http: HttpClient,
         private router: Router,
         private authService: AuthService,
-        private fridgeService: FridgeService,
         private floorService: FloorService,
         private api: ApiService) {}
 
@@ -113,8 +112,8 @@ export class FoodService {
     }
 
     addFood(name: string, type, idFloor: number, expirationDate: Date,
-            quantity: number, dateOfPurchase: Date, imageFoodPath: string, unitQty: string) {
-        imageFoodPath = typeMap.get(type);
+            quantity: number, dateOfPurchase: Date, unitQty: string) {
+        const imageFoodPath = typeMap.get(type);
 
         const foodData: FoodCreate = {
             name,
@@ -135,11 +134,11 @@ export class FoodService {
     }
 
     updateFood(idFood: number, name: string, type, idFloor: number, expirationDate: Date,
-               quantity: number, dateOfPurchase: Date, imageFoodPath: string, unitQty: string) {
+               quantity: number, dateOfPurchase: Date, unitQty: string) {
         let foodData: Food | FormData;
         const floor = this.floorService.getFloor(idFloor);
 
-        imageFoodPath = typeMap.get(type);
+        const imageFoodPath = typeMap.get(type);
 
         foodData = {
             id : idFood,

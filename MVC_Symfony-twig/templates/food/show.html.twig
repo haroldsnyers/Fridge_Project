@@ -3,14 +3,13 @@
 {% block title %}Food{% endblock %}
 
 {% block body %}
-    <h1>Food</h1>
-
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ food.id }}</td>
-            </tr>
+    <div style="padding-bottom: 100px"></div>
+    <div class="container">
+        <h1>Food</h1>
+        {% set imagePath = food.imageFoodPath %}
+        <img class="fridge-img"  src="{{ asset( imagePath ) }}" alt="food">
+        <table class="table">
+            <tbody>
             <tr>
                 <th>Name</th>
                 <td>{{ food.name }}</td>
@@ -20,19 +19,28 @@
                 <td>{{ food.type }}</td>
             </tr>
             <tr>
-                <th>Expiration_date</th>
-                <td>{{ food.expirationDate ? food.expirationDate|date('Y-m-d H:i:s') : '' }}</td>
+                <th>Expiration date</th>
+                <td>{{ food.expirationDate ? food.expirationDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Date of Purchase</th>
+                <td>{{ food.dateOfPurchase ? food.expirationDate|date('Y-m-d') : '' }}</td>
             </tr>
             <tr>
                 <th>Quantity</th>
-                <td>{{ food.quantity }}</td>
+                <td>{{ food.quantity }}{{ food.unitQty }}</td>
             </tr>
-        </tbody>
-    </table>
+            </tbody>
+        </table>
 
-    <a href="{{ path('food_index') }}">back to list</a>
+        <div class="foodShow">
+            <a href="{{ path('food_index', {'fridgeid':food.idFloor.idFridge.id, 'floorId': food.idFloor.id}) }}">back to list</a>
 
-    <a href="{{ path('food_edit', {'id': food.id}) }}">edit</a>
+            <a href="{{ path('food_edit', {'fridgeid':food.idFloor.idFridge.id, 'id': food.id}) }}">edit</a>
 
-    {{ include('food/_delete_form.html.twig') }}
+            {{ include('food/_delete_form.html.twig') }}
+        </div>
+
+    </div>
+
 {% endblock %}

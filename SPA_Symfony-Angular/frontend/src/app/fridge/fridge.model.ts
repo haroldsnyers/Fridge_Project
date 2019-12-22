@@ -4,6 +4,7 @@ export interface Fridge {
     type: string;
     nbrFloors: number;
     user_id: number;
+    imageFridgePath: string;
 }
 
 export interface FridgeCreate {
@@ -11,4 +12,5 @@ export interface FridgeCreate {
     type: string;
     nbrFloors: number;
     userMail: string;
+    imageFridgePath: string;
 }

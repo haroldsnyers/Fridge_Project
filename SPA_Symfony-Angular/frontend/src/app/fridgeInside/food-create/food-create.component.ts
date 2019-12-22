@@ -5,6 +5,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Food } from '../food.model';
 import { FoodService } from '../food.service';
 import { FloorService } from '../floor.service';
+import { MatSnackBar } from '@angular/material';
 
 
 @Component({
@@ -36,7 +37,8 @@ export class FoodCreateComponent implements OnInit, AfterViewInit {
 
   constructor(
     public foodService: FoodService,
-    public route: ActivatedRoute) {}
+    public route: ActivatedRoute,
+    private snackBar: MatSnackBar) {}
 
   ngOnInit() {
     // configure form
@@ -49,7 +51,6 @@ export class FoodCreateComponent implements OnInit, AfterViewInit {
       expirationDate: new FormControl(null, {validators : [Validators.required]}),
       quantity: new FormControl(null, {validators : [Validators.required]}),
       dateOfPurchase: new FormControl(null, {validators : [Validators.required]}),
-      imagePath: new FormControl(null, {validators : [Validators.required]}),
       unitQty: new FormControl(null, {validators : [Validators.required]}),
     });
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
@@ -67,7 +68,6 @@ export class FoodCreateComponent implements OnInit, AfterViewInit {
           'expirationDate': this.food.expiration_date,
           'quantity': this.food.quantity,
           'dateOfPurchase': this.food.date_of_purchase,
-          'imagePath': this.food.image_food_path,
           'unitQty': this.food.unit_qty
         });
       } else if (paramMap.has('floorId')) {
@@ -106,9 +106,9 @@ export class FoodCreateComponent implements OnInit, AfterViewInit {
         this.form.value.expirationDate,
         this.form.value.quantity,
         this.form.value.dateOfPurchase,
-        this.form.value.imagePath,
         this.form.value.unitQty
         );
+      this.openSnackBar('Food successfully Created!', 'OK');
     } else {
     this.foodService.updateFood(
         this.food.id,
@@ -118,11 +118,17 @@ export class FoodCreateComponent implements OnInit, AfterViewInit {
         this.form.value.expirationDate,
         this.form.value.quantity,
         this.form.value.dateOfPurchase,
-        this.form.value.imagePath,
         this.form.value.unitQty
       );
     this.ngAfterViewInit();
-    this.form.reset();
+    this.openSnackBar('Food successfully Updated!', 'OK');
     }
+    this.form.reset();
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 4000,
+    });
   }
 }

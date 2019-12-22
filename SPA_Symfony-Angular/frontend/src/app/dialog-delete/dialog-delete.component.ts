@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { FridgeService } from '../fridge/fridge.service';
 import { FloorService } from '../fridgeInside/floor.service';
 import { FoodService } from '../fridgeInside/food.service';
@@ -33,10 +33,12 @@ export class DialogDeleteComponent {
     private fridgeService: FridgeService,
     private floorService: FloorService,
     private foodService: FoodService,
-    private router: Router) {}
+    private router: Router,
+    private snackBar: MatSnackBar) {}
 
   onNoClick(): void {
     this.dialogRef.close();
+    this.openSnackBar('Deletion Cancelled!', 'OK');
   }
 
   onYesClick(): void {
@@ -48,17 +50,26 @@ export class DialogDeleteComponent {
         this.fridgeService.getFridges();
         this.router.navigate(['/fridges']);
       });
+      this.openSnackBar('Fridge succesfully deleted!', 'OK');
     } else if (this.data.typeElem === 'floor') {
       this.floorService.deleteFloor(this.data.id).subscribe(error => {
         this.floorService.errorListener.error(error);
         this.floorService.errorListener = new Subject<string>();
       });
+      this.openSnackBar('Floor succesfully deleted!', 'OK');
     } else if (this.dataFood.typeElem === 'food') {
       this.foodService.deleteFood(this.dataFood.id).subscribe(error => {
         this.floorService.errorListener.error(error);
         this.floorService.errorListener = new Subject<string>();
       });
+      this.openSnackBar('Food succesfully deleted!', 'OK');
     }
     this.dialogRef.close();
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 4000,
+    });
   }
 }
