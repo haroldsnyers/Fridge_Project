@@ -5,6 +5,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Fridge } from '../fridge.model';
 import { MatSnackBar } from '@angular/material';
+import { subscribeOn } from 'rxjs/operators';
 
 @Component({
   selector: 'app-fridge-list',
@@ -20,7 +21,8 @@ export class FridgeCreateComponent implements OnInit, AfterViewInit {
   // imagePreview: string;
   mode = 'create';
   protected fridgeId: number;
-  Error: string;
+  error: string;
+  state = 'successfuly';
   types = [
     'french door fridge',
     'side by side fridge',
@@ -72,14 +74,24 @@ export class FridgeCreateComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.fridgeService.getErrorListener().subscribe(
         next => {
-          this.Error = next;
+          this.error = next;
           this.isLoading = false;
         },
         error => {
-          this.Error = error;
+          this.error = error;
+          console.log(this.error);
           this.isLoading = false;
+          this.state = 'not';
         }
     );
+  }
+
+  openSnack() {
+    if (this.mode === 'create') {
+      this.openSnackBar('Food ' + this.state + ' created!', 'OK');
+    } else {
+      this.openSnackBar('Food ' + this.state + ' Edited!', 'OK');
+    }
   }
 
   onSaveFridge() {
@@ -94,7 +106,6 @@ export class FridgeCreateComponent implements OnInit, AfterViewInit {
         this.form.value.type,
         this.form.value.nbrFloors
         );
-      this.openSnackBar('Fridge successfully Created!', 'OK');
     } else {
       this.fridgeService.updateFridge(
         this.fridge.id,
@@ -103,9 +114,9 @@ export class FridgeCreateComponent implements OnInit, AfterViewInit {
         this.form.value.nbrFloors,
         this.fridge.user_id
         );
-      this.openSnackBar('Frudge successfully Created!', 'OK');
       }
     this.ngAfterViewInit();
+    this.openSnack();
     this.form.reset();
   }
 

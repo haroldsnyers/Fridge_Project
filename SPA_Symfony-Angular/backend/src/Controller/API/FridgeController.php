@@ -21,17 +21,23 @@ use Symfony\Component\Serializer\Serializer;
 /**
  * @Route("/api/fridge")
  */
-class FridgeControllerApi extends AbstractController
+class FridgeController extends AbstractController
 {
     /**
      * @Route("/", name="api_fridgeRepo_show", methods={"GET"})
      */
     public function index(Request $request, UserRepository $userRepository)
     {
-        $user = $request->query->get('email');
+        $mail = $request->query->get('email');
         try {
             $fridgeList = [];
-            $listFridge = $userRepository->findOneByEmail($user)->getListFridges();
+            $user = $userRepository->findOneByEmail($mail);
+            if (!$user) {
+                return $this->json([
+                    'errors' => "unable to fetch fridges"
+                ], 400);
+            }
+            $listFridge = $user->getListFridges();
             foreach($listFridge as $fridge) {
                 array_push($fridgeList, $fridge);
             }
@@ -41,7 +47,7 @@ class FridgeControllerApi extends AbstractController
                     return $object->getId();
                 },
                 ObjectNormalizer::CIRCULAR_REFERENCE_LIMIT =>0,
-                AbstractNormalizer::IGNORED_ATTRIBUTES =>['fridge', 'password', 'plainPassword', 'salt', 'listFridges'],
+                AbstractNormalizer::IGNORED_ATTRIBUTES =>['fridge', 'password', 'plainPassword', 'salt', 'listFridges', 'email', 'username', 'roles'],
                 ObjectNormalizer::ENABLE_MAX_DEPTH => true,
             ];
 
@@ -56,7 +62,7 @@ class FridgeControllerApi extends AbstractController
 
         } catch (\Exception $exception) {
             return $this->json([
-                'errors' => $exception
+                'errors' => "unable to fetch fridges"
             ], 400);
         }
     }
@@ -69,26 +75,25 @@ class FridgeControllerApi extends AbstractController
      */
     public function newFridge(Request $request, UserRepository $userRepository)
     {
-        // creates a task object and initializes some data for this example
-        $fridge = new Fridge();
-
-        $data = json_decode($request->getContent(), true);
-        $name = $data['name'];
-        $type = $data['type'];
-        $nbrFloors = $data['nbrFloors'];
-        $imagePath = $data['imagePath'];
-        $userEmail = $data['userMail'];
-
-        $user = $userRepository->findOneByEmail($userEmail);
-
-        $fridge->setName($name);
-        $fridge->setType($type);
-        $fridge->setNbrFloors($nbrFloors);
-        $fridge->setImageFridgePath($imagePath);
-        $fridge->setUser($user);
-
         try
         {
+            // creates a task object and initializes some data for this example
+            $fridge = new Fridge();
+
+            $data = json_decode($request->getContent(), true);
+            $name = $data['name'];
+            $type = $data['type'];
+            $nbrFloors = $data['nbrFloors'];
+            $imagePath = $data['imageFridgePath'];
+            $userEmail = $data['userMail'];
+
+            $user = $userRepository->findOneByEmail($userEmail);
+
+            $fridge->setName($name);
+            $fridge->setType($type);
+            $fridge->setNbrFloors($nbrFloors);
+            $fridge->setImageFridgePath($imagePath);
+            $fridge->setUser($user);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($fridge);
             $entityManager->flush();
@@ -109,22 +114,21 @@ class FridgeControllerApi extends AbstractController
      */
     public function editFridge(Request $request, FridgeRepository $fridgeRepository, Fridge $fridge): Response
     {
-        $id_fridge = $request->attributes->get('id');
-        $fridge = $fridgeRepository->findOneById($id_fridge);
-
-        $data = json_decode($request->getContent(), true);
-
-        $name = $data['name'];
-        $type = $data['type'];
-        $imagePath = $data['imagePath'];
-        $nbrFloors = $data['nbrFloors'];
-
-        $fridge->setName($name);
-        $fridge->setType($type);
-        $fridge->setNbrFloors($nbrFloors);
-        $fridge->setImageFridgePath($imagePath);
-
         try {
+            $id_fridge = $request->attributes->get('id');
+            $fridge = $fridgeRepository->findOneById($id_fridge);
+
+            $data = json_decode($request->getContent(), true);
+
+            $name = $data['name'];
+            $type = $data['type'];
+            $imagePath = $data['imageFridgePath'];
+            $nbrFloors = $data['nbrFloors'];
+
+            $fridge->setName($name);
+            $fridge->setType($type);
+            $fridge->setNbrFloors($nbrFloors);
+            $fridge->setImageFridgePath($imagePath);
             $this->getDoctrine()->getManager()->flush();
 
             return $this->json([
@@ -133,7 +137,7 @@ class FridgeControllerApi extends AbstractController
 
         } catch (\Exception $exception) {
             return $this->json([
-                'errors' => $exception
+                'errors' => $exception->getMessage()
             ], 400);
         }
     }
@@ -157,7 +161,7 @@ class FridgeControllerApi extends AbstractController
 
         } catch (\Exception $exception) {
             return $this->json([
-                'errors' => $exception
+                'errors' => $exception->getMessage()
             ], 400);
         }
     }

@@ -25,7 +25,7 @@ use Symfony\Component\Serializer\Serializer;
 /**
  * @Route("api/food")
  */
-class FoodControllerApi extends AbstractController
+class FoodController extends AbstractController
 {
     /**
      * @Route("/", name="food_index", methods={"GET"})

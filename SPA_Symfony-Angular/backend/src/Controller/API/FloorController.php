@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Serializer;
 /**
  * @Route("/api/floors")
  */
-class FloorControllerApi extends AbstractController
+class FloorController extends AbstractController
 {
     /**
      * @Route("/", name="floor_index", methods={"GET"})

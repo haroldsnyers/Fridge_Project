@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { FridgeService } from '../fridge/fridge.service';
 import { FloorService } from '../fridgeInside/floor.service';
@@ -24,7 +24,9 @@ export interface DialogDataFood {
   templateUrl: './dialog-delete.component.html',
   styleUrls: ['./dialog-delete.component.css']
 })
-export class DialogDeleteComponent {
+export class DialogDeleteComponent implements AfterViewInit {
+  state = 'successfuly';
+  type: string;
 
   constructor(
     public dialogRef: MatDialogRef<DialogDeleteComponent>,
@@ -35,6 +37,38 @@ export class DialogDeleteComponent {
     private foodService: FoodService,
     private router: Router,
     private snackBar: MatSnackBar) {}
+
+  ngAfterViewInit(): void {
+    if (this.type === 'fridge') {
+      this.fridgeService.getErrorListener().subscribe(
+        next => {
+        },
+        error => {
+          this.state = 'not';
+        }
+      );
+    } else if (this.type === 'floor') {
+      this.floorService.getErrorListener().subscribe(
+        next => {
+        },
+        error => {
+          this.state = 'not';
+        }
+      );
+    } else if (this.type === 'floor') {
+      this.foodService.getErrorListener().subscribe(
+        next => {
+        },
+        error => {
+          this.state = 'not';
+        }
+      );
+    }
+  }
+
+  openSnack(type) {
+    this.openSnackBar(type + ' ' + this.state + ' deleted!', 'OK');
+  }
 
   onNoClick(): void {
     this.dialogRef.close();
@@ -50,21 +84,25 @@ export class DialogDeleteComponent {
         this.fridgeService.getFridges();
         this.router.navigate(['/fridges']);
       });
-      this.openSnackBar('Fridge succesfully deleted!', 'OK');
+      this.dialogRef.close(this.data);
+      this.type = 'Fridge';
     } else if (this.data.typeElem === 'floor') {
       this.floorService.deleteFloor(this.data.id).subscribe(error => {
         this.floorService.errorListener.error(error);
         this.floorService.errorListener = new Subject<string>();
       });
-      this.openSnackBar('Floor succesfully deleted!', 'OK');
+      this.dialogRef.close(this.data);
+      this.type = 'Floor';
     } else if (this.dataFood.typeElem === 'food') {
       this.foodService.deleteFood(this.dataFood.id).subscribe(error => {
         this.floorService.errorListener.error(error);
         this.floorService.errorListener = new Subject<string>();
       });
-      this.openSnackBar('Food succesfully deleted!', 'OK');
+      this.dialogRef.close(this.dataFood);
+      this.type = 'Food';
     }
-    this.dialogRef.close();
+    this.ngAfterViewInit();
+    this.openSnack(this.type);
   }
 
   openSnackBar(message: string, action: string) {

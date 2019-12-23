@@ -21,6 +21,7 @@ export class FloorCreateComponent implements OnInit, AfterViewInit {
   private mode = 'create';
   private floorId: number;
   Error: string;
+  state = 'successfuly';
   types = [
     'Vegetable',
     'Cheese',
@@ -79,8 +80,17 @@ export class FloorCreateComponent implements OnInit, AfterViewInit {
         error => {
           this.Error = error;
           this.isLoading = false;
+          this.state = 'not';
         }
     );
+  }
+
+  openSnack() {
+    if (this.mode === 'create') {
+      this.openSnackBar('Floor ' + this.state + ' created!', 'OK');
+    } else {
+      this.openSnackBar('Floor ' + this.state + ' Edited!', 'OK');
+    }
   }
 
   onSaveFloor() {
@@ -94,7 +104,6 @@ export class FloorCreateComponent implements OnInit, AfterViewInit {
         this.form.value.name,
         this.form.value.type
         );
-      this.openSnackBar('Floor succesfully Created!', 'OK');
     } else {
       this.floorService.updateFloor(
         this.floor.id,
@@ -102,9 +111,9 @@ export class FloorCreateComponent implements OnInit, AfterViewInit {
         this.form.value.type,
         this.floor.id_fridge
       );
-      this.openSnackBar('Floor succesfully updated!', 'OK');
     }
     this.ngAfterViewInit();
+    this.openSnack();
     this.form.reset();
   }
 

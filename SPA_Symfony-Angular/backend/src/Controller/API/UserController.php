@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 /**
  * @Route("/api/user")
  */
-class UserControllerApi extends AbstractController
+class UserController extends AbstractController
 {
     /**
      * @Route("/register", name="api_user_registration", methods={"POST"})
@@ -35,11 +35,13 @@ class UserControllerApi extends AbstractController
         $errors = [];
         if($password != $passwordConfirmation)
         {
-            $errors[] = "Password does not match the password confirmation.";
+            array_push($errors, "Password does not match the password confirmation.");
+            # $errors[] = "Password does not match the password confirmation.";
         }
         if(strlen($password) < 8)
         {
-            $errors[] = "Password should be at least 8 characters.";
+            array_push($errors, "Password should be at least 8 characters.");
+            # $errors[] = "Password should be at least 8 characters.";
         }
         if(!$errors)
         {
@@ -53,12 +55,13 @@ class UserControllerApi extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
                 return $this->json([
-                    'user' => $user
-                ]);
+                    'message' => "succesfuly registered"
+                ], 200);
             }
             catch(UniqueConstraintViolationException $e)
             {
-                $errors[] = "The email or user provided already has an account!";
+                array_push($errors, "The email or user provided already has an account!");
+                # $errors[] = "The email or user provided already has an account!";
             }
             catch(\Exception $e)
             {

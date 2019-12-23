@@ -37,6 +37,6 @@ export class ConfirmValidParentMatcher implements ErrorStateMatcher {
 export const errorMessages: { [key: string]: string } = {
     username: 'Username must be between 1 and 128 characters',
     email: 'Email must be a valid email address (username@domain)',
-    password: 'Password must have atleast 8 characters, and contain at least one number and special character',
+    password: 'Password must have atleast 8 characters',
     passwordConfirmation: 'Passwords must match'
 };

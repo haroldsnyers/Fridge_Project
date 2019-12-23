@@ -34,6 +34,7 @@ export class FoodCreateComponent implements OnInit, AfterViewInit {
   ];
   units = ['kg', 'g', 'cl', 'L', 'unit(s)'];
   Error: string;
+  state = 'successfuly';
 
   constructor(
     public foodService: FoodService,
@@ -88,8 +89,17 @@ export class FoodCreateComponent implements OnInit, AfterViewInit {
         error => {
           this.Error = error;
           this.isLoading = false;
+          this.state = 'not';
         }
     );
+  }
+
+  openSnack() {
+    if (this.mode === 'create') {
+      this.openSnackBar('Food ' + this.state + ' created!', 'OK');
+    } else {
+      this.openSnackBar('Food ' + this.state + ' Edited!', 'OK');
+    }
   }
 
   onSaveFood() {
@@ -108,7 +118,6 @@ export class FoodCreateComponent implements OnInit, AfterViewInit {
         this.form.value.dateOfPurchase,
         this.form.value.unitQty
         );
-      this.openSnackBar('Food successfully Created!', 'OK');
     } else {
     this.foodService.updateFood(
         this.food.id,
@@ -120,9 +129,9 @@ export class FoodCreateComponent implements OnInit, AfterViewInit {
         this.form.value.dateOfPurchase,
         this.form.value.unitQty
       );
-    this.ngAfterViewInit();
-    this.openSnackBar('Food successfully Updated!', 'OK');
     }
+    this.ngAfterViewInit();
+    this.openSnack();
     this.form.reset();
   }
 

@@ -76,9 +76,14 @@ export class FridgeListComponent implements OnInit, OnDestroy, AfterViewInit {
       data: this.data
     });
 
-    dialogRef.afterClosed().subscribe(() => {
-      console.log('Deletion succesful');
-      this.ngAfterViewInit();
+    dialogRef.afterClosed().subscribe((fridge: Fridge) => {
+      if (fridge) {
+        this.fridges.forEach( (item, index) => {
+          if (item.id === fridge.id) {
+            this.fridges.splice(index, 1);
+          }
+        });
+      }
     });
   }
 

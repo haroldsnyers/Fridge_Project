@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\Serializer;
 /**
  * @Route("/api/user")
  */
-class SecurityControllerApi extends AbstractController
+class SecurityController extends AbstractController
 {
     /**
      * @Route("/login", name="api_login", methods={"POST"})

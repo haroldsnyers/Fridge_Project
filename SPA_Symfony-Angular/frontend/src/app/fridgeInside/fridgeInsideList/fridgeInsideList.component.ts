@@ -145,10 +145,8 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   updateDataSource($event) {
-    console.log(this.floors[$event].id);
     this.isLoadingBis = true;
     this.selectTabs = $event;
-    console.log(this.selectTabs);
     this.foodService.getFoodList(this.floors[$event].id);
     this.foodSub = this.foodService.getFoodUpdateListener()
       .subscribe((foodData: {listOfFood: Food[]}) => {
@@ -195,9 +193,27 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
       data: this.data
     });
 
-    dialogRef.afterClosed().subscribe(() => {
-      this.ngAfterViewInit();
-      this.router.navigate(['/fridge/floors']);
+    if (typeElem === 'food') {
+      dialogRef.afterClosed().subscribe((food: Food) => {
+        this.foodList.forEach( (item, index) => {
+          if (item.id === food.id) {
+            this.foodList.splice(index, 1);
+            this.dataSource = new MatTableDataSource(this.foodList);
+          }
+        });
+      });
+    } else {
+      dialogRef.afterClosed().subscribe((floor: Floor) => {
+        this.floors.forEach( (item, index) => {
+          if (item.id === floor.id) {
+            this.floors.splice(index, 1);
+          }
+        });
+      });
+    }
+    // dialogRef.afterClosed().subscribe(() => {
+    //   this.ngAfterViewInit();
+    //   this.router.navigate(['/fridge/floors']);
       // if (typeElem === 'food') {
       //   this.foodList = [];
       //   this.foodService.getFoodList(this.floorIds[0]);
@@ -222,7 +238,7 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
       // }
       // console.log(this.foodList);
       // console.log(this.dataSource);
-    });
+    // });
   }
 
   ngOnDestroy() {
