@@ -14,7 +14,7 @@
         {% for fridge in listFridge %}
             <div class="fridge-container my-1">
                 <a href="{{ path('floor_index', {'fridgeid': fridge.id, 'id_fridge': fridge.id}) }}">
-                    <img class="fridge-img"  src="{{ asset('images/french_door_fridge.jpg') }}" alt="hello">
+                    <img class="fridge-img"  src="{{ asset(fridge.getImageFridgePath()) }}" alt="hello">
                     <div class="fridge-title d-inline-block pl-3 align-middle">
                         <span>{{ fridge.name }}</span>
                         <br>

@@ -14,21 +14,22 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-$fridgeImage = [
-    'french door fridge' => 'french_door_fridge.jpg',
-    'side by side fridge' => 'side_by_side_fridge.jpg',
-    'freezerless fridge' => 'freezerless_fridge.jpg',
-    'bottom freezer fridge' => 'bottom_freezer_fridge.jpg',
-    'top freezer fridge' => 'top_freezer_fridge.jpg',
-    'freezer' => 'freezer.jpg',
-    'wine fridge' => 'wine_fridge.jpg'
-];
+
 
 /**
  * @Route("/fridge")
  */
 class FridgeController extends AbstractController
 {
+    private $fridgeImage = [
+        'french door fridge' => 'images/fridgeImage/french_door_fridge.jpg',
+        'side by side fridge' => 'images/fridgeImage/side_by_side_fridge.jpg',
+        'freezerless fridge' => 'images/fridgeImage/freezerless_fridge.jpg',
+        'bottom freezer fridge' => 'images/fridgeImage/bottom_freezer_fridge.jpg',
+        'top freezer fridge' => 'images/fridgeImage/top_freezer_fridge.jpg',
+        'freezer' => 'images/fridgeImage/freezer.jpg',
+        'wine fridge' => 'images/fridgeImage/wine_fridge.jpg'
+        ];
     /**
      * @Route("/", name="fridgeRepo_show")
      */
@@ -69,6 +70,8 @@ class FridgeController extends AbstractController
             // but, the original `$task` variable has also been updated
             $form->getData();
             $fridge = $form->getData();
+            $type = $fridge->getType();
+            $fridge->setImageFridgePath($this->fridgeImage[$type]);
             $fridge->setUser($user);
 
             $entityManager = $this->getDoctrine()->getManager();
@@ -98,6 +101,8 @@ class FridgeController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
+                $type = $fridge->getType();
+                $fridge->setImageFridgePath($this->fridgeImage[$type]);
                 $this->getDoctrine()->getManager()->flush();
 
                 return $this->redirectToRoute('fridgeRepo_show');

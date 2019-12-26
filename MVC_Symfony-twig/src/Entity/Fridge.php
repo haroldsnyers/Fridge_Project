@@ -44,6 +44,11 @@ class Fridge
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $image_fridge_path;
+
 
     public function __construct()
     {
@@ -130,6 +135,18 @@ class Fridge
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getImageFridgePath(): ?string
+    {
+        return $this->image_fridge_path;
+    }
+
+    public function setImageFridgePath(string $image_fridge_path): self
+    {
+        $this->image_fridge_path = $image_fridge_path;
 
         return $this;
     }

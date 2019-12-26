@@ -125,24 +125,24 @@ class FloorController extends AbstractController
         $entityManager->flush();
     }
 
-    /**
-     * @Route("/{id}", name="floor_show", methods={"GET"})
-     */
-    public function showFloor(Floor $floor): Response
-    {
-        $user = $this->getUser()->getUsername();
-        $fridgeUser = $floor->getIdFridge()->getUser()->getUsername();
+    // /**
+    //  * @Route("/{id}", name="floor_show", methods={"GET"})
+    //  */
+    // public function showFloor(Floor $floor): Response
+    // {
+    //     $user = $this->getUser()->getUsername();
+    //     $fridgeUser = $floor->getIdFridge()->getUser()->getUsername();
 
-        if ($user == $fridgeUser) {
-            return $this->render('', [
-                'floor' => $floor,
-            ]);
+    //     if ($user == $fridgeUser) {
+    //         return $this->render('', [
+    //             'floor' => $floor,
+    //         ]);
 
-        } else {
-            return $this->render('home/homepage.html.twig');
-        }
+    //     } else {
+    //         return $this->render('home/homepage.html.twig');
+    //     }
 
-    }
+    // }
 
     /**
      * @Route("/{id}/edit", name="floor_edit", methods={"GET","POST"})
