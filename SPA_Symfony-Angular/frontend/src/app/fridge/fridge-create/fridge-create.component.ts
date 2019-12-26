@@ -111,8 +111,7 @@ export class FridgeCreateComponent implements OnInit, AfterViewInit {
         this.fridge.id,
         this.form.value.name,
         this.form.value.type,
-        this.form.value.nbrFloors,
-        this.fridge.user_id
+        this.form.value.nbrFloors
         );
       }
     this.ngAfterViewInit();

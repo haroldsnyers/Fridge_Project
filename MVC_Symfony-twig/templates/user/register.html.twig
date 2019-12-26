@@ -5,15 +5,20 @@
 {% block body %}
     <div style="padding-bottom: 100px"></div>
 
-    <div class="container">
+<form id="msform" method="post" enctype="multipart/form-data">
+    <fieldset>
+        <h2 class="fs-title">Register</h2>
+        <h3 class="fs-subtitle">Select or enter the needed info</h3>
         {{ form_start(form) }}
             {{ form_row(form.username) }}
             {{ form_row(form.email) }}
             {{ form_row(form.plainPassword.first) }}
             {{ form_row(form.plainPassword.second) }}
-
             <button type="submit">Register!</button>
+            <p class="message">Already registered? <a href="{{ path('login') }}">Login</a></p>
         {{ form_end(form) }}
-    </div>
+    </fieldset>
+</form>
+    
 {% endblock %}
 

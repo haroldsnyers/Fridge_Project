@@ -33,7 +33,12 @@ class FloorController extends AbstractController
         $id_fridge = $request->query->get('idFridge');
 
         try {
-            $this->generateFloorsFridge($id_fridge, $fridgeRepository);
+            $state = $this->generateFloorsFridge($id_fridge, $fridgeRepository);
+            if ($state == 0) {
+                return $this->json([
+                    'errors' => "unable to fetch floors"
+                ], 400);
+            }
             $listFloors = $this->getFloorsFridge($id_fridge);
 
             $defaultContext = [
@@ -41,8 +46,8 @@ class FloorController extends AbstractController
                     return $object->getId();
                 },
                 ObjectNormalizer::CIRCULAR_REFERENCE_LIMIT =>0,
-                AbstractNormalizer::IGNORED_ATTRIBUTES =>['fridge', 'user', 'floor'],
-                ObjectNormalizer::ENABLE_MAX_DEPTH => true,
+                AbstractNormalizer::IGNORED_ATTRIBUTES =>['fridge', 'user', 'floor', "nbrFloors", "imageFridgePath", "__initializer__", "__cloner__", "__isInitialized__"],
+                ObjectNormalizer::ENABLE_MAX_DEPTH => true
             ];
 
             $encoders = array( new JsonEncoder());
@@ -56,7 +61,7 @@ class FloorController extends AbstractController
 
         } catch (\Exception $exception) {
             return $this->json([
-                'errors' => $exception
+                'errors' => "unable to fetch floors"
             ], 400);
         }
     }
@@ -81,6 +86,9 @@ class FloorController extends AbstractController
         $floorList = $this->getFloorsFridge($id_fridge);
 
         $fridge = $fridgeRepository->findOneById($id_fridge);
+        if (!$fridge) {
+            return 0;
+        }
         $nbr_floors = $fridge->getNbrFloors();
         $nbr_floors_real = count($floorList);
         $i = 0;
@@ -98,6 +106,7 @@ class FloorController extends AbstractController
             $entityManager->flush();
             $i--;
         }
+        return 1;
     }
 
     /**
@@ -106,31 +115,36 @@ class FloorController extends AbstractController
      */
     public function addFloor (Request $request, FridgeRepository $fridgeRepository)
     {
-        $floor = new Floor();
-
-        $data = json_decode($request->getContent(), true);
-        $name = $data['name'];
-        $type = $data['type'];
-        $id_fridge = $data['id_fridge'];
-
-        $fridge = $fridgeRepository->findOneById($id_fridge);
-
-        $floor->setName($name);
-        $floor->setType($type);
-        $floor->setQtyFood(0);
-        $floor->setIdFridge($fridge);
-
-        $nbr_floors = $fridge->getNbrFloors();
-        $fridge->setNbrFloors($nbr_floors + 1);
-
         try
         {
+            $floor = new Floor();
+
+            $data = json_decode($request->getContent(), true);
+            $name = $data['name'];
+            $type = $data['type'];
+            $id_fridge = $data['id_fridge'];
+
+            $fridge = $fridgeRepository->findOneById($id_fridge);
+            if (!$fridge) {
+                return $this->json([
+                    'errors' => "unable to save new floor at this moment."
+                ], 400);
+            }
+
+            $floor->setName($name);
+            $floor->setType($type);
+            $floor->setQtyFood(0);
+            $floor->setIdFridge($fridge);
+
+            $nbr_floors = $fridge->getNbrFloors();
+            $fridge->setNbrFloors($nbr_floors + 1);
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($fridge);
             $entityManager->flush();
             return $this->json([
                 'message' => "floor Created!"
-            ]);
+            ], 200);
         }
         catch(\Exception $e)
         {
@@ -144,29 +158,35 @@ class FloorController extends AbstractController
     /**
      * @Route("/{id}", name="floor_edit", methods={"PUT"})
      */
-    public function editFloor(Request $request, FloorRepository $floorRepository, Floor $floor): Response
+    public function editFloor(Request $request, FloorRepository $floorRepository): Response
     {
-        $id_fridge = $request->attributes->get('id');
-        $floor = $floorRepository->findOneById($id_fridge);
-
-        $data = json_decode($request->getContent(), true);
-
-        $name = $data['name'];
-        $type = $data['type'];
-
-        $floor->setName($name);
-        $floor->setType($type);
-
         try {
+            $id_fridge = $request->attributes->get('id');
+            $floor = $floorRepository->findOneById($id_fridge);
+
+            if (!$floor) {
+                return $this->json([
+                    'errors' => "unable to edit floor at this moment."
+                ], 400);
+            }
+
+            $data = json_decode($request->getContent(), true);
+
+            $name = $data['name'];
+            $type = $data['type'];
+
+            $floor->setName($name);
+            $floor->setType($type);
+
             $this->getDoctrine()->getManager()->flush();
 
             return $this->json([
                 'message' => "Floor Updated!"
-            ]);
+            ], 200);
 
         } catch (\Exception $exception) {
             return $this->json([
-                'errors' => $exception
+                'errors' => "unable to edit floor at this moment."
             ], 400);
         }
     }
@@ -176,14 +196,20 @@ class FloorController extends AbstractController
      */
     public function deleteFloor(Request $request, FloorRepository $floorRepository): Response
     {
-        $id_floor = $request->attributes->get('id');
-        $floor = $floorRepository->findOneById($id_floor);
-
-        $fridge = $floor->getIdFridge();
-        $nbrFloors = $fridge->getNbrFloors();
-        $fridge->setNbrFloors($nbrFloors - 1);
-
         try {
+            $id_floor = $request->attributes->get('id');
+            $floor = $floorRepository->findOneById($id_floor);
+
+            if (!$floor) {
+                return $this->json([
+                    'errors' => "unable to delete floor at this moment."
+                ], 400);
+            }
+
+            $fridge = $floor->getIdFridge();
+            $nbrFloors = $fridge->getNbrFloors();
+            $fridge->setNbrFloors($nbrFloors - 1);
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($floor);
             $entityManager->flush();

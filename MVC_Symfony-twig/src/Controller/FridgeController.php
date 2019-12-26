@@ -81,6 +81,7 @@ class FridgeController extends AbstractController
 
         return $this->render('fridge/CreateFridge.html.twig', [
             'fridgeForm' => $form->createView(),
+            'state' => "create"
         ]);
     }
 
@@ -105,6 +106,7 @@ class FridgeController extends AbstractController
             return $this->render('fridge/EditFridge.html.twig', [
                 'fridge' => $fridge,
                 'fridgeForm' => $form->createView(),
+                'state' => "edit"
             ]);
 
         } else {

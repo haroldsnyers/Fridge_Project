@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
-import { Fridge, FridgeCreate } from './fridge.model';
+import { Fridge, FridgeCreate, FridgeUpdate } from './fridge.model';
 import { Subject, Observable } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { ApiService } from '../service/api.service';
@@ -97,17 +97,15 @@ export class FridgeService {
         });
     }
 
-    updateFridge(idFridge: number, name: string, type: string, nbrOfFloors: number, idUser: number) {
+    updateFridge(idFridge: number, name: string, type: string, nbrOfFloors: number) {
         const imagePath = typeMap.get(type);
-        let fridgeData: Fridge | FormData;
+        let fridgeData: FridgeUpdate | FormData;
         fridgeData = {
-            id : idFridge,
             // tslint:disable:object-literal-shorthand
             name: name,
             type: type,
             nbrFloors: nbrOfFloors,
-            imageFridgePath: imagePath,
-            user_id: idUser
+            imageFridgePath: imagePath
         };
         this.api.updateItem(fridgeData, idFridge, this.url)
           .subscribe(response => {

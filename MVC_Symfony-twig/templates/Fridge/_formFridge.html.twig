@@ -8,8 +8,13 @@
         {{ form_row(fridgeForm.name, { 'attr': {
             'placeholder': "Example : Kitchen fridge"} }) }}
         {{ form_row(fridgeForm.type) }}
-        {{ form_label(fridgeForm.nbr_floors, 'Number of Floors') }}
-        {{ form_widget(fridgeForm.nbr_floors) }}
+        {% if state == "edit" %}
+            {{ form_widget(fridgeForm.nbr_floors, { 'attr': {'class': 'hidden-row'} }) }}
+        {% else %}
+            {{ form_label(fridgeForm.nbr_floors, 'Number of Floors') }}
+            {{ form_widget(fridgeForm.nbr_floors) }}
+        {% endif %}
+        
         <button class="btn">{{ button_label|default('Save') }}</button>
         {{ form_end(fridgeForm) }}
     </fieldset>

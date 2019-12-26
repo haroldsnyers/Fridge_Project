@@ -232,6 +232,10 @@ html {
     margin-bottom: 20px;
 }
 
+.hidden-row {
+    visibility: hidden;
+}
+
 /* FLOOR REPO */
 .floorRepo-item {
     position: relative;

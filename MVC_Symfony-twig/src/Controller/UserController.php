@@ -37,7 +37,7 @@ class UserController extends AbstractController
             // ... do any other work - like sending them an email, etc
             // maybe set a "flash" success message for the user
 
-            return $this->redirectToRoute('fridgeRepo_show');
+            return $this->redirectToRoute('login');
         }
 
         return $this->render(

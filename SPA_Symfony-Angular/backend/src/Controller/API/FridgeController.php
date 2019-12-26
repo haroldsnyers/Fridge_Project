@@ -89,6 +89,12 @@ class FridgeController extends AbstractController
 
             $user = $userRepository->findOneByEmail($userEmail);
 
+            if (!$user) {
+                return $this->json([
+                    'errors' => "unable to save new fridge at this moment."
+                ], 400);
+            }
+
             $fridge->setName($name);
             $fridge->setType($type);
             $fridge->setNbrFloors($nbrFloors);
@@ -118,6 +124,12 @@ class FridgeController extends AbstractController
             $id_fridge = $request->attributes->get('id');
             $fridge = $fridgeRepository->findOneById($id_fridge);
 
+            if (!$fridge) {
+                return $this->json([
+                    'errors' => "unable to edit fridge at this moment."
+                ], 400);
+            }
+
             $data = json_decode($request->getContent(), true);
 
             $name = $data['name'];
@@ -137,7 +149,7 @@ class FridgeController extends AbstractController
 
         } catch (\Exception $exception) {
             return $this->json([
-                'errors' => $exception->getMessage()
+                'errors' => "Unable to edit fridge at this time."
             ], 400);
         }
     }
@@ -147,10 +159,16 @@ class FridgeController extends AbstractController
      */
     public function deleteFridge(Request $request, FridgeRepository $fridgeRepository) : Response
     {
-        $id_fridge = $request->attributes->get('id');
-        $fridge = $fridgeRepository->findOneById($id_fridge);
-
         try {
+            $id_fridge = $request->attributes->get('id');
+            $fridge = $fridgeRepository->findOneById($id_fridge);
+
+            if (!$fridge) {
+                return $this->json([
+                    'errors' => "unable to delete fridge at this moment."
+                ], 400);
+            }
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($fridge);
             $entityManager->flush();
@@ -161,7 +179,7 @@ class FridgeController extends AbstractController
 
         } catch (\Exception $exception) {
             return $this->json([
-                'errors' => $exception->getMessage()
+                'errors' => "Unable to delete fridge at this time."
             ], 400);
         }
     }

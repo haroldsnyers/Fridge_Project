@@ -14,3 +14,10 @@ export interface FridgeCreate {
     userMail: string;
     imageFridgePath: string;
 }
+
+export interface FridgeUpdate {
+    name: string;
+    type: string;
+    nbrFloors: number;
+    imageFridgePath: string;
+}
