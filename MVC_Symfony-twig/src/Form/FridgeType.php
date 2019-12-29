@@ -32,7 +32,10 @@ class FridgeType extends AbstractType
                     'wine fridge' => 'wine fridge',
                 ],
             ])
-            ->add('nbr_floors', IntegerType::class, array('attr' => array('min' => 0)))
+            ->add('nbr_floors', IntegerType::class, [
+                'required' => true,
+                'attr' => array('min' => 1)
+            ])
         ;
     }
 

@@ -71,7 +71,7 @@
         <mat-spinner *ngIf="isLoadingBis"></mat-spinner>
         <div *ngIf="foodList.length > 0 && !isLoadingBis">
           <div *ngIf="group.value == 'table' && !isLoadingBis">
-            <mat-form-field>
+            <mat-form-field class="filter">
               <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
             </mat-form-field>
 

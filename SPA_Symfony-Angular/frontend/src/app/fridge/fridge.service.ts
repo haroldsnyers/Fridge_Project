@@ -33,7 +33,6 @@ export class FridgeService {
     private url = 'fridge';
 
     constructor(
-        private http: HttpClient,
         private router: Router,
         private authService: AuthService,
         private api: ApiService) {}

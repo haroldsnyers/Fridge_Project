@@ -158,3 +158,17 @@ mat-spinner {
     color: #1F2605;
     background-color: #D6CE15;
 }
+
+/* When the input is not focused */
+md-input-container label {
+  color: red;
+}
+
+.mat-form-field-underline {
+    background-color: blue;
+}
+
+/* When the input is focused */
+md-input-container.md-input-focused label {
+  color: blue;
+}

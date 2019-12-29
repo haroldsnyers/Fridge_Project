@@ -86,9 +86,18 @@ class FoodController extends AbstractController
      */
     public function show(Food $food): Response
     {
-        return $this->render('food/show.html.twig', [
-            'food' => $food,
-        ]);
+        $user = $this->getUser()->getUsername();
+        $fridgeUser = $food->getIdFloor()->getIdFridge()->getUser()->getUsername();
+
+        if ($user == $fridgeUser) {
+
+            return $this->render('food/show.html.twig', [
+                'food' => $food,
+            ]);
+
+        } else {
+            return $this->render('home/homepage.html.twig');
+        }
     }
 
     public function uploadImage(FormInterface $form, Food $food, $noImageUpload)

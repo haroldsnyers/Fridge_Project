@@ -88,9 +88,9 @@ export class FridgeCreateComponent implements OnInit, AfterViewInit {
 
   openSnack() {
     if (this.mode === 'create') {
-      this.openSnackBar('Food ' + this.state + ' created!', 'OK');
+      this.openSnackBar('Fridge ' + this.state + ' created!', 'OK');
     } else {
-      this.openSnackBar('Food ' + this.state + ' Edited!', 'OK');
+      this.openSnackBar('Fridge ' + this.state + ' Edited!', 'OK');
     }
   }
 

@@ -12,6 +12,7 @@ import { CustomValidators, errorMessages, ConfirmValidParentMatcher } from 'src/
 export class SignupComponent implements OnInit, AfterViewInit {
   isLoading = false;
   hide = true;
+  hide1 = true;
   form: FormGroup;
   Error: string;
 

@@ -65,6 +65,7 @@ class FoodType extends AbstractType
             ])
             ->add('quantity', IntegerType::class, [
                 'required' => true,
+                'attr' => array('min' => 1)
             ])
             ->add('unitQty', ChoiceType::class, [
                 'required' => true,

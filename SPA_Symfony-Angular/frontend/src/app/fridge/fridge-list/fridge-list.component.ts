@@ -15,10 +15,7 @@ import { MatDialog } from '@angular/material';
 export class FridgeListComponent implements OnInit, OnDestroy, AfterViewInit {
   fridges: Fridge[] = [];
   isLoading = false;
-  userIsAuthenticated = false;
   private fridgesSub: Subscription;
-  private authStatusSub: Subscription;
-  private currentFridge = null;
 
   Error: string;
   data = {};
@@ -29,10 +26,6 @@ export class FridgeListComponent implements OnInit, OnDestroy, AfterViewInit {
     private authService: AuthService,
     public dialog: MatDialog) {}
 
-  getCurrentfridge() {
-    return this.currentFridge;
-  }
-
   ngOnInit() {
     this.isLoading = true;
     this.fridgeService.getFridges();
@@ -42,10 +35,6 @@ export class FridgeListComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isLoading = false;
         this.fridges = fridgeData.fridges;
       });
-    this.userIsAuthenticated = this.authService.getIsAuth();
-    this.authStatusSub = this.authService.getAuthStatusListener().subscribe(isAuthenticated => {
-      this.userIsAuthenticated = isAuthenticated;
-    });
   }
 
   ngAfterViewInit(): void {

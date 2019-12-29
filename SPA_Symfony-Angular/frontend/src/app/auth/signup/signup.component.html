@@ -29,7 +29,7 @@
               <input matInput formControlName="password" minlength="8" [type]="hide ? 'password' : 'text'" placeholder="Password"
                 #password1>
       
-              <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+              <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" matTooltip="Show password" matTooltipPosition="above"
                 [attr.aria-pressed]="hide">
                 <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
               </button>
@@ -43,12 +43,12 @@
             </mat-form-field>
             <br>
             <mat-form-field>
-              <input matInput formControlName="passwordConfirmation" [type]="hide ? 'password' : 'text'"
+              <input matInput formControlName="passwordConfirmation" [type]="!hide1 ?  'password': 'text'"
                 placeholder="Repeat Password" #password2 [errorStateMatcher]="confirmValidParentMatcher">
       
-              <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
-                [attr.aria-pressed]="hide">
-                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+              <button mat-icon-button matSuffix (click)="hide1 = !hide1" [attr.aria-label]="'Hide password'" matTooltip="Show password" matTooltipPosition="above"
+                [attr.aria-pressed]="!hide1">
+                <mat-icon>{{!hide1 ? 'visibility_off' : 'visibility'}}</mat-icon>
               </button>
       
               <mat-hint align="end">{{password2.value?.length || 0}}/8</mat-hint>
