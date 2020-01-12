@@ -94,13 +94,13 @@ export class FoodService {
             });
     }
 
-    getFoodLists(listFloorId) {
-        this.foodList = [];
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < listFloorId.length; i++) {
-            this.getFoodList(listFloorId[i]);
-        }
-    }
+    // getFoodLists(listFloorId) {
+    //     this.foodList = [];
+    //     // tslint:disable-next-line:prefer-for-of
+    //     for (let i = 0; i < listFloorId.length; i++) {
+    //         this.getFoodList(listFloorId[i]);
+    //     }
+    // }
 
     getFood(idFood: number) {
         // tslint:disable-next-line:prefer-for-of

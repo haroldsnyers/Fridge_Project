@@ -80,9 +80,6 @@ export class DialogDeleteComponent implements AfterViewInit {
       this.fridgeService.deleteFridge(this.data.id).subscribe(error => {
         this.floorService.errorListener.error(error);
         this.floorService.errorListener = new Subject<string>();
-      }, () => {
-        this.fridgeService.getFridges();
-        this.router.navigate(['/fridges']);
       });
       this.dialogRef.close(this.data);
       this.type = 'Fridge';

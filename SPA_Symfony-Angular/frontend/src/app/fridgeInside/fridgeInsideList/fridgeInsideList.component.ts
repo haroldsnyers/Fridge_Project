@@ -57,6 +57,7 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
   floorIds = [];
 
   Error: string;
+  ErrorFloors: string;
 
   // displayedColumns: string[] = ['id', 'name', 'progress', 'color'];
   // dataSource: MatTableDataSource<UserData>;
@@ -77,8 +78,7 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
     public fridgeService: FridgeService,
     public foodService: FoodService,
     private authService: AuthService,
-    public dialog: MatDialog,
-    private router: Router) {
+    public dialog: MatDialog) {
     // Create 100 users
     // const users = Array.from({length: 100}, (_, k) => createNewUser(k + 1));
 
@@ -117,7 +117,6 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
       .subscribe((floorData: {floors: Floor[]}) => {
         this.isLoading = false;
         this.floors = floorData.floors;
-        console.log(this.floors);
         this.tabs = this.getFloorsNames();
         this.floorIds = this.floorService.getListFloorIds();
         this.foodService.getFoodList(this.floorIds[0]);
@@ -129,10 +128,6 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
         this.foodList = foodData.listOfFood;
         this.dataSource = new MatTableDataSource(this.foodList);
       });
-    this.userIsAuthenticated = this.authService.getIsAuth();
-    this.authStatusSub = this.authService.getAuthStatusListener().subscribe(isAuthenticated => {
-      this.userIsAuthenticated = isAuthenticated;
-    });
   }
 
   getFloorsNames() {
@@ -159,6 +154,16 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.floorService.getErrorListener().subscribe(
+      next => {
+        this.ErrorFloors = next;
+        this.isLoading = false;
+      },
+      error => {
+        this.ErrorFloors = error;
+        this.isLoading = false;
+      }
+    );
     this.foodService.getErrorListener().subscribe(
       next => {
         this.Error = next;
@@ -168,7 +173,7 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
         this.Error = error;
         this.isLoading = false;
       }
-  );
+    );
   }
 
   applyFilter(filterValue: string) {
@@ -211,34 +216,6 @@ export class FridgeInsideListComponent implements OnInit, AfterViewInit, OnDestr
         });
       });
     }
-    // dialogRef.afterClosed().subscribe(() => {
-    //   this.ngAfterViewInit();
-    //   this.router.navigate(['/fridge/floors']);
-      // if (typeElem === 'food') {
-      //   this.foodList = [];
-      //   this.foodService.getFoodList(this.floorIds[0]);
-      //   this.foodSub = this.foodService.getFoodUpdateListener()
-      //     .subscribe((foodData: {listOfFood: Food[]}) => {
-      //       this.isLoadingBis = false;
-      //       this.foodList = foodData.listOfFood;
-      //       this.dataSource = new MatTableDataSource(this.foodList);
-      //     });
-      // } else if (typeElem === 'floor') {
-      //   this.floorService.getFloors();
-      //   this.floors = [];
-      //   this.floorsSub = this.floorService.getFloorUpdateListener()
-      //     .subscribe((floorData: {floors: Floor[]}) => {
-      //       this.isLoading = false;
-      //       this.floors = floorData.floors;
-      //       console.log(this.floors);
-      //       this.tabs = this.getFloorsNames();
-      //       this.floorIds = this.floorService.getListFloorIds();
-      //       this.foodService.getFoodList(this.floorIds[0]);
-      // });
-      // }
-      // console.log(this.foodList);
-      // console.log(this.dataSource);
-    // });
   }
 
   ngOnDestroy() {
